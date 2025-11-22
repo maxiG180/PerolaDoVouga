@@ -28,7 +28,7 @@ export default function Home() {
 
                         <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl font-bold text-beige-900 mb-6 leading-tight animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
                             Sabores que <br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-gold-dark to-gold animate-gradient">
+                            <span className="bg-clip-text bg-gradient-to-r from-gold via-gold-dark to-gold animate-gradient">
                                 Encantam
                             </span>
                         </h1>
@@ -41,7 +41,7 @@ export default function Home() {
 
                         <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
                             <Link href="/menu">
-                                <Button size="lg" variant="gold" className="w-full sm:w-auto text-lg px-10 py-7 rounded-full shadow-2xl shadow-gold/30 hover:shadow-gold/50 transition-all hover:-translate-y-1 hover:scale-105 font-semibold bg-gold hover:bg-gold-dark text-white">
+                                <Button size="lg" variant="gold" className="text-dark w-full sm:w-auto text-lg px-10 py-7 rounded-full shadow-2xl shadow-gold/30 hover:shadow-gold/50 transition-all hover:-translate-y-1 hover:scale-105 font-semibold bg-gold hover:bg-gold-dark">
                                     Ver Menu Completo
                                     <ArrowRight className="ml-2 w-5 h-5" />
                                 </Button>
@@ -111,7 +111,7 @@ export default function Home() {
                 </section>
 
                 {/* Visit Us / Map Section */}
-                <section className="py-20 bg-gradient-to-br from-beige-900 via-beige-800 to-beige-700 text-white relative overflow-hidden">
+                <section className="py-20 bg-gradient-to-br from-beige-900 via-beige-800 to-beige-700 relative overflow-hidden">
                     <div className="absolute inset-0 opacity-5">
                         <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.1),transparent)]"></div>
                     </div>
@@ -122,7 +122,7 @@ export default function Home() {
                                 <span className="inline-block px-4 py-2 rounded-full bg-gold/20 text-gold-light font-semibold tracking-widest uppercase mb-6 text-sm">
                                     📍 Visite-nos
                                 </span>
-                                <h2 className="font-serif text-4xl md:text-5xl font-bold mb-6 text-white">
+                                <h2 className="font-serif text-4xl md:text-5xl font-bold mb-6">
                                     Estamos à sua espera
                                 </h2>
                                 <p className="text-beige-200 text-lg mb-10 leading-relaxed">
@@ -136,7 +136,7 @@ export default function Home() {
                                             <MapPin className="w-7 h-7 text-gold-light" />
                                         </div>
                                         <div>
-                                            <h4 className="font-bold text-lg mb-1 text-white">Morada</h4>
+                                            <h4 className="font-bold text-lg mb-1">Morada</h4>
                                             <p className="text-beige-200">
                                                 Av. Alm. Reis 243A<br />
                                                 1000-058 Lisboa, Portugal
@@ -149,7 +149,7 @@ export default function Home() {
                                             <Clock className="w-7 h-7 text-turquoise-light" />
                                         </div>
                                         <div>
-                                            <h4 className="font-bold text-lg mb-1 text-white">Horário</h4>
+                                            <h4 className="font-bold text-lg mb-1">Horário</h4>
                                             <p className="text-beige-200">
                                                 Segunda a Sábado: 07:00 - 18:30<br />
                                                 Domingo: Encerrado
@@ -162,7 +162,7 @@ export default function Home() {
                                             <Phone className="w-7 h-7 text-gold-light" />
                                         </div>
                                         <div>
-                                            <h4 className="font-bold text-lg mb-1 text-white">Contacto</h4>
+                                            <h4 className="font-bold text-lg mb-1">Contacto</h4>
                                             <p className="text-beige-200">
                                                 +351 123 456 789
                                             </p>

@@ -3,8 +3,6 @@ import { NextResponse } from 'next/server'
 import { Resend } from 'resend'
 import { z } from 'zod'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
-
 const orderSchema = z.object({
     customer: z.object({
         name: z.string(),
@@ -67,6 +65,7 @@ export async function POST(request: Request) {
 
         // 3. Send Email to Parents (Cafe Owner)
         if (process.env.RESEND_API_KEY) {
+            const resend = new Resend(process.env.RESEND_API_KEY)
             await resend.emails.send({
                 from: 'Pérola do Vouga <onboarding@resend.dev>',
                 to: ['peroladovougalda@gmail.com'],

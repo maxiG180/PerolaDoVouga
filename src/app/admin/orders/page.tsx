@@ -1,6 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
 import { OrdersTable } from '@/components/admin/OrdersTable'
 
+export const dynamic = 'force-dynamic'
+
 export default async function AdminOrdersPage() {
     const supabase = await createClient()
 

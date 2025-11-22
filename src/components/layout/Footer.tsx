@@ -13,7 +13,6 @@ export function Footer() {
                             Uma experiência gastronómica autêntica e memorável.
                         </p>
                         <div className="flex gap-4">
-                            <a href="#" className="hover:text-gold transition-colors"><Instagram className="w-5 h-5" /></a>
                             <a href="#" className="hover:text-gold transition-colors"><Facebook className="w-5 h-5" /></a>
                         </div>
                     </div>
@@ -32,7 +31,7 @@ export function Footer() {
                             </li>
                             <li className="flex items-center gap-3 text-beige-300">
                                 <Mail className="w-5 h-5 text-gold shrink-0" />
-                                <span>ola@peroladovouga.com</span>
+                                <span>peroladovougalda@gmail.com</span>
                             </li>
                         </ul>
                     </div>

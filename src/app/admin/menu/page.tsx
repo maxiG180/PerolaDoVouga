@@ -1,6 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
 import { MenuTable } from '@/components/admin/MenuTable'
 
+export const dynamic = 'force-dynamic'
+
 export default async function AdminMenuPage() {
     const supabase = await createClient()
 

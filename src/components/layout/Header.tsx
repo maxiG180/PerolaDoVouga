@@ -59,7 +59,7 @@ export function Header() {
                     <Link href="/about" className="text-sm font-medium hover:text-gold transition-colors">
                         Sobre Nós
                     </Link>
-                    <Button variant="gold" size="sm" className="gap-2">
+                    <Button variant="gold" size="sm" className="gap-2 text-dark">
                         <ShoppingBag className="w-4 h-4" />
                         Encomendar
                     </Button>

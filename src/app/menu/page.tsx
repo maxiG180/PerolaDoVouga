@@ -4,6 +4,9 @@ import { MenuItem } from '@/components/menu/MenuItem'
 import { createClient } from '@/lib/supabase/server'
 import { UtensilsCrossed, Soup } from 'lucide-react'
 
+// Force dynamic rendering since we use cookies for Supabase
+export const dynamic = 'force-dynamic'
+
 // Mock data for initial display if DB is empty
 const MOCK_MENU = [
     {
