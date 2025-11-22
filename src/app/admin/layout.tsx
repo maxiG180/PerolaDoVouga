@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { LayoutDashboard, UtensilsCrossed, LogOut, Home } from 'lucide-react'
+import { LayoutDashboard, UtensilsCrossed, LogOut, Home, Settings } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 export default async function AdminLayout({
@@ -44,6 +44,13 @@ export default async function AdminLayout({
                     >
                         <UtensilsCrossed className="w-5 h-5" />
                         Menu & Pratos
+                    </Link>
+                    <Link
+                        href="/admin/settings"
+                        className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primary-800 transition-colors text-beige-100 hover:text-white"
+                    >
+                        <Settings className="w-5 h-5" />
+                        Definições
                     </Link>
                     <Link
                         href="/"

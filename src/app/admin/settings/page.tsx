@@ -11,7 +11,7 @@ import { Loader2, Save } from 'lucide-react'
 export default function SettingsPage() {
     const [isLoading, setIsLoading] = useState(true)
     const [isSaving, setIsSaving] = useState(false)
-    const supabase = createClient()
+    const supabase = createClient() as any
 
     const [settings, setSettings] = useState({
         business_name: '',
@@ -66,7 +66,7 @@ export default function SettingsPage() {
 
             const { error } = await supabase
                 .from('site_settings')
-                .upsert(updates, { onConflict: 'key' })
+                .upsert(updates as any, { onConflict: 'key' })
 
             if (error) throw error
 
