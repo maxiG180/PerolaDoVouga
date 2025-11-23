@@ -2,9 +2,10 @@
 
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
 import { formatPrice } from '@/lib/utils'
 import { useCartStore } from '@/stores/cart-store'
-import { Plus } from 'lucide-react'
+import { Plus, Clock, Users } from 'lucide-react'
 import Image from 'next/image'
 import { toast } from 'sonner'
 
@@ -17,12 +18,28 @@ interface MenuItemProps {
         image_url: string | null
         is_available: boolean
     }
+    hideImage?: boolean
+    quantityRemaining?: number | null
+    isSoldOut?: boolean
+    advanceNotice?: number
+    minimumQuantity?: number
 }
 
-export function MenuItem({ item }: MenuItemProps) {
+export function MenuItem({
+    item,
+    hideImage = false,
+    quantityRemaining,
+    isSoldOut,
+    advanceNotice,
+    minimumQuantity
+}: MenuItemProps) {
     const addItem = useCartStore((state) => state.addItem)
 
     const handleAdd = () => {
+        if (isSoldOut) {
+            toast.error('Este item está esgotado')
+            return
+        }
         addItem({
             menuItemId: item.id,
             name: item.name,
@@ -34,43 +51,84 @@ export function MenuItem({ item }: MenuItemProps) {
     }
 
     return (
-        <Card className="overflow-hidden group hover:shadow-lg transition-all duration-300 border-beige-200">
-            <div className="relative h-48 bg-beige-100 overflow-hidden">
-                {item.image_url ? (
-                    <Image
-                        src={item.image_url}
-                        alt={item.name}
-                        fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                ) : (
-                    <div className="w-full h-full flex items-center justify-center text-4xl">
-                        🍽️
-                    </div>
-                )}
-                {!item.is_available && (
-                    <div className="absolute inset-0 bg-white/60 backdrop-blur-sm flex items-center justify-center">
-                        <span className="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">
-                            Esgotado
-                        </span>
-                    </div>
-                )}
-            </div>
+        <Card className="overflow-hidden group hover:shadow-lg transition-all duration-300 border-beige-200 h-full flex flex-col">
+            {!hideImage && (
+                <div className="relative h-48 bg-beige-100 overflow-hidden shrink-0">
+                    {item.image_url ? (
+                        <Image
+                            src={item.image_url}
+                            alt={item.name}
+                            fill
+                            className="object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                    ) : (
+                        <div className="w-full h-full flex items-center justify-center text-4xl bg-beige-50">
+                            🍽️
+                        </div>
+                    )}
 
-            <div className="p-4">
+                    {/* Sold Out Overlay */}
+                    {isSoldOut && (
+                        <div className="absolute inset-0 bg-white/60 backdrop-blur-sm flex items-center justify-center">
+                            <span className="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">
+                                ESGOTADO
+                            </span>
+                        </div>
+                    )}
+
+                    {/* Quantity Remaining Badge */}
+                    {!isSoldOut && quantityRemaining !== null && quantityRemaining !== undefined && (
+                        <div className="absolute top-2 right-2">
+                            <Badge className={`${quantityRemaining <= 3
+                                    ? 'bg-red-500 hover:bg-red-600'
+                                    : 'bg-gold hover:bg-gold-dark'
+                                } text-white`}>
+                                🔥 {quantityRemaining} restantes
+                            </Badge>
+                        </div>
+                    )}
+
+                    {/* General Unavailable */}
+                    {!item.is_available && !isSoldOut && (
+                        <div className="absolute inset-0 bg-white/60 backdrop-blur-sm flex items-center justify-center">
+                            <span className="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">
+                                Esgotado
+                            </span>
+                        </div>
+                    )}
+                </div>
+            )}
+
+            <div className="p-4 flex flex-col flex-grow">
                 <div className="flex justify-between items-start mb-2">
-                    <h3 className="font-serif font-bold text-lg text-primary-900 line-clamp-1">{item.name}</h3>
+                    <h3 className="font-serif font-bold text-lg text-beige-900 line-clamp-1">{item.name}</h3>
                     <span className="font-medium text-gold-dark">{formatPrice(item.price)}</span>
                 </div>
 
-                <p className="text-sm text-muted-foreground line-clamp-2 mb-4 min-h-[2.5rem]">
+                <p className="text-sm text-muted-foreground line-clamp-2 mb-4 min-h-[2.5rem] flex-grow">
                     {item.description || 'Sem descrição disponível.'}
                 </p>
 
+                {/* Advance Order Info */}
+                {advanceNotice && (
+                    <div className="mb-3 space-y-1">
+                        <div className="flex items-center gap-1 text-xs text-accent">
+                            <Clock className="w-3 h-3" />
+                            <span>{advanceNotice} dias de antecedência</span>
+                        </div>
+                        {minimumQuantity && (
+                            <div className="flex items-center gap-1 text-xs text-accent">
+                                <Users className="w-3 h-3" />
+                                <span>Mínimo {minimumQuantity} unidades</span>
+                            </div>
+                        )}
+                    </div>
+                )}
+
                 <Button
                     onClick={handleAdd}
-                    disabled={!item.is_available}
-                    className="w-full gap-2 bg-beige-200 text-primary-900 hover:bg-gold hover:text-white transition-colors"
+                    disabled={!item.is_available || isSoldOut}
+                    className="w-full gap-2 bg-beige-200 text-beige-900 hover:bg-gold hover:text-white transition-colors disabled:opacity-50"
                 >
                     <Plus className="w-4 h-4" />
                     Adicionar

@@ -1,0 +1,57 @@
+{
+    "nav": {
+        "home": "Início",
+        "menu": "Menu",
+        "about": "Sobre Nós",
+        "contact": "Contactos"
+    },
+    "home": {
+        "welcome": "Bem-vindo à Pérola do Vouga",
+        "tagline": "Sabores que Encantam",
+        "description": "Uma experiência gastronómica única onde a tradição encontra a elegância.",
+        "cta_menu": "Ver Menu Completo",
+        "cta_about": "A Nossa História",
+        "featured_title": "Pratos em Destaque",
+        "featured_subtitle": "As Nossas Especialidades",
+        "why_choose": "Porquê Escolher-nos",
+        "why_choose_subtitle": "Três razões que fazem da Pérola do Vouga o seu destino gastronómico preferido",
+        "visit_us": "Visite-nos",
+        "waiting_for_you": "Estamos à sua espera",
+        "visit_description": "Venha conhecer o nosso espaço e desfrutar de uma refeição inesquecível. Estamos localizados no coração de Lisboa, com fácil acesso.",
+        "roots": {
+            "subtitle": "A Nossa Origem",
+            "title": "Do Rio Vouga para Lisboa",
+            "description1": "O nome \"Pérola do Vouga\" não é um acaso. Inspiramo-nos na beleza e riqueza do Rio Vouga para trazer até si uma experiência gastronómica que une a tradição das nossas raízes à elegância da capital.",
+            "description2": "Cada prato conta uma história, cada sabor é uma viagem."
+        },
+        "features": {
+            "authentic": {
+                "title": "Cozinha Autêntica",
+                "description": "Receitas tradicionais preparadas com um toque moderno e ingredientes locais selecionados com cuidado."
+            },
+            "cozy": {
+                "title": "Ambiente Familiar",
+                "description": "Um espaço pequeno e acolhedor, onde o verdadeiro destaque é o sabor da nossa comida caseira."
+            },
+            "quality": {
+                "title": "Qualidade Premium",
+                "description": "Compromisso absoluto com a excelência em cada prato que servimos, do início ao fim."
+            }
+        }
+    },
+    "menu": {
+        "title": "O Nosso Menu",
+        "subtitle": "Explore a nossa seleção de pratos deliciosos, preparados com ingredientes frescos e locais.",
+        "search_placeholder": "Pesquisar pratos...",
+        "all": "Todos",
+        "daily_special": "Prato do Dia",
+        "soup_special": "Sopa do Dia",
+        "add_to_cart": "Adicionar",
+        "sold_out": "Esgotado"
+    },
+    "common": {
+        "address": "Morada",
+        "hours": "Horário",
+        "contact": "Contactos"
+    }
+}

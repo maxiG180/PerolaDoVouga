@@ -9,11 +9,12 @@ export function Footer() {
                     <div>
                         <h3 className="font-serif text-2xl font-bold text-gold mb-4">Pérola do Vouga</h3>
                         <p className="text-beige-300 mb-6 leading-relaxed">
-                            Trazendo a elegância e os sabores do Rio Vouga para o coração de Lisboa.
+                            Trazemos a elegância e os sabores do Rio Vouga para o coração de Lisboa.
                             Uma experiência gastronómica autêntica e memorável.
                         </p>
                         <div className="flex gap-4">
                             <a href="#" className="hover:text-gold transition-colors"><Facebook className="w-5 h-5" /></a>
+                            <a href="#" className="hover:text-gold transition-colors"><Instagram className="w-5 h-5" /></a>
                         </div>
                     </div>
 
@@ -23,11 +24,11 @@ export function Footer() {
                         <ul className="space-y-4">
                             <li className="flex items-start gap-3 text-beige-300">
                                 <MapPin className="w-5 h-5 text-gold shrink-0 mt-1" />
-                                <span>Rua da Pérola, 123<br />1000-001 Lisboa, Portugal</span>
+                                <span>Av. Alm. Reis 243A<br />1000-058 Lisboa, Portugal</span>
                             </li>
                             <li className="flex items-center gap-3 text-beige-300">
                                 <Phone className="w-5 h-5 text-gold shrink-0" />
-                                <span>+351 21 123 4567</span>
+                                <span>+351 21 846 4584</span>
                             </li>
                             <li className="flex items-center gap-3 text-beige-300">
                                 <Mail className="w-5 h-5 text-gold shrink-0" />
@@ -41,16 +42,12 @@ export function Footer() {
                         <h4 className="font-serif text-lg font-bold text-white mb-6">Horário</h4>
                         <ul className="space-y-2 text-beige-300">
                             <li className="flex justify-between">
-                                <span>Segunda - Sexta</span>
-                                <span>08:00 - 20:00</span>
-                            </li>
-                            <li className="flex justify-between">
-                                <span>Sábado</span>
-                                <span>09:00 - 21:00</span>
+                                <span>Segunda - Sábado</span>
+                                <span>07:00 - 18:30</span>
                             </li>
                             <li className="flex justify-between text-gold">
                                 <span>Domingo</span>
-                                <span>Fechado</span>
+                                <span>Encerrado</span>
                             </li>
                         </ul>
                     </div>
