@@ -187,11 +187,19 @@ export function MenuForm({ isOpen, onClose, onSuccess, editingItem, categories }
                     </div>
 
                     <div className="space-y-2">
-                        <Label>URL da Imagem (Opcional)</Label>
+                        <Label>
+                            URL da Imagem
+                            {['Cafetaria', 'Bebidas', 'Vinhos', 'Cervejas', 'Refrigerantes', 'Águas'].includes(
+                                categories.find(c => c.id === formData.category_id)?.name || ''
+                            ) ? ' (Opcional)' : ' (Obrigatório)'}
+                        </Label>
                         <Input
                             value={formData.image_url}
                             onChange={e => setFormData({ ...formData, image_url: e.target.value })}
                             placeholder="https://..."
+                            required={!['Cafetaria', 'Bebidas', 'Vinhos', 'Cervejas', 'Refrigerantes', 'Águas'].includes(
+                                categories.find(c => c.id === formData.category_id)?.name || ''
+                            )}
                         />
                     </div>
 

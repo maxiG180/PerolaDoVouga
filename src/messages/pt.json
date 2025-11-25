@@ -53,5 +53,16 @@
         "address": "Morada",
         "hours": "Horário",
         "contact": "Contactos"
+    },
+    "admin": {
+        "login": {
+            "title": "Área de Administração",
+            "subtitle": "Pérola do Vouga",
+            "email_label": "Email",
+            "password_label": "Password",
+            "submit_button": "Entrar",
+            "success": "Login efetuado com sucesso!",
+            "error": "Erro ao fazer login"
+        }
     }
 }

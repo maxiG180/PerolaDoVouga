@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
                 stripe_payment_intent_id: orderData.stripePaymentIntentId,
                 stripe_fee: stripeFee,
                 status: 'pending',
-            })
+            } as any)
             .select()
             .single();
 
@@ -68,7 +68,7 @@ export async function POST(req: NextRequest) {
 
         // Insert order items
         const orderItems = orderData.items.map(item => ({
-            order_id: order.id,
+            order_id: (order as any).id,
             menu_item_id: item.menuItemId,
             item_name: item.name,
             item_price: item.price,
@@ -79,7 +79,7 @@ export async function POST(req: NextRequest) {
 
         const { error: itemsError } = await supabase
             .from('order_items')
-            .insert(orderItems);
+            .insert(orderItems as any);
 
         if (itemsError) {
             return NextResponse.json({ error: itemsError.message }, { status: 500 });
@@ -97,9 +97,12 @@ export async function POST(req: NextRequest) {
         if (resend) {
             try {
                 await resend.emails.send({
-                    from: 'Pérola do Vouga <orders@peroladovouga.pt>',
-                    to: orderData.customerEmail,
-                    subject: `Pedido Confirmado - ${orderNumber}`,
+                    from: 'Pérola do Vouga <onboarding@resend.dev>',
+                    // NOTE: Using onboarding domain, we can ONLY send to the verified email address (the owner).
+                    // We cannot send confirmation emails to customers until we verify a custom domain.
+                    // For now, we send the confirmation details to the owner so they can forward it or just see the order.
+                    to: process.env.RESEND_TO_EMAIL || 'peroladovougalda@gmail.com',
+                    subject: `Novo Pedido #${orderNumber} (Cópia Cliente)`,
                     html: `
             <h2>Obrigado pelo seu pedido!</h2>
             <p>Número do pedido: <strong>${orderNumber}</strong></p>

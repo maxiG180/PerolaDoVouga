@@ -8,6 +8,7 @@ import { useCartStore } from '@/stores/cart-store'
 import { Plus, Clock, Users } from 'lucide-react'
 import Image from 'next/image'
 import { toast } from 'sonner'
+import { cn } from '@/lib/utils'
 
 interface MenuItemProps {
     item: {
@@ -51,9 +52,12 @@ export function MenuItem({
     }
 
     return (
-        <Card className="overflow-hidden group hover:shadow-lg transition-all duration-300 border-beige-200 h-full flex flex-col">
+        <Card className={cn(
+            "overflow-hidden group transition-all duration-300 border-0 shadow-sm hover:shadow-md bg-white rounded-2xl",
+            hideImage ? "hover:-translate-y-0.5" : "hover:-translate-y-1"
+        )}>
             {!hideImage && (
-                <div className="relative h-48 bg-beige-100 overflow-hidden shrink-0">
+                <div className="relative h-48 bg-beige-50 overflow-hidden shrink-0">
                     {item.image_url ? (
                         <Image
                             src={item.image_url}
@@ -62,7 +66,7 @@ export function MenuItem({
                             className="object-cover group-hover:scale-105 transition-transform duration-500"
                         />
                     ) : (
-                        <div className="w-full h-full flex items-center justify-center text-4xl bg-beige-50">
+                        <div className="w-full h-full flex items-center justify-center text-4xl bg-beige-50/50">
                             🍽️
                         </div>
                     )}
@@ -70,7 +74,7 @@ export function MenuItem({
                     {/* Sold Out Overlay */}
                     {isSoldOut && (
                         <div className="absolute inset-0 bg-white/60 backdrop-blur-sm flex items-center justify-center">
-                            <span className="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">
+                            <span className="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold shadow-sm">
                                 ESGOTADO
                             </span>
                         </div>
@@ -80,9 +84,9 @@ export function MenuItem({
                     {!isSoldOut && quantityRemaining !== null && quantityRemaining !== undefined && (
                         <div className="absolute top-2 right-2">
                             <Badge className={`${quantityRemaining <= 3
-                                    ? 'bg-red-500 hover:bg-red-600'
-                                    : 'bg-gold hover:bg-gold-dark'
-                                } text-white`}>
+                                ? 'bg-red-500 hover:bg-red-600'
+                                : 'bg-gold hover:bg-gold-dark'
+                                } text-white shadow-sm`}>
                                 🔥 {quantityRemaining} restantes
                             </Badge>
                         </div>
@@ -91,7 +95,7 @@ export function MenuItem({
                     {/* General Unavailable */}
                     {!item.is_available && !isSoldOut && (
                         <div className="absolute inset-0 bg-white/60 backdrop-blur-sm flex items-center justify-center">
-                            <span className="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">
+                            <span className="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold shadow-sm">
                                 Esgotado
                             </span>
                         </div>
@@ -99,15 +103,19 @@ export function MenuItem({
                 </div>
             )}
 
-            <div className="p-4 flex flex-col flex-grow">
-                <div className="flex justify-between items-start mb-2">
-                    <h3 className="font-serif font-bold text-lg text-beige-900 line-clamp-1">{item.name}</h3>
-                    <span className="font-medium text-gold-dark">{formatPrice(item.price)}</span>
+            <div className={cn("flex flex-col flex-grow", hideImage ? "p-3" : "p-4")}>
+                <div className="flex justify-between items-start mb-1 gap-2">
+                    <h3 className={cn("font-serif font-bold text-beige-900 leading-tight", hideImage ? "text-base" : "text-lg")}>
+                        {item.name}
+                    </h3>
+                    <span className="font-medium text-gold-dark whitespace-nowrap">{formatPrice(item.price)}</span>
                 </div>
 
-                <p className="text-sm text-muted-foreground line-clamp-2 mb-4 min-h-[2.5rem] flex-grow">
-                    {item.description || 'Sem descrição disponível.'}
-                </p>
+                {!hideImage && (
+                    <p className="text-sm text-muted-foreground line-clamp-2 mb-4 min-h-[2.5rem] flex-grow">
+                        {item.description || 'Sem descrição disponível.'}
+                    </p>
+                )}
 
                 {/* Advance Order Info */}
                 {advanceNotice && (
@@ -119,7 +127,7 @@ export function MenuItem({
                         {minimumQuantity && (
                             <div className="flex items-center gap-1 text-xs text-accent">
                                 <Users className="w-3 h-3" />
-                                <span>Mínimo {minimumQuantity} unidades</span>
+                                <span className="whitespace-nowrap">Mín. {minimumQuantity} un.</span>
                             </div>
                         )}
                     </div>
@@ -128,10 +136,14 @@ export function MenuItem({
                 <Button
                     onClick={handleAdd}
                     disabled={!item.is_available || isSoldOut}
-                    className="w-full gap-2 bg-beige-200 text-beige-900 hover:bg-gold hover:text-white transition-colors disabled:opacity-50"
+                    size={hideImage ? "sm" : "default"}
+                    className={cn(
+                        "w-full gap-2 bg-beige-100 text-beige-900 hover:bg-gold hover:text-white transition-colors disabled:opacity-50 mt-auto",
+                        hideImage ? "h-8 text-xs" : ""
+                    )}
                 >
-                    <Plus className="w-4 h-4" />
-                    Adicionar
+                    <Plus className={cn("w-4 h-4", hideImage ? "w-3 h-3" : "")} />
+                    {hideImage ? "Adicionar" : "Adicionar ao Pedido"}
                 </Button>
             </div>
         </Card>

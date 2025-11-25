@@ -11,51 +11,46 @@ export default async function Home() {
     const tCommon = await getTranslations('common')
 
     return (
-        <div className="min-h-screen flex flex-col bg-stone-50">
+        <div className="min-h-screen flex flex-col bg-beige-100/30">
             <Header />
 
             <main className="flex-1">
                 {/* Hero Section - Redesigned for Mobile First */}
-                <section className="relative min-h-[90vh] flex items-center overflow-hidden py-20">
-                    {/* Background Image with Overlay */}
-                    <div className="absolute inset-0 z-0">
-                        <div className="absolute inset-0 bg-black/70 z-10"></div>
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/60 z-10"></div>
-                        <img
-                            src="/img_homepage/salmao grelhado.jpg"
-                            alt="Background"
-                            className="w-full h-full object-cover scale-105 animate-slow-zoom"
-                        />
-                    </div>
+                {/* Hero Section - Light & Airy Split Layout */}
+                <section className="relative min-h-[90vh] flex items-center pt-24 pb-12 lg:pt-32 lg:pb-20 overflow-hidden">
+                    {/* Decorative Background Elements */}
+                    <div className="absolute top-0 right-0 w-1/2 h-full bg-beige-100/50 -z-10 rounded-l-[100px] hidden lg:block" />
+                    <div className="absolute -top-20 -left-20 w-96 h-96 bg-gold/5 rounded-full blur-3xl -z-10" />
 
-                    <div className="container relative z-20 px-4 mt-16">
+                    <div className="container mx-auto px-4">
                         <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
-                            <div className="lg:w-1/2 text-center lg:text-left">
-                                <div className="inline-block mb-6 animate-fade-in-up">
-                                    <span className="px-6 py-2 rounded-full border border-white/30 bg-white/10 backdrop-blur-md text-white text-sm font-semibold tracking-wider uppercase shadow-lg">
+                            {/* Left Content */}
+                            <div className="lg:w-1/2 text-center lg:text-left space-y-8">
+                                <div className="inline-block animate-fade-in-up">
+                                    <span className="px-6 py-2 rounded-full bg-beige-100 text-beige-900 text-sm font-bold tracking-wider uppercase border border-beige-200">
                                         ✨ {t('welcome')}
                                     </span>
                                 </div>
 
-                                <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl font-bold mb-6 leading-tight animate-fade-in-up drop-shadow-2xl" style={{ animationDelay: '0.1s' }}>
-                                    <span className="text-white">{t('tagline').split(' ')[0]}</span> <br />
-                                    <span className="text-white">
+                                <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl font-bold leading-[1.1] text-beige-900 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+                                    {t('tagline').split(' ')[0]} <br />
+                                    <span className="text-gold-dark">
                                         {t('tagline').split(' ').slice(1).join(' ')}
                                     </span>
                                 </h1>
 
-                                <p className="text-xl md:text-2xl text-white/90 mb-12 animate-fade-in-up leading-relaxed font-medium drop-shadow-md" style={{ animationDelay: '0.2s' }}>
+                                <p className="text-xl md:text-2xl text-stone-600 max-w-xl mx-auto lg:mx-0 animate-fade-in-up leading-relaxed" style={{ animationDelay: '0.2s' }}>
                                     {t('description')}
                                 </p>
 
-                                <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
-                                    <Button asChild size="lg" className="bg-white text-primary-900 hover:bg-stone-100 w-full sm:w-auto text-lg px-10 py-7 rounded-full shadow-2xl hover:shadow-white/20 transition-all hover:-translate-y-1 hover:scale-105 font-bold border-none">
+                                <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start animate-fade-in-up pt-4" style={{ animationDelay: '0.3s' }}>
+                                    <Button asChild size="lg" className="bg-stone-900 text-white hover:bg-stone-800 text-lg px-10 py-7 rounded-full shadow-xl hover:shadow-2xl transition-all hover:-translate-y-1">
                                         <Link href="/menu">
                                             {t('cta_menu')}
                                             <ArrowRight className="ml-2 w-5 h-5" />
                                         </Link>
                                     </Button>
-                                    <Button asChild variant="outline" size="lg" className="w-full sm:w-auto text-lg px-10 py-7 rounded-full border-2 border-white text-white hover:bg-white hover:text-primary-900 transition-all hover:scale-105 font-bold backdrop-blur-sm shadow-lg">
+                                    <Button asChild variant="outline" size="lg" className="text-lg px-10 py-7 rounded-full border-2 border-beige-200 text-beige-900 hover:bg-beige-100 hover:border-beige-300 transition-all">
                                         <Link href="/about">
                                             {t('cta_about')}
                                         </Link>
@@ -63,21 +58,32 @@ export default async function Home() {
                                 </div>
                             </div>
 
-                            <div className="lg:w-1/2 relative mt-12 lg:mt-0 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
-                                <div className="relative max-w-md mx-auto transform rotate-3 hover:rotate-0 transition-all duration-500 group">
-                                    <div className="absolute -inset-4 bg-white/10 backdrop-blur-md rounded-3xl -z-10 group-hover:bg-white/20 transition-colors"></div>
-                                    <div className="rounded-2xl overflow-hidden shadow-2xl border-4 border-white/20 relative aspect-[4/3]">
+                            {/* Right Image */}
+                            <div className="lg:w-1/2 relative animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+                                <div className="relative z-10 rounded-[2.5rem] overflow-hidden shadow-2xl transition-all duration-700 ease-out border-4 border-white">
+                                    <img
+                                        src="/img_homepage/salmao grelhado.jpg"
+                                        alt="Prato de Salmão Grelhado"
+                                        className="w-full h-auto object-cover transform hover:scale-105 transition-transform duration-700"
+                                    />
+
+                                    {/* Floating Badge - River Image */}
+                                    <div className="absolute bottom-6 left-6 w-32 h-32 rounded-2xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.12)] border-4 border-white hidden sm:block transform -rotate-6 hover:rotate-0 transition-all duration-500 group cursor-pointer">
                                         <img
                                             src="/vouga.jpg"
                                             alt="Rio Vouga"
-                                            className="w-full h-full object-cover"
+                                            className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
                                         />
-                                        <div className="absolute bottom-4 left-4 right-4 bg-black/70 backdrop-blur-md p-4 rounded-xl border border-white/10 shadow-xl">
-                                            <p className="text-white font-serif italic text-xl font-bold">"As nossas origens: Rio Vouga"</p>
-                                            <p className="text-white/90 text-sm mt-1 font-medium">A inspiração por trás de cada prato.</p>
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-80" />
+                                        <div className="absolute bottom-2 left-0 right-0 text-center">
+                                            <span className="text-white text-xs font-bold tracking-wider uppercase drop-shadow-md">Rio Vouga</span>
                                         </div>
                                     </div>
                                 </div>
+
+                                {/* Decorative Elements behind image */}
+                                <div className="absolute -bottom-10 -right-10 w-64 h-64 bg-gold/10 rounded-full blur-3xl -z-10" />
+                                <div className="absolute -top-10 -left-10 w-32 h-32 border-4 border-beige-200 rounded-full -z-10 opacity-50" />
                             </div>
                         </div>
                     </div>

@@ -47,5 +47,16 @@
         "address": "Address",
         "hours": "Hours",
         "contact": "Contact"
+    },
+    "admin": {
+        "login": {
+            "title": "Admin Area",
+            "subtitle": "Pérola do Vouga",
+            "email_label": "Email",
+            "password_label": "Password",
+            "submit_button": "Login",
+            "success": "Login successful!",
+            "error": "Login failed"
+        }
     }
 }

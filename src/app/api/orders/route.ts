@@ -68,7 +68,7 @@ export async function POST(request: Request) {
             const resend = new Resend(process.env.RESEND_API_KEY)
             await resend.emails.send({
                 from: 'Pérola do Vouga <onboarding@resend.dev>',
-                to: ['peroladovougalda@gmail.com'],
+                to: [process.env.RESEND_TO_EMAIL || 'peroladovougalda@gmail.com'],
                 subject: `Nova Encomenda #${orderNumber} - ${customer.name}`,
                 html: `
           <h1>Nova Encomenda Recebida!</h1>

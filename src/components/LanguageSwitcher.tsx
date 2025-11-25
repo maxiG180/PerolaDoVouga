@@ -18,7 +18,7 @@ export function LanguageSwitcher() {
             <button
                 onClick={() => switchLanguage('pt')}
                 className={cn(
-                    "w-8 h-8 flex items-center justify-center rounded-full transition-all duration-300",
+                    "w-8 h-8 flex items-center justify-center rounded-full transition-all duration-300 cursor-pointer",
                     locale === 'pt'
                         ? "bg-white shadow-md scale-110"
                         : "opacity-60 hover:opacity-100 hover:bg-white/20"
@@ -31,7 +31,7 @@ export function LanguageSwitcher() {
             <button
                 onClick={() => switchLanguage('en')}
                 className={cn(
-                    "w-8 h-8 flex items-center justify-center rounded-full transition-all duration-300",
+                    "w-8 h-8 flex items-center justify-center rounded-full transition-all duration-300 cursor-pointer",
                     locale === 'en'
                         ? "bg-white shadow-md scale-110"
                         : "opacity-60 hover:opacity-100 hover:bg-white/20"

@@ -113,10 +113,13 @@ export function MenuContent({ menuData }: MenuContentProps) {
         return false
     }
 
+    const isDrinkCategory = (category: string) =>
+        ['Cafetaria', 'Bebidas', 'Vinhos', 'Cervejas', 'Refrigerantes', 'Águas'].includes(category)
+
     return (
         <div className="space-y-8">
             {/* Search and Category Filter */}
-            <div className="sticky top-20 z-30 bg-beige-100/95 backdrop-blur-md py-4 -mx-4 px-4 md:mx-0 md:px-0 space-y-4 shadow-sm">
+            <div className="sticky top-[72px] z-30 bg-beige-100/95 backdrop-blur-md py-4 -mx-4 px-4 md:mx-0 md:px-0 space-y-4 shadow-sm transition-all">
                 <div className="flex justify-center">
                     <div className="relative w-full max-w-md">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
@@ -142,8 +145,8 @@ export function MenuContent({ menuData }: MenuContentProps) {
                                 className={cn(
                                     "flex items-center gap-2 px-5 py-2.5 rounded-full whitespace-nowrap transition-all duration-300 font-medium",
                                     isSelected
-                                        ? "bg-beige-900 text-white shadow-lg scale-105"
-                                        : "bg-stone-100 text-stone-600 hover:bg-stone-200 hover:text-beige-900"
+                                        ? "bg-stone-900 text-white shadow-lg scale-105"
+                                        : "bg-stone-100 text-stone-600 hover:bg-stone-200 hover:text-stone-900"
                                 )}
                             >
                                 <Icon className={cn("w-4 h-4", isSelected ? "text-gold" : "text-stone-400")} />
@@ -163,7 +166,7 @@ export function MenuContent({ menuData }: MenuContentProps) {
                                 <Soup className="w-6 h-6 text-gold" />
                                 <h2 className="text-2xl font-serif font-bold text-beige-900">Sopa do Dia</h2>
                             </div>
-                            <Badge variant="outline" className="bg-gold/10 text-gold border-gold">
+                            <Badge className="bg-gold/10 text-gold hover:bg-gold/20 border-0">
                                 {today}
                             </Badge>
                         </div>
@@ -181,7 +184,7 @@ export function MenuContent({ menuData }: MenuContentProps) {
                                 <Clock className="w-6 h-6 text-gold" />
                                 <h2 className="text-2xl font-serif font-bold text-beige-900">Hoje Disponível</h2>
                             </div>
-                            <Badge variant="outline" className="bg-gold/10 text-gold border-gold">
+                            <Badge className="bg-gold/10 text-gold hover:bg-gold/20 border-0">
                                 {today}
                             </Badge>
                         </div>
@@ -197,7 +200,7 @@ export function MenuContent({ menuData }: MenuContentProps) {
                                         <MenuItem
                                             key={item.id}
                                             item={item}
-                                            hideImage={false}
+                                            hideImage={isDrinkCategory(categoryName)}
                                             quantityRemaining={item.quantity_remaining}
                                             isSoldOut={item.is_sold_out}
                                         />
@@ -217,14 +220,12 @@ export function MenuContent({ menuData }: MenuContentProps) {
                                     <Utensils className="w-6 h-6 text-beige-600" />
                                     <h2 className="text-2xl font-serif font-bold text-beige-900">Sempre Disponível</h2>
                                 </div>
-                                <Badge variant="outline" className="bg-beige-900/10 text-beige-900 border-beige-900">
-                                    Disponível a qualquer momento
-                                </Badge>
                             </div>
                         )}
 
                         {Object.entries(groupedAlwaysAvailable).map(([categoryName, items]) => {
                             if (!shouldShowSection('Always', categoryName)) return null
+                            const isDrinks = isDrinkCategory(categoryName)
 
                             return (
                                 <div key={categoryName} className="space-y-4">
@@ -232,12 +233,17 @@ export function MenuContent({ menuData }: MenuContentProps) {
                                         <span className="w-2 h-2 bg-beige-900 rounded-full"></span>
                                         {categoryName}
                                     </h3>
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                                    <div className={cn(
+                                        "grid gap-4",
+                                        isDrinks
+                                            ? "grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
+                                            : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+                                    )}>
                                         {(items as any[]).map((item: any) => (
                                             <MenuItem
                                                 key={item.id}
                                                 item={item}
-                                                hideImage={['Cafetaria', 'Bebidas', 'Vinhos', 'Cervejas'].includes(categoryName)}
+                                                hideImage={isDrinks}
                                             />
                                         ))}
                                     </div>
@@ -255,7 +261,7 @@ export function MenuContent({ menuData }: MenuContentProps) {
                                 <Calendar className="w-6 h-6 text-accent" />
                                 <h2 className="text-2xl font-serif font-bold text-beige-900">Sob Encomenda</h2>
                             </div>
-                            <Badge variant="outline" className="bg-accent/10 text-accent border-accent">
+                            <Badge className="bg-accent/10 text-accent hover:bg-accent/20 border-0">
                                 Requer antecedência
                             </Badge>
                         </div>

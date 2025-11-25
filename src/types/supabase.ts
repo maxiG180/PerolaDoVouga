@@ -17,6 +17,7 @@ export interface Database {
           description: string | null
           display_order: number
           is_active: boolean
+          icon_name: string | null
           created_at: string
           updated_at: string
         }
@@ -27,6 +28,7 @@ export interface Database {
           description?: string | null
           display_order?: number
           is_active?: boolean
+          icon_name?: string | null
           created_at?: string
           updated_at?: string
         }
@@ -37,6 +39,7 @@ export interface Database {
           description?: string | null
           display_order?: number
           is_active?: boolean
+          icon_name?: string | null
           created_at?: string
           updated_at?: string
         }
@@ -55,6 +58,12 @@ export interface Database {
           is_available: boolean
           is_featured: boolean
           display_order: number
+          is_always_available: boolean
+          availability_type: 'immediate' | 'advance_order'
+          advance_notice_days: number | null
+          minimum_quantity: number | null
+          minimum_quantity_text: string | null
+          cuisine_type: 'portuguesa' | 'africana' | 'ucraniana' | 'other' | null
           created_at: string
           updated_at: string
         }
@@ -71,6 +80,12 @@ export interface Database {
           is_available?: boolean
           is_featured?: boolean
           display_order?: number
+          is_always_available?: boolean
+          availability_type?: 'immediate' | 'advance_order'
+          advance_notice_days?: number | null
+          minimum_quantity?: number | null
+          minimum_quantity_text?: string | null
+          cuisine_type?: 'portuguesa' | 'africana' | 'ucraniana' | 'other' | null
           created_at?: string
           updated_at?: string
         }
@@ -87,6 +102,12 @@ export interface Database {
           is_available?: boolean
           is_featured?: boolean
           display_order?: number
+          is_always_available?: boolean
+          availability_type?: 'immediate' | 'advance_order'
+          advance_notice_days?: number | null
+          minimum_quantity?: number | null
+          minimum_quantity_text?: string | null
+          cuisine_type?: 'portuguesa' | 'africana' | 'ucraniana' | 'other' | null
           created_at?: string
           updated_at?: string
         }
@@ -102,6 +123,10 @@ export interface Database {
           special_instructions: string | null
           total_amount: number
           status: 'pending' | 'accepted' | 'preparing' | 'ready' | 'completed' | 'cancelled'
+          payment_method: 'online' | 'pickup'
+          payment_status: 'pending' | 'paid' | 'failed'
+          stripe_payment_intent_id: string | null
+          stripe_fee: number
           created_at: string
           updated_at: string
         }
@@ -115,6 +140,10 @@ export interface Database {
           special_instructions?: string | null
           total_amount: number
           status?: 'pending' | 'accepted' | 'preparing' | 'ready' | 'completed' | 'cancelled'
+          payment_method?: 'online' | 'pickup'
+          payment_status?: 'pending' | 'paid' | 'failed'
+          stripe_payment_intent_id?: string | null
+          stripe_fee?: number
           created_at?: string
           updated_at?: string
         }
@@ -128,6 +157,10 @@ export interface Database {
           special_instructions?: string | null
           total_amount?: number
           status?: 'pending' | 'accepted' | 'preparing' | 'ready' | 'completed' | 'cancelled'
+          payment_method?: 'online' | 'pickup'
+          payment_status?: 'pending' | 'paid' | 'failed'
+          stripe_payment_intent_id?: string | null
+          stripe_fee?: number
           created_at?: string
           updated_at?: string
         }
@@ -162,6 +195,64 @@ export interface Database {
           quantity?: number
           customizations?: string | null
           subtotal?: number
+        }
+      }
+      daily_menu_planning: {
+        Row: {
+          id: string
+          date: string
+          soup_id: string | null
+          notes: string | null
+          created_by: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          date: string
+          soup_id?: string | null
+          notes?: string | null
+          created_by?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          date?: string
+          soup_id?: string | null
+          notes?: string | null
+          created_by?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+      }
+      daily_menu_items: {
+        Row: {
+          id: string
+          planning_id: string
+          menu_item_id: string
+          quantity_available: number | null
+          quantity_sold: number
+          is_sold_out: boolean
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          planning_id: string
+          menu_item_id: string
+          quantity_available?: number | null
+          quantity_sold?: number
+          is_sold_out?: boolean
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          planning_id?: string
+          menu_item_id?: string
+          quantity_available?: number | null
+          quantity_sold?: number
+          is_sold_out?: boolean
+          created_at?: string
         }
       }
     }

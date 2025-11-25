@@ -35,7 +35,7 @@ export default async function RootLayout({
 
     return (
         <html lang={locale} className={`${playfair.variable} ${inter.variable}`}>
-            <body className="font-sans antialiased">
+            <body className="font-sans antialiased" suppressHydrationWarning>
                 <style dangerouslySetInnerHTML={{
                     __html: `
                     :root {
