@@ -76,13 +76,12 @@ export default function AdminLoginPage() {
                     <p className="text-muted-foreground mb-6">Você já está autenticado.</p>
 
                     <div className="space-y-3">
-                        <Button
-                            className="w-full"
-                            variant="gold"
+                        <button
+                            className="w-full px-4 py-2 bg-[#D4AF37] hover:bg-[#B39226] text-white font-medium rounded-md transition-colors"
                             onClick={() => router.push('/admin/orders')}
                         >
                             Ir para Painel de Controlo
-                        </Button>
+                        </button>
                         <Button
                             className="w-full"
                             variant="outline"
@@ -136,10 +135,14 @@ export default function AdminLoginPage() {
                             required
                         />
                     </div>
-                    <Button type="submit" className="w-full" variant="gold" disabled={loading}>
+                    <button
+                        type="submit"
+                        className="w-full px-4 py-2 bg-[#D4AF37] hover:bg-[#B39226] text-white font-medium rounded-md transition-colors disabled:opacity-50 flex items-center justify-center"
+                        disabled={loading}
+                    >
                         {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
                         {t('submit_button')}
-                    </Button>
+                    </button>
                 </form>
             </div>
         </div>

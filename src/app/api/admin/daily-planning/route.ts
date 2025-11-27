@@ -3,7 +3,7 @@ import { createClient } from '@/lib/supabase/server';
 
 export async function POST(req: NextRequest) {
     try {
-        const supabase = await createClient();
+        const supabase = await createClient() as any;
         const { date, soupId, selectedPratos, notes } = await req.json();
 
         // 1. Upsert daily_menu_planning
@@ -56,7 +56,7 @@ export async function POST(req: NextRequest) {
 
 export async function GET(req: NextRequest) {
     try {
-        const supabase = await createClient();
+        const supabase = await createClient() as any;
         const { searchParams } = new URL(req.url);
         const date = searchParams.get('date');
 

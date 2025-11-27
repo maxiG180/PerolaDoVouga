@@ -4,6 +4,7 @@ import "../globals.css"
 import { Toaster } from "sonner"
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages } from 'next-intl/server'
+import { ChatWidget } from '@/components/chat/ChatWidget'
 
 const playfair = Playfair_Display({
     subsets: ["latin"],
@@ -69,6 +70,7 @@ export default async function RootLayout({
                 <NextIntlClientProvider messages={messages}>
                     {children}
                     <Toaster position="top-center" richColors />
+                    <ChatWidget />
                 </NextIntlClientProvider>
             </body>
         </html>

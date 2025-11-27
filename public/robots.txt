@@ -1,0 +1,17 @@
+# Allow all crawlers for public pages
+User-agent: *
+Allow: /
+Allow: /menu
+Allow: /about
+Allow: /checkout
+
+# Block all admin and internal pages
+Disallow: /admin/
+Disallow: /api/
+Disallow: /*admin*
+
+# Block chat-related endpoints
+Disallow: /api/chat/
+
+# Sitemap (optional - create this later)
+# Sitemap: https://peroladovouga.com/sitemap.xml

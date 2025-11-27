@@ -53,9 +53,13 @@ export function OrdersTable({ initialOrders }: { initialOrders: any[] }) {
                 (payload: any) => {
                     if (payload.eventType === 'INSERT') {
                         toast.success(`Nova encomenda recebida! #${payload.new.order_number}`)
-                        // Play sound if possible (browser policy restricts this usually)
-                        // const audio = new Audio('/sounds/notification.mp3')
-                        // audio.play().catch(() => {})
+                        // Play notification sound
+                        try {
+                            const audio = new Audio('data:audio/mp3;base64,//NExAAAAANIAAAAAExBTUUzLjEwMKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq//NExAAAAANIAAAAAExBTUUzLjEwMKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq')
+                            audio.play().catch(e => console.log('Audio play failed:', e))
+                        } catch (e) {
+                            console.error('Error playing sound:', e)
+                        }
                         router.refresh()
                     } else if (payload.eventType === 'UPDATE') {
                         setOrders((currentOrders: any[]) =>

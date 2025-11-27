@@ -1,6 +1,7 @@
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { Button } from '@/components/ui/button'
+import Image from 'next/image'
 import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
 import { ArrowRight, Utensils, Coffee, Star, MapPin, Clock, Phone, ChefHat } from 'lucide-react'
@@ -27,30 +28,27 @@ export default async function Home() {
                             {/* Left Content */}
                             <div className="lg:w-1/2 text-center lg:text-left space-y-8">
                                 <div className="inline-block animate-fade-in-up">
-                                    <span className="px-6 py-2 rounded-full bg-beige-100 text-beige-900 text-sm font-bold tracking-wider uppercase border border-beige-200">
-                                        ✨ {t('welcome')}
+                                    <span className="px-4 py-1.5 rounded-lg bg-beige-100 text-beige-900 text-sm font-medium">
+                                        {t('welcome')}
                                     </span>
                                 </div>
 
-                                <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl font-bold leading-[1.1] text-beige-900 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
-                                    {t('tagline').split(' ')[0]} <br />
-                                    <span className="text-gold-dark">
-                                        {t('tagline').split(' ').slice(1).join(' ')}
-                                    </span>
+                                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-stone-800 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+                                    {t('tagline')}
                                 </h1>
 
-                                <p className="text-xl md:text-2xl text-stone-600 max-w-xl mx-auto lg:mx-0 animate-fade-in-up leading-relaxed" style={{ animationDelay: '0.2s' }}>
+                                <p className="text-lg md:text-xl text-stone-600 max-w-xl mx-auto lg:mx-0 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
                                     {t('description')}
                                 </p>
 
-                                <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start animate-fade-in-up pt-4" style={{ animationDelay: '0.3s' }}>
-                                    <Button asChild size="lg" className="bg-stone-900 text-white hover:bg-stone-800 text-lg px-10 py-7 rounded-full shadow-xl hover:shadow-2xl transition-all hover:-translate-y-1">
+                                <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
+                                    <Button asChild size="lg" className="bg-stone-800 text-white hover:bg-stone-900">
                                         <Link href="/menu">
                                             {t('cta_menu')}
-                                            <ArrowRight className="ml-2 w-5 h-5" />
+                                            <ArrowRight className="ml-2 w-4 h-4" />
                                         </Link>
                                     </Button>
-                                    <Button asChild variant="outline" size="lg" className="text-lg px-10 py-7 rounded-full border-2 border-beige-200 text-beige-900 hover:bg-beige-100 hover:border-beige-300 transition-all">
+                                    <Button asChild variant="outline" size="lg" className="border-stone-300 text-stone-800 hover:bg-stone-50">
                                         <Link href="/about">
                                             {t('cta_about')}
                                         </Link>
@@ -60,30 +58,13 @@ export default async function Home() {
 
                             {/* Right Image */}
                             <div className="lg:w-1/2 relative animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
-                                <div className="relative z-10 rounded-[2.5rem] overflow-hidden shadow-2xl transition-all duration-700 ease-out border-4 border-white">
+                                <div className="relative rounded-xl overflow-hidden shadow-lg border-2 border-gray-200 h-[350px] lg:h-[500px]">
                                     <img
-                                        src="/img_homepage/salmao grelhado.jpg"
+                                        src="/salmao-grelhado.jpg"
                                         alt="Prato de Salmão Grelhado"
-                                        className="w-full h-auto object-cover transform hover:scale-105 transition-transform duration-700"
+                                        className="w-full h-full object-cover"
                                     />
-
-                                    {/* Floating Badge - River Image */}
-                                    <div className="absolute bottom-6 left-6 w-32 h-32 rounded-2xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.12)] border-4 border-white hidden sm:block transform -rotate-6 hover:rotate-0 transition-all duration-500 group cursor-pointer">
-                                        <img
-                                            src="/vouga.jpg"
-                                            alt="Rio Vouga"
-                                            className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
-                                        />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-80" />
-                                        <div className="absolute bottom-2 left-0 right-0 text-center">
-                                            <span className="text-white text-xs font-bold tracking-wider uppercase drop-shadow-md">Rio Vouga</span>
-                                        </div>
-                                    </div>
                                 </div>
-
-                                {/* Decorative Elements behind image */}
-                                <div className="absolute -bottom-10 -right-10 w-64 h-64 bg-gold/10 rounded-full blur-3xl -z-10" />
-                                <div className="absolute -top-10 -left-10 w-32 h-32 border-4 border-beige-200 rounded-full -z-10 opacity-50" />
                             </div>
                         </div>
                     </div>
@@ -92,10 +73,9 @@ export default async function Home() {
                 {/* Featured Dishes Section - Redesigned Grid */}
                 <section className="py-20 bg-white relative">
                     <div className="container mx-auto px-4">
-                        <div className="flex flex-col md:flex-row items-end justify-between mb-12 gap-6">
+                        <div className="flex flex-col md:flex-row items-end justify-between mb-10 gap-6">
                             <div className="text-left">
-                                <span className="text-gold font-serif italic text-xl mb-2 block">{t('featured_subtitle')}</span>
-                                <h2 className="font-serif text-4xl md:text-5xl font-bold text-primary-900">
+                                <h2 className="text-3xl md:text-4xl font-bold text-stone-800">
                                     {t('featured_title')}
                                 </h2>
                             </div>
@@ -111,7 +91,7 @@ export default async function Home() {
                             <div className="group relative h-[450px] rounded-3xl overflow-hidden cursor-pointer">
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10"></div>
                                 <img
-                                    src="/img_homepage/Bacalhau-com-natas.jpg"
+                                    src="/Bacalhau-com-natas.jpg"
                                     alt="Bacalhau com Natas"
                                     className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
                                 />
@@ -128,7 +108,7 @@ export default async function Home() {
                             <div className="group relative h-[450px] rounded-3xl overflow-hidden cursor-pointer">
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10"></div>
                                 <img
-                                    src="/img_homepage/bitoque-de-vaca.jpg"
+                                    src="/bitoque-de-vaca.jpg"
                                     alt="Bitoque de Novilho"
                                     className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
                                 />
@@ -145,7 +125,7 @@ export default async function Home() {
                             <div className="group relative h-[450px] rounded-3xl overflow-hidden cursor-pointer md:col-span-2 lg:col-span-1">
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10"></div>
                                 <img
-                                    src="/img_homepage/secretos-de-porco.jpg"
+                                    src="/secretos-de-porco.jpg"
                                     alt="Secretos de Porco"
                                     className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
                                 />
