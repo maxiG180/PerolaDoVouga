@@ -33,7 +33,8 @@ export async function GET(request: NextRequest) {
         }
 
         // Format data for frontend
-        const formattedData = data.map(item => {
+        // Type assertion needed due to Supabase type inference issue with joins
+        const formattedData = (data as any[]).map((item: any) => {
             const cost = item.recipe_costs?.[0]
 
             // If we have a cost entry, use it. Otherwise default to item price as selling price and 0 cost
@@ -79,7 +80,7 @@ export async function POST(request: NextRequest) {
                 selling_price,
                 updated_by: user.id,
                 last_updated: new Date().toISOString()
-            }, { onConflict: 'menu_item_id' })
+            } as any, { onConflict: 'menu_item_id' })
             .select()
             .single()
 
@@ -89,6 +90,7 @@ export async function POST(request: NextRequest) {
 
         // Optionally update the main menu_item price to match sending price?
         // Let's decide to keep them in sync
+        // @ts-ignore - Supabase type inference issue
         const { error: menuError } = await supabase
             .from('menu_items')
             .update({ price: selling_price })

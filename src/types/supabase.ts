@@ -332,6 +332,7 @@ export interface Database {
           item_name: string
           quantity: number
           unit_price: number
+          total_price: number
           sale_date: string
           notes?: string | null
           created_at?: string

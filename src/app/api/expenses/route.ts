@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextRequest, NextResponse } from 'next/server'
+import { Database } from '@/types/supabase'
 
 export async function GET(request: NextRequest) {
     try {
@@ -84,23 +85,26 @@ export async function POST(request: NextRequest) {
             .from('expense_categories')
             .select('id')
             .eq('name', getCategoryNameFromId(category_id))
-            .single()
+            .single() as { data: { id: string } | null, error: any }
 
         if (catError || !categoryData) {
             return NextResponse.json({ error: 'Invalid category' }, { status: 400 })
         }
 
-        // Insert expense
+        // Insert expense with proper Database type
+        const expenseData: Database['public']['Tables']['expenses']['Insert'] = {
+            category_id: categoryData.id,
+            amount: Number(amount),
+            expense_date,
+            description: description || null,
+            is_recurring: is_recurring || false,
+            created_by: user.id
+        }
+
+        // Type assertion needed due to Supabase type inference issue
         const { data, error } = await supabase
             .from('expenses')
-            .insert([{
-                category_id: categoryData.id,
-                amount: Number(amount),
-                expense_date,
-                description: description || null,
-                is_recurring: is_recurring || false,
-                created_by: user.id
-            }])
+            .insert(expenseData as any)
             .select()
             .single()
 
