@@ -43,7 +43,7 @@ export default function AdminLoginPage() {
 
             toast.success(t('success'))
             router.refresh()
-            router.push('/admin/orders')
+            router.push('/admin/home')
         } catch (error: any) {
             toast.error(t('error'))
         } finally {
@@ -77,8 +77,8 @@ export default function AdminLoginPage() {
 
                     <div className="space-y-3">
                         <button
-                            className="w-full px-4 py-2 bg-[#D4AF37] hover:bg-[#B39226] text-white font-medium rounded-md transition-colors"
-                            onClick={() => router.push('/admin/orders')}
+                            className="w-full px-4 py-2 bg-[#D4AF37] hover:bg-[#B39226] text-white font-medium rounded-md transition-colors cursor-pointer"
+                            onClick={() => router.push('/admin/home')}
                         >
                             Ir para Painel de Controlo
                         </button>

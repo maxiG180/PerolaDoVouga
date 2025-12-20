@@ -70,6 +70,19 @@ export default async function Home() {
                     </div>
                 </section>
 
+                {/* Online Ordering Coming Soon Banner */}
+                <section className="bg-stone-900 py-12">
+                    <div className="container mx-auto px-4 text-center">
+                        <Badge className="bg-gold text-white mb-4 hover:bg-gold text-lg py-1 px-4">Em Breve</Badge>
+                        <h2 className="text-3xl md:text-4xl font-serif font-bold text-white mb-4">
+                            Encomendas Online
+                        </h2>
+                        <p className="text-stone-300 text-lg max-w-2xl mx-auto">
+                            Estamos a preparar o nosso sistema de encomendas online para que possa desfrutar dos nossos pratos no conforto da sua casa. Fique atento!
+                        </p>
+                    </div>
+                </section>
+
                 {/* Featured Dishes Section - Redesigned Grid */}
                 <section className="py-20 bg-white relative">
                     <div className="container mx-auto px-4">

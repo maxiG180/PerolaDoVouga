@@ -46,7 +46,7 @@ export function Header() {
                             Pérola do Vouga
                         </span>
                         <span className="text-[10px] uppercase tracking-[0.2em] font-medium mt-0.5 text-gold-dark">
-                            Takeaway & Café
+                            Café & Restaurante
                         </span>
                     </div>
                 </Link>
@@ -71,12 +71,7 @@ export function Header() {
                             <span className="hidden lg:inline">+351 21 846 4584</span>
                         </a>
 
-                        <Button asChild variant="gold" size="sm" className="gap-2 text-beige-900 shadow-lg hover:shadow-gold/20">
-                            <Link href="/menu">
-                                <ShoppingBag className="w-4 h-4" />
-                                <span className="hidden lg:inline">Encomendar</span>
-                            </Link>
-                        </Button>
+
 
                         <LanguageSwitcher />
                     </div>
@@ -118,10 +113,7 @@ export function Header() {
                     >
                         {t('about')}
                     </Link>
-                    <Button className="w-full gap-2 py-6 text-lg" variant="gold">
-                        <ShoppingBag className="w-5 h-5" />
-                        Ver Carrinho
-                    </Button>
+
                 </div>
             )}
         </header>

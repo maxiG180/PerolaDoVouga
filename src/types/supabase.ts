@@ -255,6 +255,127 @@ export interface Database {
           created_at?: string
         }
       }
+      expense_categories: {
+        Row: {
+          id: string
+          name: string
+          icon: string | null
+          color: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          icon?: string | null
+          color?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          icon?: string | null
+          color?: string | null
+          created_at?: string
+        }
+      }
+      expenses: {
+        Row: {
+          id: string
+          category_id: string
+          amount: number
+          expense_date: string
+          description: string | null
+          is_recurring: boolean
+          created_at: string
+          updated_at: string
+          created_by: string | null
+        }
+        Insert: {
+          id?: string
+          category_id: string
+          amount: number
+          expense_date: string
+          description?: string | null
+          is_recurring?: boolean
+          created_at?: string
+          updated_at?: string
+          created_by?: string | null
+        }
+        Update: {
+          id?: string
+          category_id?: string
+          amount?: number
+          expense_date?: string
+          description?: string | null
+          is_recurring?: boolean
+          created_at?: string
+          updated_at?: string
+          created_by?: string | null
+        }
+      }
+      sales_log: {
+        Row: {
+          id: string
+          menu_item_id: string
+          item_name: string
+          quantity: number
+          unit_price: number
+          total_price: number
+          sale_date: string
+          notes: string | null
+          created_at: string
+          created_by: string | null
+        }
+        Insert: {
+          id?: string
+          menu_item_id: string
+          item_name: string
+          quantity: number
+          unit_price: number
+          sale_date: string
+          notes?: string | null
+          created_at?: string
+          created_by?: string | null
+        }
+        Update: {
+          id?: string
+          menu_item_id?: string
+          item_name?: string
+          quantity?: number
+          unit_price?: number
+          sale_date?: string
+          notes?: string | null
+          created_at?: string
+          created_by?: string | null
+        }
+      }
+      recipe_costs: {
+        Row: {
+          id: string
+          menu_item_id: string
+          ingredient_cost: number
+          selling_price: number
+          margin_percentage: number
+          last_updated: string
+          updated_by: string | null
+        }
+        Insert: {
+          id?: string
+          menu_item_id: string
+          ingredient_cost?: number
+          selling_price: number
+          last_updated?: string
+          updated_by?: string | null
+        }
+        Update: {
+          id?: string
+          menu_item_id?: string
+          ingredient_cost?: number
+          selling_price?: number
+          last_updated?: string
+          updated_by?: string | null
+        }
+      }
     }
   }
 }

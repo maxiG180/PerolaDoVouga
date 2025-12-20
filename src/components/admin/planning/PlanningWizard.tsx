@@ -8,12 +8,14 @@ import { Calendar } from '@/components/ui/calendar'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { toast } from 'sonner'
-import { Loader2, Save, Copy, ArrowRight, Check } from 'lucide-react'
+
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
+    PopoverClose,
 } from '@/components/ui/popover'
+import { Loader2, Save, Copy, ArrowRight, Check, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import Image from 'next/image'
 
@@ -32,6 +34,7 @@ export function PlanningWizard() {
     const [dishes, setDishes] = useState<MenuItem[]>([])
     const [selectedSoup, setSelectedSoup] = useState<string | null>(null)
     const [selectedDishes, setSelectedDishes] = useState<string[]>([])
+    const [notes, setNotes] = useState<string>('')
     const [loading, setLoading] = useState(true)
     const [saving, setSaving] = useState(false)
     const [step, setStep] = useState(1) // 1: Soup, 2: Dishes, 3: Review
@@ -51,7 +54,9 @@ export function PlanningWizard() {
             .eq('is_available', true)
 
         if (data) {
+            // @ts-ignore
             setSoups(data.filter(i => i.daily_type === 'soup'))
+            // @ts-ignore
             setDishes(data.filter(i => i.daily_type === 'dish'))
         }
         setLoading(false)
@@ -66,11 +71,16 @@ export function PlanningWizard() {
             .single()
 
         if (data) {
+            // @ts-ignore
             setSelectedSoup(data.soup_id)
+            // @ts-ignore
             setSelectedDishes(data.dish_ids || [])
+            // @ts-ignore
+            setNotes(data.notes || '')
         } else {
             setSelectedSoup(null)
             setSelectedDishes([])
+            setNotes('')
         }
     }
 
@@ -82,10 +92,12 @@ export function PlanningWizard() {
             // Upsert logic
             const { error } = await supabase
                 .from('daily_menus')
+                // @ts-ignore
                 .upsert({
                     date: formattedDate,
                     soup_id: selectedSoup,
-                    dish_ids: selectedDishes
+                    dish_ids: selectedDishes,
+                    notes: notes
                 }, { onConflict: 'date' })
 
             if (error) throw error
@@ -111,7 +123,9 @@ export function PlanningWizard() {
             .single()
 
         if (data) {
+            // @ts-ignore
             setSelectedSoup(data.soup_id)
+            // @ts-ignore
             setSelectedDishes(data.dish_ids || [])
             toast.success('Menu copiado do dia anterior!')
         } else {
@@ -134,33 +148,38 @@ export function PlanningWizard() {
     return (
         <div className="space-y-8">
             {/* Header / Date Selection */}
-            <div className="flex flex-col md:flex-row justify-between items-center gap-4 bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-                <div>
-                    <h2 className="text-lg font-semibold text-gray-900">Planeamento para:</h2>
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-4 md:p-6 rounded-xl shadow-sm border border-gray-200">
+                <div className="w-full md:w-auto">
+                    <h2 className="text-lg font-semibold text-gray-900 mb-2 md:mb-0">Planeamento para:</h2>
                     <Popover>
                         <PopoverTrigger asChild>
-                            <Button variant="outline" className="w-[240px] justify-start text-left font-normal mt-1 text-lg">
+                            <Button variant="outline" className="w-full md:w-[240px] justify-start text-left font-normal mt-1 text-lg">
                                 {format(date, "EEEE, d 'de' MMMM", { locale: pt })}
                             </Button>
                         </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0" align="start">
-                            <Calendar
-                                mode="single"
-                                selected={date}
-                                onSelect={(d) => d && setDate(d)}
-                                initialFocus
-                            />
+                        <PopoverContent className="w-auto p-0 bg-white" align="start">
+                            <div className="relative">
+                                <Calendar
+                                    mode="single"
+                                    selected={date}
+                                    onSelect={(d) => d && setDate(d)}
+                                    initialFocus
+                                />
+                                <PopoverClose className="absolute top-2 right-2 p-1 rounded-full hover:bg-gray-100">
+                                    <X className="w-4 h-4 text-gray-500" />
+                                </PopoverClose>
+                            </div>
                         </PopoverContent>
                     </Popover>
                 </div>
 
-                <div className="flex gap-2">
-                    <Button variant="outline" onClick={copyFromYesterday}>
+                <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
+                    <Button variant="outline" onClick={copyFromYesterday} className="w-full sm:w-auto">
                         <Copy className="w-4 h-4 mr-2" />
                         Copiar de Ontem
                     </Button>
                     <Button
-                        className="bg-[#D4AF37] hover:bg-[#B39226] text-white"
+                        className="bg-[#D4AF37] hover:bg-[#B39226] text-white w-full sm:w-auto"
                         onClick={handleSave}
                         disabled={saving}
                     >
@@ -250,7 +269,25 @@ export function PlanningWizard() {
                     </CardContent>
                 </Card>
             </div>
-        </div>
+
+            {/* Step 3: Shopping List / Notes */}
+            <Card className="border-gray-200">
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                        <span className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 text-sm font-bold">3</span>
+                        Lista de Compras & Notas
+                    </CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <textarea
+                        className="w-full min-h-[150px] p-4 rounded-lg border border-gray-200 focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37] resize-y"
+                        placeholder="Escreva aqui a lista de compras para este dia ou outras notas importantes..."
+                        value={notes}
+                        onChange={(e) => setNotes(e.target.value)}
+                    />
+                </CardContent>
+            </Card>
+        </div >
     )
 }
 

@@ -183,56 +183,58 @@ export function DishForm({ initialData, onSuccess, onCancel }: DishFormProps) {
 
                 {/* Right Column - Photo & Settings */}
                 <div className="space-y-4">
-                    <div>
-                        <Label>Foto do Prato *</Label>
-                        <div className="mt-2 border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:bg-gray-50 transition-colors relative">
-                            {form.watch('photo_url') ? (
-                                <div className="relative h-48 w-full">
-                                    <Image
-                                        src={form.watch('photo_url')}
-                                        alt="Preview"
-                                        fill
-                                        className="object-cover rounded-md"
-                                    />
-                                    <div className="absolute top-2 right-2 flex gap-2">
-                                        <label className="p-1 bg-white/90 text-gray-700 rounded-full hover:bg-white cursor-pointer shadow-sm">
-                                            <Pencil className="w-4 h-4" />
-                                            <input
-                                                type="file"
-                                                accept="image/*"
-                                                onChange={handleImageUpload}
-                                                disabled={uploading}
-                                                className="hidden"
-                                            />
-                                        </label>
-                                        <button
-                                            type="button"
-                                            onClick={() => form.setValue('photo_url', '')}
-                                            className="p-1 bg-red-500 text-white rounded-full hover:bg-red-600 shadow-sm"
-                                        >
-                                            <X className="w-4 h-4" />
-                                        </button>
+                    {form.watch('category') !== 'Bebidas' && (
+                        <div>
+                            <Label>Foto do Prato *</Label>
+                            <div className="mt-2 border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:bg-gray-50 transition-colors relative">
+                                {form.watch('photo_url') ? (
+                                    <div className="relative h-48 w-full">
+                                        <Image
+                                            src={form.watch('photo_url')!}
+                                            alt="Preview"
+                                            fill
+                                            className="object-cover rounded-md"
+                                        />
+                                        <div className="absolute top-2 right-2 flex gap-2">
+                                            <label className="p-1 bg-white/90 text-gray-700 rounded-full hover:bg-white cursor-pointer shadow-sm">
+                                                <Pencil className="w-4 h-4" />
+                                                <input
+                                                    type="file"
+                                                    accept="image/*"
+                                                    onChange={handleImageUpload}
+                                                    disabled={uploading}
+                                                    className="hidden"
+                                                />
+                                            </label>
+                                            <button
+                                                type="button"
+                                                onClick={() => form.setValue('photo_url', '')}
+                                                className="p-1 bg-red-500 text-white rounded-full hover:bg-red-600 shadow-sm"
+                                            >
+                                                <X className="w-4 h-4" />
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
-                            ) : (
-                                <div className="flex flex-col items-center justify-center py-8">
-                                    <Upload className="w-10 h-10 text-gray-400 mb-2" />
-                                    <p className="text-sm text-gray-500 mb-2">Clique para carregar imagem</p>
-                                    <Input
-                                        type="file"
-                                        accept="image/*"
-                                        onChange={handleImageUpload}
-                                        disabled={uploading}
-                                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                                    />
-                                </div>
+                                ) : (
+                                    <div className="flex flex-col items-center justify-center py-8">
+                                        <Upload className="w-10 h-10 text-gray-400 mb-2" />
+                                        <p className="text-sm text-gray-500 mb-2">Clique para carregar imagem</p>
+                                        <Input
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={handleImageUpload}
+                                            disabled={uploading}
+                                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                        />
+                                    </div>
+                                )}
+                            </div>
+                            {uploading && <p className="text-sm text-blue-500 mt-1">A carregar imagem...</p>}
+                            {form.formState.errors.photo_url && (
+                                <p className="text-sm text-red-500">{form.formState.errors.photo_url.message}</p>
                             )}
                         </div>
-                        {uploading && <p className="text-sm text-blue-500 mt-1">A carregar imagem...</p>}
-                        {form.formState.errors.photo_url && (
-                            <p className="text-sm text-red-500">{form.formState.errors.photo_url.message}</p>
-                        )}
-                    </div>
+                    )}
 
                     <div className="bg-gray-50 p-4 rounded-lg space-y-4">
                         <h3 className="font-medium text-gray-900">Configurações</h3>

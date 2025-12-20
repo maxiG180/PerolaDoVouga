@@ -12,8 +12,8 @@ insert into site_settings (key, value) values
   ('address', 'Rua Principal, 123, Vouga'),
   ('phone', '+351 123 456 789'),
   ('email', 'peroladovougalda@gmail.com'),
-  ('opening_hours_weekdays', '08:00 - 20:00'),
-  ('opening_hours_weekend', '09:00 - 22:00'),
+  ('opening_hours_weekdays', 'Segunda a Sábado: 07:00 - 18:30'),
+  ('opening_hours_weekend', 'Domingo: Encerrado'),
   ('facebook_url', 'https://facebook.com'),
   ('instagram_url', 'https://instagram.com')
 on conflict (key) do nothing;

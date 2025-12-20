@@ -22,7 +22,8 @@ import {
     SelectValue,
 } from '@/components/ui/select'
 import { toast } from 'sonner'
-import { Plus, Pencil, Trash2, Search, Copy, Image as ImageIcon, Upload } from 'lucide-react'
+import { Plus, Pencil, Trash2, Search, Copy, Image as ImageIcon, Upload, Coffee } from 'lucide-react'
+
 import { DishForm } from './DishForm'
 import {
     Dialog,
@@ -242,33 +243,35 @@ export function DishList({ initialItems }: DishListProps) {
                 {filteredItems.map((item) => (
                     <div key={item.id} className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 flex gap-4">
                         {/* Image */}
-                        <div className="relative w-24 h-24 shrink-0 rounded-lg overflow-hidden bg-gray-100 group cursor-pointer">
-                            <label className="absolute inset-0 cursor-pointer">
-                                <input
-                                    type="file"
-                                    accept="image/*"
-                                    className="hidden"
-                                    onChange={(e) => handleQuickImageUpload(e, item)}
-                                />
-                                {item.photo_url ? (
-                                    <>
-                                        <Image
-                                            src={item.photo_url}
-                                            alt={item.name}
-                                            fill
-                                            className="object-cover"
-                                        />
-                                        <div className="absolute inset-0 flex items-center justify-center bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity">
-                                            <Upload className="w-6 h-6 text-white" />
+                        {item.category !== 'Bebidas' && (
+                            <div className="relative w-24 h-24 shrink-0 rounded-lg overflow-hidden bg-gray-100 group cursor-pointer">
+                                <label className="absolute inset-0 cursor-pointer">
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        className="hidden"
+                                        onChange={(e) => handleQuickImageUpload(e, item)}
+                                    />
+                                    {item.photo_url ? (
+                                        <>
+                                            <Image
+                                                src={item.photo_url}
+                                                alt={item.name}
+                                                fill
+                                                className="object-cover"
+                                            />
+                                            <div className="absolute inset-0 flex items-center justify-center bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <Upload className="w-6 h-6 text-white" />
+                                            </div>
+                                        </>
+                                    ) : (
+                                        <div className="flex items-center justify-center h-full text-gray-400 bg-gray-50">
+                                            <Upload className="w-6 h-6" />
                                         </div>
-                                    </>
-                                ) : (
-                                    <div className="flex items-center justify-center h-full text-gray-400 bg-gray-50">
-                                        <Upload className="w-6 h-6" />
-                                    </div>
-                                )}
-                            </label>
-                        </div>
+                                    )}
+                                </label>
+                            </div>
+                        )}
 
                         {/* Content */}
                         <div className="flex-1 min-w-0 flex flex-col justify-between">
@@ -328,33 +331,39 @@ export function DishList({ initialItems }: DishListProps) {
                         {filteredItems.map((item) => (
                             <TableRow key={item.id} className="border-b border-gray-50 hover:bg-gray-50/50">
                                 <TableCell>
-                                    <div className="relative w-12 h-12 rounded-md overflow-hidden bg-gray-100 group cursor-pointer">
-                                        <label className="absolute inset-0 cursor-pointer">
-                                            <input
-                                                type="file"
-                                                accept="image/*"
-                                                className="hidden"
-                                                onChange={(e) => handleQuickImageUpload(e, item)}
-                                            />
-                                            {item.photo_url ? (
-                                                <>
-                                                    <Image
-                                                        src={item.photo_url}
-                                                        alt={item.name}
-                                                        fill
-                                                        className="object-cover transition-opacity group-hover:opacity-75"
-                                                    />
-                                                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-black/30 transition-opacity">
-                                                        <Upload className="w-4 h-4 text-white" />
+                                    {item.category !== 'Bebidas' ? (
+                                        <div className="relative w-12 h-12 rounded-md overflow-hidden bg-gray-100 group cursor-pointer">
+                                            <label className="absolute inset-0 cursor-pointer">
+                                                <input
+                                                    type="file"
+                                                    accept="image/*"
+                                                    className="hidden"
+                                                    onChange={(e) => handleQuickImageUpload(e, item)}
+                                                />
+                                                {item.photo_url ? (
+                                                    <>
+                                                        <Image
+                                                            src={item.photo_url}
+                                                            alt={item.name}
+                                                            fill
+                                                            className="object-cover transition-opacity group-hover:opacity-75"
+                                                        />
+                                                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-black/30 transition-opacity">
+                                                            <Upload className="w-4 h-4 text-white" />
+                                                        </div>
+                                                    </>
+                                                ) : (
+                                                    <div className="flex items-center justify-center h-full text-gray-400 group-hover:bg-gray-200 transition-colors">
+                                                        <Upload className="w-5 h-5" />
                                                     </div>
-                                                </>
-                                            ) : (
-                                                <div className="flex items-center justify-center h-full text-gray-400 group-hover:bg-gray-200 transition-colors">
-                                                    <Upload className="w-5 h-5" />
-                                                </div>
-                                            )}
-                                        </label>
-                                    </div>
+                                                )}
+                                            </label>
+                                        </div>
+                                    ) : (
+                                        <div className="w-12 h-12 flex items-center justify-center bg-gray-50 rounded-md text-gray-300">
+                                            <Coffee className="w-5 h-5" />
+                                        </div>
+                                    )}
                                 </TableCell>
                                 <TableCell className="font-medium">
                                     <div>{item.name}</div>

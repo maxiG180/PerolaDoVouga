@@ -133,7 +133,7 @@ export function MenuItem({
                     </div>
                 )}
 
-                <Button
+                {/* <Button
                     onClick={handleAdd}
                     disabled={!item.is_available || isSoldOut}
                     size={hideImage ? "sm" : "default"}
@@ -144,7 +144,7 @@ export function MenuItem({
                 >
                     <Plus className={cn("w-4 h-4", hideImage ? "w-3 h-3" : "")} />
                     {hideImage ? "Adicionar" : "Adicionar ao Pedido"}
-                </Button>
+                </Button> */}
             </div>
         </Card>
     )

@@ -1,0 +1,34 @@
+src/app/[locale]/admin/(dashboard)/margins/page.tsx(36,62): error TS2339: Property 'price' does not exist on type 'never'.
+src/app/[locale]/admin/(dashboard)/margins/page.tsx(43,22): error TS2339: Property 'id' does not exist on type 'never'.
+src/app/[locale]/admin/(dashboard)/margins/page.tsx(44,24): error TS2339: Property 'name' does not exist on type 'never'.
+src/app/api/expenses/route.ts(96,14): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(values: never, options?: { count?: "exact" | "planned" | "estimated" | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "expenses", never, "POST">', gave the following error.
+    Argument of type '{ category_id: any; amount: number; expense_date: any; description: any; is_recurring: any; created_by: string; }[]' is not assignable to parameter of type 'never'.
+  Overload 2 of 2, '(values: never[], options?: { count?: "exact" | "planned" | "estimated" | undefined; defaultToNull?: boolean | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "expenses", never, "POST">', gave the following error.
+    Type '{ category_id: any; amount: number; expense_date: any; description: any; is_recurring: any; created_by: string; }' is not assignable to type 'never'.
+src/app/api/expenses/route.ts(97,43): error TS2339: Property 'id' does not exist on type 'never'.
+src/app/api/margins/route.ts(37,31): error TS2339: Property 'recipe_costs' does not exist on type 'never'.
+src/app/api/margins/route.ts(41,26): error TS2339: Property 'id' does not exist on type 'never'.
+src/app/api/margins/route.ts(42,28): error TS2339: Property 'name' does not exist on type 'never'.
+src/app/api/margins/route.ts(43,60): error TS2339: Property 'price' does not exist on type 'never'.
+src/app/api/margins/route.ts(76,14): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(values: never, options?: { onConflict?: string | undefined; ignoreDuplicates?: boolean | undefined; count?: "exact" | "planned" | "estimated" | undefined; } | undefined): PostgrestFilterBuilder<{ ...; }, ... 5 more ..., "POST">', gave the following error.
+    Argument of type '{ menu_item_id: any; ingredient_cost: any; selling_price: any; updated_by: string; last_updated: string; }' is not assignable to parameter of type 'never'.
+  Overload 2 of 2, '(values: never[], options?: { onConflict?: string | undefined; ignoreDuplicates?: boolean | undefined; count?: "exact" | "planned" | "estimated" | undefined; defaultToNull?: boolean | undefined; } | undefined): PostgrestFilterBuilder<...>', gave the following error.
+    Object literal may only specify known properties, and 'menu_item_id' does not exist in type 'never[]'.
+src/app/api/margins/route.ts(94,21): error TS2345: Argument of type '{ price: any; }' is not assignable to parameter of type 'never'.
+src/app/api/sales/route.ts(74,14): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(values: never, options?: { count?: "exact" | "planned" | "estimated" | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "sales_log", never, "POST">', gave the following error.
+    Argument of type '{ menu_item_id: any; item_name: any; quantity: number; unit_price: number; sale_date: any; created_by: string; }[]' is not assignable to parameter of type 'never'.
+  Overload 2 of 2, '(values: never[], options?: { count?: "exact" | "planned" | "estimated" | undefined; defaultToNull?: boolean | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "sales_log", never, "POST">', gave the following error.
+    Type '{ menu_item_id: any; item_name: any; quantity: number; unit_price: number; sale_date: any; created_by: string; }' is not assignable to type 'never'.
+src/components/admin/menu/DishForm.tsx(35,9): error TS2322: Type 'Resolver<{ name: string; price: number; category: string; daily_type?: "none" | "soup" | "dish" | undefined; is_available?: boolean | undefined; cuisine_type?: "Portuguese" | "African" | "Ukrainian" | "Other" | undefined; ... 4 more ...; allergens?: string[] | undefined; }, any, { ...; }>' is not assignable to type 'Resolver<{ name: string; daily_type: "none" | "soup" | "dish"; is_available: boolean; cuisine_type: "Portuguese" | "African" | "Ukrainian" | "Other"; price: number; is_always_available: boolean; ... 4 more ...; photo_url?: string | undefined; }, any, { ...; }>'.
+  Types of parameters 'options' and 'options' are incompatible.
+    Type 'ResolverOptions<{ name: string; daily_type: "none" | "soup" | "dish"; is_available: boolean; cuisine_type: "Portuguese" | "African" | "Ukrainian" | "Other"; price: number; is_always_available: boolean; ... 4 more ...; photo_url?: string | undefined; }>' is not assignable to type 'ResolverOptions<{ name: string; price: number; category: string; daily_type?: "none" | "soup" | "dish" | undefined; is_available?: boolean | undefined; cuisine_type?: "Portuguese" | "African" | "Ukrainian" | "Other" | undefined; ... 4 more ...; allergens?: string[] | undefined; }>'.
+      Type '"none" | "soup" | "dish" | undefined' is not assignable to type '"none" | "soup" | "dish"'.
+        Type 'undefined' is not assignable to type '"none" | "soup" | "dish"'.
+src/components/admin/menu/DishForm.tsx(107,43): error TS2345: Argument of type '(data: MenuItemFormData) => Promise<void>' is not assignable to parameter of type 'SubmitHandler<TFieldValues>'.
+  Types of parameters 'data' and 'data' are incompatible.
+    Type 'TFieldValues' is not assignable to type '{ name: string; daily_type: "none" | "soup" | "dish"; is_available: boolean; cuisine_type: "Portuguese" | "African" | "Ukrainian" | "Other"; price: number; is_always_available: boolean; ... 4 more ...; photo_url?: string | undefined; }'.
+      Type 'FieldValues' is missing the following properties from type '{ name: string; daily_type: "none" | "soup" | "dish"; is_available: boolean; cuisine_type: "Portuguese" | "African" | "Ukrainian" | "Other"; price: number; is_always_available: boolean; ... 4 more ...; photo_url?: string | undefined; }': name, daily_type, is_available, cuisine_type, and 4 more.
+src/components/ui/calendar.tsx(57,17): error TS2353: Object literal may only specify known properties, and 'IconLeft' does not exist in type 'Partial<CustomComponents>'.

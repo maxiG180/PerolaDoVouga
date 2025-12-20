@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LayoutDashboard, UtensilsCrossed, LogOut, Home, Settings, MessageCircle, CalendarDays, Menu, ExternalLink } from 'lucide-react'
+import { LayoutDashboard, UtensilsCrossed, LogOut, Home, Settings, MessageCircle, CalendarDays, Menu, ExternalLink, Receipt, ShoppingCart, TrendingUp } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { useState } from 'react'
@@ -10,10 +10,11 @@ import { cn } from '@/lib/utils'
 
 const navItems = [
     { href: '/admin/home', label: 'Painel', icon: Home },
+    { href: '/admin/expenses', label: 'Despesas', icon: Receipt },
+    { href: '/admin/sales', label: 'Vendas', icon: ShoppingCart },
+    { href: '/admin/margins', label: 'Margens', icon: TrendingUp },
     { href: '/admin/planning', label: 'Planeamento', icon: CalendarDays },
-    { href: '/admin/orders', label: 'Encomendas', icon: LayoutDashboard },
-    { href: '/admin/menu', label: 'Menu & Pratos', icon: UtensilsCrossed },
-    { href: '/admin/chat', label: 'Chat Suporte', icon: MessageCircle },
+    { href: '/admin/menu', label: 'Menu', icon: UtensilsCrossed },
     { href: '/admin/settings', label: 'Definições', icon: Settings },
 ]
 
@@ -79,20 +80,30 @@ export function AdminSidebar() {
                 <NavContent />
             </aside>
 
-            {/* Mobile Trigger */}
-            <div className="md:hidden fixed top-0 left-0 right-0 p-4 bg-white/80 backdrop-blur-sm border-b border-gray-200 z-50 flex items-center justify-between">
-                <Sheet open={open} onOpenChange={setOpen}>
-                    <SheetTrigger asChild>
-                        <Button variant="outline" size="icon" className="bg-white border-primary-900 text-primary-900">
-                            <Menu className="w-6 h-6" />
-                        </Button>
-                    </SheetTrigger>
-                    <SheetContent side="left" className="p-0 w-72 bg-primary-900 border-r-primary-800">
-                        <NavContent />
-                    </SheetContent>
-                </Sheet>
-                <span className="font-serif font-bold text-lg text-primary-900">Admin</span>
-                <div className="w-10" /> {/* Spacer for centering */}
+            {/* Mobile Bottom Nav */}
+            <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50 pb-safe">
+                <nav className="flex justify-around items-center h-16 px-2">
+                    {navItems.map((item) => {
+                        const isActive = pathname === item.href
+                        return (
+                            <Link
+                                key={item.href}
+                                href={item.href}
+                                className={cn(
+                                    "flex flex-col items-center justify-center w-full h-full space-y-1",
+                                    isActive
+                                        ? "text-[#D4AF37]"
+                                        : "text-gray-500 hover:text-gray-900"
+                                )}
+                            >
+                                <item.icon className={cn("w-6 h-6", isActive && "fill-current")} />
+                                <span className="text-[10px] font-medium truncate max-w-[60px]">
+                                    {item.label.split(' ')[0]}
+                                </span>
+                            </Link>
+                        )
+                    })}
+                </nav>
             </div>
         </>
     )
