@@ -82,16 +82,26 @@ export function DishForm({ initialData, onSuccess, onCancel }: DishFormProps) {
 
     const onSubmit = async (data: MenuItemFormData) => {
         try {
+            // Ensure defaults for optional fields
+            const submitData = {
+                ...data,
+                cuisine_type: data.cuisine_type || 'Portuguese',
+                is_available: data.is_available ?? true,
+                is_always_available: data.is_always_available ?? false,
+                daily_type: data.daily_type || 'none',
+                allergens: data.allergens || [],
+            }
+
             const { error } = initialData
                 ? await supabase
                     .from('menu_items')
                     // @ts-ignore
-                    .update(data)
+                    .update(submitData)
                     .eq('id', initialData.id)
                 : await supabase
                     .from('menu_items')
                     // @ts-ignore
-                    .insert(data)
+                    .insert(submitData)
 
             if (error) throw error
 
