@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { Database } from '@/types/supabase'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function GET(request: NextRequest) {
@@ -69,16 +70,22 @@ export async function POST(request: NextRequest) {
         }
 
         // Insert sale
+        const quantityNum = Number(quantity)
+        const unitPriceNum = Number(unit_price)
+
+        const insertData: Database['public']['Tables']['sales_log']['Insert'] = {
+            menu_item_id,
+            item_name,
+            quantity: quantityNum,
+            unit_price: unitPriceNum,
+            total_price: quantityNum * unitPriceNum,
+            sale_date,
+            created_by: user.id
+        }
+
         const { data, error } = await supabase
             .from('sales_log')
-            .insert([{
-                menu_item_id,
-                item_name,
-                quantity: Number(quantity),
-                unit_price: Number(unit_price),
-                sale_date,
-                created_by: user.id
-            }])
+            .insert([insertData] as any)
             .select()
             .single()
 

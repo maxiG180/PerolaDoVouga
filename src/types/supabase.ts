@@ -344,6 +344,7 @@ export interface Database {
           item_name?: string
           quantity?: number
           unit_price?: number
+          total_price?: number
           sale_date?: string
           notes?: string | null
           created_at?: string
@@ -377,6 +378,15 @@ export interface Database {
           updated_by?: string | null
         }
       }
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      [_ in never]: never
+    }
+    Enums: {
+      [_ in never]: never
     }
   }
 }
