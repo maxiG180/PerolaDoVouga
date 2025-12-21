@@ -90,8 +90,7 @@ export async function POST(request: NextRequest) {
 
         // Optionally update the main menu_item price to match sending price?
         // Let's decide to keep them in sync
-        // @ts-ignore - Supabase type inference issue
-        const { error: menuError } = await supabase
+        const { error: menuError } = await (supabase as any)
             .from('menu_items')
             .update({ price: selling_price })
             .eq('id', menu_item_id)
