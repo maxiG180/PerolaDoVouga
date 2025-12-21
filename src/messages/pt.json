@@ -7,17 +7,17 @@
     },
     "home": {
         "welcome": "Bem-vindo",
-        "tagline": "Sabores Autênticos, Momentos Inesquecíveis",
-        "description": "Comida caseira portuguesa feita com amor e ingredientes frescos. Venha sentir-se em casa.",
-        "cta_menu": "Ver Menu Completo",
+        "tagline": "Comida Portuguesa de Verdade",
+        "description": "Fazemos comida caseira como a da sua avó. Ingredientes frescos, receitas tradicionais, preços honestos.",
+        "cta_menu": "Ver Menu",
         "cta_about": "A Nossa História",
-        "featured_title": "Pratos em Destaque",
+        "featured_title": "Os Nossos Pratos",
         "featured_subtitle": "As Nossas Especialidades",
         "why_choose": "Porquê Escolher-nos",
         "why_choose_subtitle": "Três razões que fazem da Pérola do Vouga o seu destino gastronómico preferido",
         "visit_us": "Visite-nos",
-        "waiting_for_you": "Estamos à sua espera",
-        "visit_description": "Venha conhecer o nosso espaço e desfrutar de uma refeição inesquecível. Estamos localizados no coração de Lisboa, com fácil acesso.",
+        "waiting_for_you": "Venha conhecer-nos",
+        "visit_description": "Somos uma tasca de bairro em Lisboa. Boa comida, ambiente simples, pessoas genuínas.",
         "roots": {
             "subtitle": "A Nossa Origem",
             "title": "Do Rio Vouga para Lisboa",
@@ -26,16 +26,16 @@
         },
         "features": {
             "authentic": {
-                "title": "Cozinha Autêntica",
-                "description": "Receitas tradicionais preparadas com um toque moderno e ingredientes locais selecionados com cuidado."
+                "title": "Sem Truques",
+                "description": "Fazemos comida de verdade. As mesmas receitas de sempre, com ingredientes frescos do mercado."
             },
             "cozy": {
-                "title": "Ambiente Familiar",
-                "description": "Um espaço pequeno e acolhedor, onde o verdadeiro destaque é o sabor da nossa comida caseira."
+                "title": "Como em Casa",
+                "description": "Pequeno, simples e acolhedor. Aqui o que importa é a comida e as pessoas."
             },
             "quality": {
-                "title": "Qualidade Premium",
-                "description": "Compromisso absoluto com a excelência em cada prato que servimos, do início ao fim."
+                "title": "Preço Justo",
+                "description": "Boa comida não tem de custar uma fortuna. Qualidade a preços honestos, todos os dias."
             }
         }
     },

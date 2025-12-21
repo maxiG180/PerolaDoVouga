@@ -6,30 +6,30 @@
         "contact": "Contact"
     },
     "home": {
-        "welcome": "Welcome to Pérola do Vouga",
-        "tagline": "Flavors that Enchant",
-        "description": "A unique gastronomic experience where tradition meets elegance.",
-        "cta_menu": "View Full Menu",
+        "welcome": "Welcome",
+        "tagline": "Real Portuguese Food",
+        "description": "Home-cooked meals like your grandmother used to make. Fresh ingredients, traditional recipes, honest prices.",
+        "cta_menu": "See Menu",
         "cta_about": "Our Story",
-        "featured_title": "Featured Dishes",
+        "featured_title": "Our Dishes",
         "featured_subtitle": "Our Specialties",
         "why_choose": "Why Choose Us",
         "why_choose_subtitle": "Three reasons that make Pérola do Vouga your preferred gastronomic destination",
         "visit_us": "Visit Us",
-        "waiting_for_you": "We are waiting for you",
-        "visit_description": "Come visit our space and enjoy an unforgettable meal. We are located in the heart of Lisbon, with easy access.",
+        "waiting_for_you": "Come say hello",
+        "visit_description": "We're a neighborhood spot in Lisbon. Good food, simple setting, real people.",
         "features": {
             "authentic": {
-                "title": "Authentic Cuisine",
-                "description": "Traditional recipes prepared with a modern touch and carefully selected local ingredients."
+                "title": "No Tricks",
+                "description": "We cook real food. Same old recipes, fresh ingredients from the market."
             },
             "cozy": {
-                "title": "Family Atmosphere",
-                "description": "A small and cozy space where the true highlight is the flavor of our homemade food."
+                "title": "Feels Like Home",
+                "description": "Small, simple, welcoming. Here, it's all about the food and the people."
             },
             "quality": {
-                "title": "Premium Quality",
-                "description": "Absolute commitment to excellence in every dish we serve, from start to finish."
+                "title": "Fair Prices",
+                "description": "Good food doesn't have to cost a fortune. Quality at honest prices, every day."
             }
         }
     },

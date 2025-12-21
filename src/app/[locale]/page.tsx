@@ -60,8 +60,8 @@ export default async function Home() {
                             <div className="lg:w-1/2 relative animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
                                 <div className="relative rounded-xl overflow-hidden shadow-lg border-2 border-gray-200 h-[350px] lg:h-[500px]">
                                     <img
-                                        src="/salmao-grelhado.jpg"
-                                        alt="Prato de Salmão Grelhado"
+                                        src="/cafe.jpg"
+                                        alt="Pérola do Vouga - Pastelaria & Snack-Bar"
                                         className="w-full h-full object-cover"
                                     />
                                 </div>
