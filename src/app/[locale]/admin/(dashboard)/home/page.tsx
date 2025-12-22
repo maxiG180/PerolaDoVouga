@@ -93,10 +93,13 @@ export default async function AdminDashboardPage() {
     const missingPlan = !planData
 
     return (
-        <div className="space-y-6 pb-20">
-            <div className="flex justify-between items-center">
-                <h1 className="text-3xl font-serif font-bold text-primary-900">Gestão Interna</h1>
-                <p className="text-sm text-muted-foreground">
+        <div className="space-y-6 pb-6">
+            {/* Header */}
+            <div className="flex flex-col gap-2">
+                <h1 className="text-3xl md:text-4xl font-serif font-bold bg-gradient-to-r from-primary-900 to-primary-700 bg-clip-text text-transparent">
+                    Gestão Interna
+                </h1>
+                <p className="text-sm md:text-base text-gray-600 font-medium">
                     {format(today, "EEEE, d 'de' MMMM", { locale: pt })}
                 </p>
             </div>
@@ -110,38 +113,40 @@ export default async function AdminDashboardPage() {
             />
 
             {/* Top Row: Hoje + Esta Semana */}
-            <div className="grid md:grid-cols-2 gap-4">
+            <div className="grid md:grid-cols-2 gap-4 md:gap-6">
                 {/* HOJE */}
-                <Card className="shadow-lg border-none bg-gradient-to-br from-blue-50 to-white">
-                    <CardHeader className="pb-3">
-                        <CardTitle className="text-base font-medium flex items-center gap-2">
-                            <ShoppingCart className="w-5 h-5 text-blue-600" />
+                <Card className="shadow-xl border-0 bg-gradient-to-br from-blue-500 to-blue-600 text-white overflow-hidden relative">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16" />
+                    <CardHeader className="pb-3 relative">
+                        <CardTitle className="text-sm md:text-base font-semibold flex items-center gap-2 text-blue-100">
+                            <ShoppingCart className="w-5 h-5" />
                             Hoje
                         </CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-1">
-                        <div className="text-3xl font-bold text-blue-600">
+                    <CardContent className="space-y-1 relative">
+                        <div className="text-4xl md:text-5xl font-bold">
                             €{todayRevenue.toFixed(2)}
                         </div>
-                        <p className="text-sm text-muted-foreground">
+                        <p className="text-sm md:text-base text-blue-100 font-medium">
                             {todayQuantity} {todayQuantity === 1 ? 'pedido' : 'pedidos'}
                         </p>
                     </CardContent>
                 </Card>
 
                 {/* ESTA SEMANA */}
-                <Card className="shadow-lg border-none bg-gradient-to-br from-purple-50 to-white">
-                    <CardHeader className="pb-3">
-                        <CardTitle className="text-base font-medium flex items-center gap-2">
-                            <ChartIcon className="w-5 h-5 text-purple-600" />
+                <Card className="shadow-xl border-0 bg-gradient-to-br from-purple-500 to-purple-600 text-white overflow-hidden relative">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16" />
+                    <CardHeader className="pb-3 relative">
+                        <CardTitle className="text-sm md:text-base font-semibold flex items-center gap-2 text-purple-100">
+                            <ChartIcon className="w-5 h-5" />
                             Esta Semana
                         </CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-1">
-                        <div className="text-3xl font-bold text-purple-600">
+                    <CardContent className="space-y-1 relative">
+                        <div className="text-4xl md:text-5xl font-bold">
                             €{weekRevenue.toFixed(2)}
                         </div>
-                        <p className="text-sm text-muted-foreground">
+                        <p className="text-sm md:text-base text-purple-100 font-medium">
                             {format(startOfWeek(today, { weekStartsOn: 1 }), 'dd/MM')} - {format(endOfWeek(today, { weekStartsOn: 1 }), 'dd/MM')}
                         </p>
                     </CardContent>
@@ -149,49 +154,52 @@ export default async function AdminDashboardPage() {
             </div>
 
             {/* ESTE MÊS - Full Width */}
-            <Card className="shadow-lg border-none bg-gradient-to-br from-green-50 via-white to-green-50">
-                <CardHeader>
-                    <CardTitle className="text-lg font-medium flex items-center gap-2">
-                        <Euro className="w-6 h-6 text-green-600" />
+            <Card className="shadow-xl border-0 bg-gradient-to-br from-white via-green-50/30 to-white overflow-hidden relative">
+                <div className="absolute bottom-0 right-0 w-64 h-64 bg-green-100/20 rounded-full -mr-32 -mb-32" />
+                <CardHeader className="relative">
+                    <CardTitle className="text-lg md:text-xl font-bold flex items-center gap-2 text-primary-900">
+                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center">
+                            <Euro className="w-6 h-6 text-white" />
+                        </div>
                         Este Mês
                     </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                    <div className="grid md:grid-cols-3 gap-4">
-                        <div>
-                            <p className="text-sm text-muted-foreground mb-1">Receita</p>
-                            <p className="text-2xl font-bold text-green-600">€{monthRevenue.toFixed(2)}</p>
+                <CardContent className="space-y-4 relative">
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+                        <div className="bg-gradient-to-br from-green-50 to-white p-4 rounded-2xl border border-green-100">
+                            <p className="text-sm md:text-base text-gray-600 mb-1.5 font-medium">Receita</p>
+                            <p className="text-2xl md:text-3xl font-bold text-green-600">€{monthRevenue.toFixed(2)}</p>
                         </div>
-                        <div>
-                            <p className="text-sm text-muted-foreground mb-1">Despesas</p>
-                            <p className="text-2xl font-bold text-red-600">€{monthExpensesTotal.toFixed(2)}</p>
+                        <div className="bg-gradient-to-br from-red-50 to-white p-4 rounded-2xl border border-red-100">
+                            <p className="text-sm md:text-base text-gray-600 mb-1.5 font-medium">Despesas</p>
+                            <p className="text-2xl md:text-3xl font-bold text-red-600">€{monthExpensesTotal.toFixed(2)}</p>
                         </div>
-                        <div className="md:border-l md:pl-4">
-                            <p className="text-sm text-muted-foreground mb-1 flex items-center gap-2">
+                        <div className="col-span-2 md:col-span-1 bg-gradient-to-br from-primary-900 to-primary-800 p-4 md:p-6 rounded-2xl shadow-lg">
+                            <p className="text-sm md:text-base text-white/80 mb-1.5 flex items-center gap-2 font-medium">
                                 Lucro
                                 {monthProfit > 0 ? (
-                                    <TrendingUp className="w-4 h-4 text-green-600" />
+                                    <TrendingUp className="w-5 h-5 text-green-300" />
                                 ) : (
-                                    <TrendingDown className="w-4 h-4 text-red-600" />
+                                    <TrendingDown className="w-5 h-5 text-red-300" />
                                 )}
                             </p>
-                            <p className={`text-3xl font-bold ${monthProfit > 0 ? 'text-green-700' : 'text-red-700'}`}>
+                            <p className="text-3xl md:text-4xl font-bold text-white">
                                 €{monthProfit.toFixed(2)}
                             </p>
                         </div>
                     </div>
-                    <div className="pt-2 border-t">
-                        <p className="text-xs text-muted-foreground">
-                            {monthOrders} vendas este mês
+                    <div className="pt-2 border-t border-gray-200">
+                        <p className="text-sm md:text-base text-gray-600 font-medium">
+                            📊 {monthOrders} vendas este mês
                         </p>
                     </div>
                 </CardContent>
             </Card>
 
             {/* TOP 3 PRATOS */}
-            <Card className="shadow-lg border-none">
+            <Card className="shadow-xl border-0 bg-white">
                 <CardHeader>
-                    <CardTitle className="text-lg font-medium flex items-center gap-2">
+                    <CardTitle className="text-lg md:text-xl font-bold flex items-center gap-2 text-primary-900">
                         🏆 Top 3 Pratos (Este Mês)
                     </CardTitle>
                 </CardHeader>
@@ -199,49 +207,30 @@ export default async function AdminDashboardPage() {
                     {top3.length > 0 ? (
                         <div className="space-y-3">
                             {top3.map(([name, quantity], index) => (
-                                <div key={name} className="flex items-center justify-between p-3 rounded-lg bg-beige-50 hover:bg-beige-100 transition-colors">
-                                    <div className="flex items-center gap-3">
+                                <div key={name} className="flex items-center justify-between p-4 md:p-5 rounded-2xl bg-gradient-to-r from-beige-50 to-white border border-beige-100 hover:shadow-md transition-all">
+                                    <div className="flex items-center gap-4">
                                         <div className={`
-                                            w-8 h-8 rounded-full flex items-center justify-center font-bold text-white
-                                            ${index === 0 ? 'bg-yellow-500' : index === 1 ? 'bg-gray-400' : 'bg-orange-600'}
+                                            w-12 h-12 md:w-14 md:h-14 rounded-2xl flex items-center justify-center font-bold text-white text-lg md:text-xl shadow-lg
+                                            ${index === 0 ? 'bg-gradient-to-br from-yellow-400 to-yellow-500' : index === 1 ? 'bg-gradient-to-br from-gray-300 to-gray-400' : 'bg-gradient-to-br from-orange-500 to-orange-600'}
                                         `}>
                                             {index + 1}
                                         </div>
-                                        <span className="font-medium text-primary-900">{name}</span>
+                                        <span className="font-semibold text-base md:text-lg text-primary-900">{name}</span>
                                     </div>
-                                    <span className="text-lg font-bold text-primary-900">{quantity}x</span>
+                                    <span className="text-xl md:text-2xl font-bold text-primary-900 bg-beige-100 px-4 py-2 rounded-xl">{quantity}x</span>
                                 </div>
                             ))}
                         </div>
                     ) : (
-                        <div className="text-center py-8 text-muted-foreground">
-                            <Receipt className="w-12 h-12 mx-auto mb-2 opacity-50" />
-                            <p>Ainda não há vendas registadas este mês.</p>
-                            <p className="text-sm mt-1">Comece a registar vendas para ver estatísticas!</p>
+                        <div className="text-center py-12 text-muted-foreground">
+                            <Receipt className="w-16 h-16 mx-auto mb-3 opacity-30" />
+                            <p className="text-base font-medium">Ainda não há vendas registadas este mês.</p>
+                            <p className="text-sm mt-2">Comece a registar vendas para ver estatísticas!</p>
                         </div>
                     )}
                 </CardContent>
             </Card>
 
-            {/* Quick Actions - Mobile Optimized */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                <a href="/admin/expenses" className="p-4 bg-white rounded-xl shadow-md hover:shadow-lg transition-all active:scale-95 flex flex-col items-center gap-2 text-center min-h-[100px] justify-center">
-                    <Receipt className="w-8 h-8 text-red-600" />
-                    <span className="text-sm font-medium text-primary-900">Despesas</span>
-                </a>
-                <a href="/admin/sales" className="p-4 bg-white rounded-xl shadow-md hover:shadow-lg transition-all active:scale-95 flex flex-col items-center gap-2 text-center min-h-[100px] justify-center">
-                    <ShoppingCart className="w-8 h-8 text-blue-600" />
-                    <span className="text-sm font-medium text-primary-900">Vendas</span>
-                </a>
-                <a href="/admin/margins" className="p-4 bg-white rounded-xl shadow-md hover:shadow-lg transition-all active:scale-95 flex flex-col items-center gap-2 text-center min-h-[100px] justify-center">
-                    <TrendingUp className="w-8 h-8 text-green-600" />
-                    <span className="text-sm font-medium text-primary-900">Margens</span>
-                </a>
-                <a href="/admin/planning" className="p-4 bg-white rounded-xl shadow-md hover:shadow-lg transition-all active:scale-95 flex flex-col items-center gap-2 text-center min-h-[100px] justify-center">
-                    <ChartIcon className="w-8 h-8 text-purple-600" />
-                    <span className="text-sm font-medium text-primary-900">Planeamento</span>
-                </a>
-            </div>
         </div>
     )
 }
