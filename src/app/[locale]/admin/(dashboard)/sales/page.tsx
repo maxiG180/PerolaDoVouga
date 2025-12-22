@@ -2,14 +2,13 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Calendar } from '@/components/ui/calendar'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { CalendarIcon, Plus, Minus, ShoppingCart, Save, ArrowLeft, Trash2 } from 'lucide-react'
+import { CalendarIcon, Plus, Minus, Save, ArrowLeft } from 'lucide-react'
 import { format } from 'date-fns'
 import { pt } from 'date-fns/locale'
 import { cn } from '@/lib/utils'
@@ -48,11 +47,11 @@ export default function SalesPage() {
         fetchMenu()
     }, [])
 
-    // Fetch today's sales
+    // Fetch sales for selected date
     const fetchTodaySales = async () => {
         try {
             const todayStr = format(date, 'yyyy-MM-dd')
-            const res = await fetch(`/api/sales?start_date=${todayStr}&end_date=${todayStr}`)
+            const res = await fetch(/api/sales ? start_date = ${ todayStr } & end_date=${ todayStr })
             if (res.ok) {
                 const data = await res.json()
                 setTodaySales(data)
@@ -108,12 +107,10 @@ export default function SalesPage() {
             // Reset form
             setSelectedItem('')
             setQuantity(1)
-            // Keep date
 
             // Refresh list
             fetchTodaySales()
 
-            // Optional: Show simple feedback or just rely on list update
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Erro ao registar venda')
         } finally {
@@ -122,179 +119,204 @@ export default function SalesPage() {
     }
 
     return (
-        <div className="space-y-8 pb-20 max-w-2xl mx-auto">
+        <div className="space-y-4">
             {/* Header */}
-            <div className="flex items-center gap-4">
-                <Button asChild variant="ghost" size="icon">
-                    <Link href="/admin">
-                        <ArrowLeft className="w-5 h-5" />
-                    </Link>
-                </Button>
+            <div className="flex items-center justify-between">
                 <div>
-                    <h1 className="text-3xl font-serif font-bold text-primary-900 flex items-center gap-2">
-                        <ShoppingCart className="w-8 h-8" />
-                        Registar Venda
-                    </h1>
-                    <p className="text-sm text-muted-foreground">{format(date, "EEEE, d 'de' MMMM", { locale: pt })}</p>
+                    <h1 className="text-2xl font-bold text-gray-900">Registar Vendas</h1>
+                    <p className="text-sm text-gray-600">{format(date, "EEEE, d 'de' MMMM", { locale: pt })}</p>
                 </div>
+                <Popover>
+                    <PopoverTrigger asChild>
+                        <Button variant="outline" className="gap-2">
+                            <CalendarIcon className="h-4 w-4" />
+                            {format(date, "dd/MM/yyyy")}
+                        </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="end">
+                        <Calendar
+                            mode="single"
+                            selected={date}
+                            onSelect={(newDate) => newDate && setDate(newDate)}
+                            locale={pt}
+                            initialFocus
+                        />
+                    </PopoverContent>
+                </Popover>
             </div>
 
-            {/* Form */}
-            <Card className="shadow-lg border-none bg-white">
-                <CardHeader className="pb-2">
-                    <CardTitle className="text-lg">Nova Venda</CardTitle>
-                </CardHeader>
-                <CardContent className="p-6 pt-0">
-                    <form onSubmit={handleSubmit} className="space-y-6">
-                        {/* Date Selection */}
-                        <div className="flex justify-end mb-4">
-                            <Popover>
-                                <PopoverTrigger asChild>
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        className={cn(
-                                            "w-[180px] justify-start text-left font-normal",
-                                            !date && "text-muted-foreground"
-                                        )}
-                                    >
-                                        <CalendarIcon className="mr-2 h-4 w-4" />
-                                        {date ? format(date, "dd/MM/yyyy") : <span>Data</span>}
-                                    </Button>
-                                </PopoverTrigger>
-                                <PopoverContent className="w-auto p-0" align="end">
-                                    <Calendar
-                                        mode="single"
-                                        selected={date}
-                                        onSelect={(newDate) => newDate && setDate(newDate)}
-                                        locale={pt}
-                                        initialFocus
-                                    />
-                                </PopoverContent>
-                            </Popover>
+            {/* Quick Add Form */}
+            <div className="bg-white border border-gray-300 rounded-lg p-4">
+                <form onSubmit={handleSubmit} className="grid grid-cols-12 gap-3 items-end">
+                    <div className="col-span-5">
+                        <Label className="text-sm font-medium text-gray-700">Prato</Label>
+                        <Select value={selectedItem} onValueChange={setSelectedItem}>
+                            <SelectTrigger className="mt-1">
+                                <SelectValue placeholder="Selecione..." />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {menuItems.map((item) => (
+                                    <SelectItem key={item.id} value={item.id}>
+                                        {item.name} - €{item.price}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
+
+                    <div className="col-span-3">
+                        <Label className="text-sm font-medium text-gray-700">Quantidade</Label>
+                        <div className="flex items-center gap-2 mt-1">
+                            <Button
+                                type="button"
+                                variant="outline"
+                                size="icon"
+                                className="h-10 w-10"
+                                onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                                disabled={quantity <= 1}
+                            >
+                                <Minus className="w-4 h-4" />
+                            </Button>
+                            <Input
+                                type="number"
+                                min="1"
+                                value={quantity}
+                                onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
+                                className="h-10 text-center font-bold"
+                            />
+                            <Button
+                                type="button"
+                                variant="outline"
+                                size="icon"
+                                className="h-10 w-10"
+                                onClick={() => setQuantity(quantity + 1)}
+                            >
+                                <Plus className="w-4 h-4" />
+                            </Button>
                         </div>
+                    </div>
 
-                        {/* Dish Selection */}
-                        <div className="space-y-2">
-                            <Label htmlFor="dish" className="text-base font-medium">
-                                Prato *
-                            </Label>
-                            <Select value={selectedItem} onValueChange={setSelectedItem}>
-                                <SelectTrigger className="h-12 text-lg">
-                                    <SelectValue placeholder="Selecione..." />
-                                </SelectTrigger>
-                                <SelectContent className="max-h-[300px]">
-                                    {menuItems.map((item) => (
-                                        <SelectItem key={item.id} value={item.id}>
-                                            <span className="flex items-center justify-between w-full gap-4">
-                                                <span>{item.name}</span>
-                                                <span className="text-sm text-muted-foreground">€{item.price}</span>
-                                            </span>
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
+                    <div className="col-span-2">
+                        <Label className="text-sm font-medium text-gray-700">Total</Label>
+                        <div className="mt-1 h-10 px-3 flex items-center justify-end bg-green-50 border border-green-300 rounded-lg">
+                            <span className="font-bold text-green-700">
+                                €{selectedMenuItem ? (selectedMenuItem.price * quantity).toFixed(2) : '0.00'}
+                            </span>
                         </div>
+                    </div>
 
-                        {/* Quantity */}
-                        <div className="space-y-2">
-                            <Label className="text-base font-medium">Quantidade *</Label>
-                            <div className="flex items-center gap-4">
-                                <Button
-                                    type="button"
-                                    variant="outline"
-                                    size="icon"
-                                    className="h-14 w-14 rounded-full border-2"
-                                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                                    disabled={quantity <= 1}
-                                >
-                                    <Minus className="w-6 h-6" />
-                                </Button>
-                                <Input
-                                    type="number"
-                                    min="1"
-                                    value={quantity}
-                                    onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
-                                    className="h-14 text-center text-3xl font-bold flex-1"
-                                />
-                                <Button
-                                    type="button"
-                                    variant="outline"
-                                    size="icon"
-                                    className="h-14 w-14 rounded-full border-2"
-                                    onClick={() => setQuantity(quantity + 1)}
-                                >
-                                    <Plus className="w-6 h-6" />
-                                </Button>
-                            </div>
-                        </div>
-
-                        {/* Price Preview */}
-                        {selectedMenuItem && (
-                            <div className="flex justify-between items-center text-lg px-2 py-2 bg-green-50 rounded-lg">
-                                <span className="font-medium">Total a Registar:</span>
-                                <span className="font-bold text-green-700 text-xl">
-                                    €{(selectedMenuItem.price * quantity).toFixed(2)}
-                                </span>
-                            </div>
-                        )}
-
-                        {error && (
-                            <div className="text-red-700 text-sm bg-red-50 p-3 rounded-md">
-                                {error}
-                            </div>
-                        )}
-
+                    <div className="col-span-2">
                         <Button
                             type="submit"
-                            className="w-full h-14 text-xl font-bold gap-2 bg-blue-600 hover:bg-blue-700 shadow-md active:scale-95 transition-transform"
+                            className="w-full h-10 bg-blue-600 hover:bg-blue-700 gap-2"
                             disabled={loading || !selectedItem}
                         >
-                            {loading ? (
-                                'A guardar...'
-                            ) : (
-                                <>
-                                    <Save className="w-6 h-6" />
-                                    Registar Venda
-                                </>
-                            )}
+                            <Save className="w-4 h-4" />
+                            Registar
                         </Button>
-                    </form>
-                </CardContent>
-            </Card>
+                    </div>
+                </form>
+                {error && (
+                    <div className="text-red-700 text-sm bg-red-50 p-2 rounded-md mt-2">
+                        {error}
+                    </div>
+                )}
+            </div>
 
-            {/* List of Recent Sales */}
-            <div className="space-y-4">
-                <div className="flex items-center justify-between px-2">
-                    <h2 className="text-xl font-bold text-primary-900">Vendas do Dia</h2>
-                    <div className="text-right">
-                        <div className="text-sm text-muted-foreground">{stats.totalItems} itens</div>
-                        <div className="text-lg font-bold text-green-600">Total: €{stats.totalRevenue.toFixed(2)}</div>
+            {/* Excel-Style Table */}
+            <div className="bg-white border border-gray-300 rounded-lg shadow-sm overflow-hidden">
+                {/* Table Header */}
+                <div className="bg-gray-100 border-b border-gray-300">
+                    <div className="grid grid-cols-12 gap-0">
+                        <div className="col-span-2 px-4 py-3 font-bold text-sm text-gray-700 border-r border-gray-300">
+                            Hora
+                        </div>
+                        <div className="col-span-5 px-4 py-3 font-bold text-sm text-gray-700 border-r border-gray-300">
+                            Prato
+                        </div>
+                        <div className="col-span-2 px-4 py-3 font-bold text-sm text-gray-700 border-r border-gray-300 text-center">
+                            Qtd.
+                        </div>
+                        <div className="col-span-2 px-4 py-3 font-bold text-sm text-gray-700 border-r border-gray-300 text-right">
+                            Preço Unit.
+                        </div>
+                        <div className="col-span-1 px-4 py-3 font-bold text-sm text-gray-700 text-right">
+                            Total
+                        </div>
                     </div>
                 </div>
 
-                <div className="space-y-2">
+                {/* Table Body */}
+                <div>
                     {todaySales.length > 0 ? (
-                        todaySales.map((sale) => (
-                            <div key={sale.id} className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 flex justify-between items-center">
-                                <div>
-                                    <div className="font-medium text-lg">{sale.item_name}</div>
-                                    <div className="text-sm text-muted-foreground">
-                                        {sale.quantity}x €{sale.unit_price}
-                                    </div>
+                        todaySales.map((sale, index) => (
+                            <div
+                                key={sale.id}
+                                className={`grid grid-cols-12 gap-0 border-b border-gray-200 hover:bg-gray-50 transition-colors ${index % 2 === 1 ? 'bg-gray-50/50' : 'bg-white'
+                                    }`}
+                            >
+                                <div className="col-span-2 px-4 py-3 text-sm text-gray-700 border-r border-gray-200">
+                                    {format(new Date(sale.created_at || sale.sale_date), "HH:mm")}
                                 </div>
-                                <div className="text-lg font-bold text-primary-900">
+                                <div className="col-span-5 px-4 py-3 text-sm font-medium text-gray-900 border-r border-gray-200">
+                                    {sale.item_name}
+                                </div>
+                                <div className="col-span-2 px-4 py-3 text-sm text-gray-900 border-r border-gray-200 text-center font-bold">
+                                    {sale.quantity}
+                                </div>
+                                <div className="col-span-2 px-4 py-3 text-sm text-gray-700 border-r border-gray-200 text-right">
+                                    €{Number(sale.unit_price).toFixed(2)}
+                                </div>
+                                <div className="col-span-1 px-4 py-3 text-sm font-bold text-green-600 text-right">
                                     €{Number(sale.total_price).toFixed(2)}
                                 </div>
                             </div>
                         ))
                     ) : (
-                        <div className="text-center py-8 text-muted-foreground bg-gray-50 rounded-lg border border-dashed">
-                            Sem vendas registadas para esta data
+                        <div className="px-4 py-12 text-center text-gray-500">
+                            <p className="font-medium">Sem vendas registadas para esta data</p>
+                            <p className="text-sm mt-1">Use o formulário acima para registar vendas</p>
                         </div>
                     )}
                 </div>
+
+                {/* Table Footer - Totals */}
+                {todaySales.length > 0 && (
+                    <div className="bg-gray-100 border-t-2 border-gray-400">
+                        <div className="grid grid-cols-12 gap-0">
+                            <div className="col-span-7 px-4 py-3 font-bold text-sm text-gray-900 border-r border-gray-300">
+                                TOTAL
+                            </div>
+                            <div className="col-span-2 px-4 py-3 font-bold text-sm text-gray-900 border-r border-gray-300 text-center">
+                                {stats.totalItems}
+                            </div>
+                            <div className="col-span-3 px-4 py-3 font-bold text-base text-green-700 text-right">
+                                €{stats.totalRevenue.toFixed(2)}
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
+
+            {/* Statistics */}
+            {todaySales.length > 0 && (
+                <div className="bg-white border border-gray-200 rounded-lg p-4">
+                    <div className="text-sm text-gray-600 space-y-1">
+                        <div className="flex justify-between">
+                            <span>Total de vendas:</span>
+                            <span className="font-medium text-gray-900">{todaySales.length}</span>
+                        </div>
+                        <div className="flex justify-between">
+                            <span>Total de itens vendidos:</span>
+                            <span className="font-medium text-gray-900">{stats.totalItems}</span>
+                        </div>
+                        <div className="flex justify-between pt-2 border-t">
+                            <span className="font-bold text-gray-900">Receita total:</span>
+                            <span className="font-bold text-green-600">€{stats.totalRevenue.toFixed(2)}</span>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }

@@ -1,7 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Plus, Receipt, Calendar, TrendingUp, Filter, Euro } from 'lucide-react'
+import { Plus } from 'lucide-react'
 import Link from 'next/link'
 import { format, startOfMonth, endOfMonth } from 'date-fns'
 import { pt } from 'date-fns/locale'
@@ -34,105 +33,124 @@ export default async function ExpensesPage() {
     const totalExpenses = expenses?.reduce((sum, exp) => sum + Number(exp.amount), 0) || 0
 
     return (
-        <div className="space-y-6 pb-20">
+        <div className="space-y-4">
             {/* Header */}
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div className="flex items-center justify-between">
                 <div>
-                    <h1 className="text-3xl font-serif font-bold text-primary-900 flex items-center gap-2">
-                        <Receipt className="w-8 h-8" />
-                        Despesas
-                    </h1>
-                    <p className="text-sm text-muted-foreground mt-1">
+                    <h1 className="text-2xl font-bold text-gray-900">Despesas</h1>
+                    <p className="text-sm text-gray-600">
                         {format(today, "MMMM 'de' yyyy", { locale: pt })}
                     </p>
                 </div>
-                <Button asChild size="lg" className="bg-red-600 hover:bg-red-700 gap-2 min-h-[50px]">
+                <Button asChild size="default" className="bg-red-600 hover:bg-red-700 gap-2">
                     <Link href="/admin/expenses/add">
-                        <Plus className="w-5 h-5" />
+                        <Plus className="w-4 h-4" />
                         Nova Despesa
                     </Link>
                 </Button>
             </div>
 
-            {/* Total Card */}
-            <Card className="shadow-lg border-none bg-gradient-to-br from-red-50 to-white">
-                <CardHeader className="pb-3">
-                    <CardTitle className="text-base font-medium flex items-center gap-2">
-                        <Euro className="w-5 h-5 text-red-600" />
-                        Total Este Mês
-                    </CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <div className="text-4xl font-bold text-red-600">
-                        €{totalExpenses.toFixed(2)}
+            {/* Excel-Style Table */}
+            <div className="bg-white border border-gray-300 rounded-lg shadow-sm overflow-hidden">
+                {/* Table Header */}
+                <div className="bg-gray-100 border-b border-gray-300">
+                    <div className="grid grid-cols-12 gap-0">
+                        <div className="col-span-2 px-4 py-3 font-bold text-sm text-gray-700 border-r border-gray-300">
+                            Data
+                        </div>
+                        <div className="col-span-3 px-4 py-3 font-bold text-sm text-gray-700 border-r border-gray-300">
+                            Categoria
+                        </div>
+                        <div className="col-span-4 px-4 py-3 font-bold text-sm text-gray-700 border-r border-gray-300">
+                            Descrição
+                        </div>
+                        <div className="col-span-2 px-4 py-3 font-bold text-sm text-gray-700 border-r border-gray-300 text-right">
+                            Valor
+                        </div>
+                        <div className="col-span-1 px-4 py-3 font-bold text-sm text-gray-700 text-center">
+                            🔄
+                        </div>
                     </div>
-                    <p className="text-sm text-muted-foreground mt-1">
-                        {expenses?.length || 0} {expenses?.length === 1 ? 'despesa' : 'despesas'}
-                    </p>
-                </CardContent>
-            </Card>
+                </div>
 
-            {/* Expenses List */}
-            <div className="space-y-3">
-                {expenses && expenses.length > 0 ? (
-                    expenses.map((expense) => (
-                        <Card key={expense.id} className="shadow-md border-none hover:shadow-lg transition-all">
-                            <CardContent className="p-4">
-                                <div className="flex items-center justify-between">
-                                    <div className="flex items-center gap-3 flex-1">
-                                        <div
-                                            className="w-12 h-12 rounded-full flex items-center justify-center text-2xl"
-                                            style={{ backgroundColor: `${expense.expense_categories?.color}20` }}
-                                        >
-                                            {expense.expense_categories?.icon || '📋'}
-                                        </div>
-                                        <div className="flex-1 min-w-0">
-                                            <div className="font-semibold text-primary-900 truncate">
-                                                {expense.expense_categories?.name || 'Outros'}
-                                            </div>
-                                            <div className="text-sm text-muted-foreground flex items-center gap-2">
-                                                <Calendar className="w-3 h-3" />
-                                                {format(new Date(expense.expense_date), "dd/MM/yyyy", { locale: pt })}
-                                            </div>
-                                            {expense.description && (
-                                                <div className="text-xs text-muted-foreground mt-1 truncate">
-                                                    {expense.description}
-                                                </div>
-                                            )}
-                                            {expense.is_recurring && (
-                                                <div className="text-xs text-blue-600 mt-1 font-medium">
-                                                    🔄 Recorrente
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                    <div className="text-right ml-4">
-                                        <div className="text-xl font-bold text-red-600">
-                                            €{Number(expense.amount).toFixed(2)}
-                                        </div>
+                {/* Table Body */}
+                <div>
+                    {expenses && expenses.length > 0 ? (
+                        expenses.map((expense, index) => (
+                            <div
+                                key={expense.id}
+                                className={`grid grid-cols-12 gap-0 border-b border-gray-200 hover:bg-gray-50 transition-colors ${index % 2 === 1 ? 'bg-gray-50/50' : 'bg-white'
+                                    }`}
+                            >
+                                <div className="col-span-2 px-4 py-3 text-sm text-gray-900 border-r border-gray-200">
+                                    {format(new Date(expense.expense_date), "dd/MM/yyyy")}
+                                </div>
+                                <div className="col-span-3 px-4 py-3 text-sm border-r border-gray-200">
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-lg">{expense.expense_categories?.icon || '📋'}</span>
+                                        <span className="font-medium text-gray-900">
+                                            {expense.expense_categories?.name || 'Outros'}
+                                        </span>
                                     </div>
                                 </div>
-                            </CardContent>
-                        </Card>
-                    ))
-                ) : (
-                    <Card className="shadow-md border-none">
-                        <CardContent className="p-8 text-center">
-                            <Receipt className="w-16 h-16 mx-auto mb-4 text-muted-foreground opacity-50" />
-                            <h3 className="font-semibold text-lg mb-2">Sem despesas este mês</h3>
-                            <p className="text-sm text-muted-foreground mb-4">
-                                Comece a registar as suas despesas para ter controlo financeiro
-                            </p>
-                            <Button asChild variant="outline">
-                                <Link href="/admin/expenses/add">
-                                    <Plus className="w-4 h-4 mr-2" />
-                                    Adicionar Primeira Despesa
-                                </Link>
-                            </Button>
-                        </CardContent>
-                    </Card>
+                                <div className="col-span-4 px-4 py-3 text-sm text-gray-700 border-r border-gray-200">
+                                    {expense.description || '-'}
+                                </div>
+                                <div className="col-span-2 px-4 py-3 text-sm font-bold text-red-600 border-r border-gray-200 text-right">
+                                    €{Number(expense.amount).toFixed(2)}
+                                </div>
+                                <div className="col-span-1 px-4 py-3 text-sm text-center">
+                                    {expense.is_recurring ? '✓' : ''}
+                                </div>
+                            </div>
+                        ))
+                    ) : (
+                        <div className="px-4 py-12 text-center text-gray-500">
+                            <p className="font-medium">Sem despesas este mês</p>
+                            <p className="text-sm mt-1">Clique em "Nova Despesa" para adicionar</p>
+                        </div>
+                    )}
+                </div>
+
+                {/* Table Footer - Totals */}
+                {expenses && expenses.length > 0 && (
+                    <div className="bg-gray-100 border-t-2 border-gray-400">
+                        <div className="grid grid-cols-12 gap-0">
+                            <div className="col-span-9 px-4 py-3 font-bold text-sm text-gray-900 border-r border-gray-300">
+                                TOTAL
+                            </div>
+                            <div className="col-span-2 px-4 py-3 font-bold text-base text-red-700 border-r border-gray-300 text-right">
+                                €{totalExpenses.toFixed(2)}
+                            </div>
+                            <div className="col-span-1 px-4 py-3 text-sm text-center text-gray-600">
+                                {expenses.filter(e => e.is_recurring).length}
+                            </div>
+                        </div>
+                    </div>
                 )}
             </div>
+
+            {/* Statistics */}
+            {expenses && expenses.length > 0 && (
+                <div className="bg-white border border-gray-200 rounded-lg p-4">
+                    <div className="text-sm text-gray-600 space-y-1">
+                        <div className="flex justify-between">
+                            <span>Total de despesas:</span>
+                            <span className="font-medium text-gray-900">{expenses.length}</span>
+                        </div>
+                        <div className="flex justify-between">
+                            <span>Despesas recorrentes:</span>
+                            <span className="font-medium text-gray-900">
+                                {expenses.filter(e => e.is_recurring).length}
+                            </span>
+                        </div>
+                        <div className="flex justify-between pt-2 border-t">
+                            <span className="font-bold text-gray-900">Valor total:</span>
+                            <span className="font-bold text-red-600">€{totalExpenses.toFixed(2)}</span>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }
