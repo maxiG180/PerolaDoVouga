@@ -4,6 +4,7 @@ import { TrendingUp, TrendingDown, Euro, ShoppingCart, Receipt, TrendingUp as Ch
 import { format, startOfWeek, endOfWeek, startOfMonth, endOfMonth, subDays } from 'date-fns'
 import { pt } from 'date-fns/locale'
 import { SmartInsights } from '@/components/admin/dashboard/SmartInsights'
+import { cn } from '@/lib/utils'
 
 export const dynamic = 'force-dynamic'
 
@@ -93,13 +94,13 @@ export default async function AdminDashboardPage() {
     const missingPlan = !planData
 
     return (
-        <div className="space-y-6 pb-6">
+        <div className="space-y-6">
             {/* Header */}
-            <div className="flex flex-col gap-2">
-                <h1 className="text-3xl md:text-4xl font-serif font-bold bg-gradient-to-r from-primary-900 to-primary-700 bg-clip-text text-transparent">
+            <div>
+                <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-1">
                     Gestão Interna
                 </h1>
-                <p className="text-sm md:text-base text-gray-600 font-medium">
+                <p className="text-base text-gray-600">
                     {format(today, "EEEE, d 'de' MMMM", { locale: pt })}
                 </p>
             </div>
@@ -112,125 +113,121 @@ export default async function AdminDashboardPage() {
                 topDishName={top3[0]?.[0] || ''}
             />
 
-            {/* Top Row: Hoje + Esta Semana */}
-            <div className="grid md:grid-cols-2 gap-4 md:gap-6">
-                {/* HOJE */}
-                <Card className="shadow-xl border-0 bg-gradient-to-br from-blue-500 to-blue-600 text-white overflow-hidden relative">
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16" />
-                    <CardHeader className="pb-3 relative">
-                        <CardTitle className="text-sm md:text-base font-semibold flex items-center gap-2 text-blue-100">
-                            <ShoppingCart className="w-5 h-5" />
+            {/* Today & This Week Stats */}
+            <div className="grid md:grid-cols-2 gap-4">
+                {/* Today */}
+                <Card className="bg-white border border-gray-200 shadow-sm">
+                    <CardHeader className="pb-2">
+                        <CardTitle className="text-sm font-medium text-gray-600 flex items-center gap-2">
+                            <ShoppingCart className="w-4 h-4" />
                             Hoje
                         </CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-1 relative">
-                        <div className="text-4xl md:text-5xl font-bold">
+                    <CardContent>
+                        <div className="text-4xl font-bold text-gray-900 mb-1">
                             €{todayRevenue.toFixed(2)}
                         </div>
-                        <p className="text-sm md:text-base text-blue-100 font-medium">
+                        <p className="text-sm text-gray-600">
                             {todayQuantity} {todayQuantity === 1 ? 'pedido' : 'pedidos'}
                         </p>
                     </CardContent>
                 </Card>
 
-                {/* ESTA SEMANA */}
-                <Card className="shadow-xl border-0 bg-gradient-to-br from-purple-500 to-purple-600 text-white overflow-hidden relative">
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16" />
-                    <CardHeader className="pb-3 relative">
-                        <CardTitle className="text-sm md:text-base font-semibold flex items-center gap-2 text-purple-100">
-                            <ChartIcon className="w-5 h-5" />
+                {/* This Week */}
+                <Card className="bg-white border border-gray-200 shadow-sm">
+                    <CardHeader className="pb-2">
+                        <CardTitle className="text-sm font-medium text-gray-600 flex items-center gap-2">
+                            <ChartIcon className="w-4 h-4" />
                             Esta Semana
                         </CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-1 relative">
-                        <div className="text-4xl md:text-5xl font-bold">
+                    <CardContent>
+                        <div className="text-4xl font-bold text-gray-900 mb-1">
                             €{weekRevenue.toFixed(2)}
                         </div>
-                        <p className="text-sm md:text-base text-purple-100 font-medium">
+                        <p className="text-sm text-gray-600">
                             {format(startOfWeek(today, { weekStartsOn: 1 }), 'dd/MM')} - {format(endOfWeek(today, { weekStartsOn: 1 }), 'dd/MM')}
                         </p>
                     </CardContent>
                 </Card>
             </div>
 
-            {/* ESTE MÊS - Full Width */}
-            <Card className="shadow-xl border-0 bg-gradient-to-br from-white via-green-50/30 to-white overflow-hidden relative">
-                <div className="absolute bottom-0 right-0 w-64 h-64 bg-green-100/20 rounded-full -mr-32 -mb-32" />
-                <CardHeader className="relative">
-                    <CardTitle className="text-lg md:text-xl font-bold flex items-center gap-2 text-primary-900">
-                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center">
-                            <Euro className="w-6 h-6 text-white" />
-                        </div>
+            {/* This Month Stats */}
+            <Card className="bg-white border border-gray-200 shadow-sm">
+                <CardHeader>
+                    <CardTitle className="text-lg font-bold text-gray-900 flex items-center gap-2">
+                        <Euro className="w-5 h-5" />
                         Este Mês
                     </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4 relative">
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
-                        <div className="bg-gradient-to-br from-green-50 to-white p-4 rounded-2xl border border-green-100">
-                            <p className="text-sm md:text-base text-gray-600 mb-1.5 font-medium">Receita</p>
-                            <p className="text-2xl md:text-3xl font-bold text-green-600">€{monthRevenue.toFixed(2)}</p>
+                <CardContent className="space-y-4">
+                    <div className="grid md:grid-cols-3 gap-4">
+                        <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+                            <p className="text-sm font-medium text-gray-700 mb-1">Receita</p>
+                            <p className="text-2xl font-bold text-green-700">€{monthRevenue.toFixed(2)}</p>
                         </div>
-                        <div className="bg-gradient-to-br from-red-50 to-white p-4 rounded-2xl border border-red-100">
-                            <p className="text-sm md:text-base text-gray-600 mb-1.5 font-medium">Despesas</p>
-                            <p className="text-2xl md:text-3xl font-bold text-red-600">€{monthExpensesTotal.toFixed(2)}</p>
+                        <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+                            <p className="text-sm font-medium text-gray-700 mb-1">Despesas</p>
+                            <p className="text-2xl font-bold text-red-700">€{monthExpensesTotal.toFixed(2)}</p>
                         </div>
-                        <div className="col-span-2 md:col-span-1 bg-gradient-to-br from-primary-900 to-primary-800 p-4 md:p-6 rounded-2xl shadow-lg">
-                            <p className="text-sm md:text-base text-white/80 mb-1.5 flex items-center gap-2 font-medium">
+                        <div className="p-4 bg-primary-900 rounded-lg">
+                            <p className="text-sm font-medium text-white/90 mb-1 flex items-center gap-1">
                                 Lucro
                                 {monthProfit > 0 ? (
-                                    <TrendingUp className="w-5 h-5 text-green-300" />
+                                    <TrendingUp className="w-4 h-4" />
                                 ) : (
-                                    <TrendingDown className="w-5 h-5 text-red-300" />
+                                    <TrendingDown className="w-4 h-4" />
                                 )}
                             </p>
-                            <p className="text-3xl md:text-4xl font-bold text-white">
+                            <p className="text-2xl font-bold text-white">
                                 €{monthProfit.toFixed(2)}
                             </p>
                         </div>
                     </div>
                     <div className="pt-2 border-t border-gray-200">
-                        <p className="text-sm md:text-base text-gray-600 font-medium">
+                        <p className="text-sm text-gray-600">
                             📊 {monthOrders} vendas este mês
                         </p>
                     </div>
                 </CardContent>
             </Card>
 
-            {/* TOP 3 PRATOS */}
-            <Card className="shadow-xl border-0 bg-white">
+            {/* Top 3 Dishes */}
+            <Card className="bg-white border border-gray-200 shadow-sm">
                 <CardHeader>
-                    <CardTitle className="text-lg md:text-xl font-bold flex items-center gap-2 text-primary-900">
+                    <CardTitle className="text-lg font-bold text-gray-900 flex items-center gap-2">
                         🏆 Top 3 Pratos (Este Mês)
                     </CardTitle>
                 </CardHeader>
                 <CardContent>
                     {top3.length > 0 ? (
-                        <div className="space-y-3">
+                        <div className="space-y-2">
                             {top3.map(([name, quantity], index) => (
-                                <div key={name} className="flex items-center justify-between p-4 md:p-5 rounded-2xl bg-gradient-to-r from-beige-50 to-white border border-beige-100 hover:shadow-md transition-all">
-                                    <div className="flex items-center gap-4">
-                                        <div className={`
-                                            w-12 h-12 md:w-14 md:h-14 rounded-2xl flex items-center justify-center font-bold text-white text-lg md:text-xl shadow-lg
-                                            ${index === 0 ? 'bg-gradient-to-br from-yellow-400 to-yellow-500' : index === 1 ? 'bg-gradient-to-br from-gray-300 to-gray-400' : 'bg-gradient-to-br from-orange-500 to-orange-600'}
-                                        `}>
+                                <div key={name} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200">
+                                    <div className="flex items-center gap-3">
+                                        <div className={cn(
+                                            "w-10 h-10 rounded-lg flex items-center justify-center font-bold text-white",
+                                            index === 0 && "bg-yellow-500",
+                                            index === 1 && "bg-gray-400",
+                                            index === 2 && "bg-orange-500"
+                                        )}>
                                             {index + 1}
                                         </div>
-                                        <span className="font-semibold text-base md:text-lg text-primary-900">{name}</span>
+                                        <span className="font-medium text-gray-900">{name}</span>
                                     </div>
-                                    <span className="text-xl md:text-2xl font-bold text-primary-900 bg-beige-100 px-4 py-2 rounded-xl">{quantity}x</span>
+                                    <span className="text-lg font-bold text-gray-900">{quantity}x</span>
                                 </div>
                             ))}
                         </div>
                     ) : (
-                        <div className="text-center py-12 text-muted-foreground">
-                            <Receipt className="w-16 h-16 mx-auto mb-3 opacity-30" />
-                            <p className="text-base font-medium">Ainda não há vendas registadas este mês.</p>
-                            <p className="text-sm mt-2">Comece a registar vendas para ver estatísticas!</p>
+                        <div className="text-center py-8 text-gray-500">
+                            <Receipt className="w-12 h-12 mx-auto mb-2 opacity-30" />
+                            <p className="font-medium">Ainda não há vendas registadas este mês.</p>
+                            <p className="text-sm mt-1">Comece a registar vendas para ver estatísticas!</p>
                         </div>
                     )}
                 </CardContent>
             </Card>
-
         </div>
     )
 }
