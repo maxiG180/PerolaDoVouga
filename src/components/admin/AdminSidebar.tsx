@@ -11,13 +11,13 @@ import { cn } from '@/lib/utils'
 const navItems = [
     { href: '/admin/home', label: 'Painel', icon: Home },
     { href: '/admin/expenses', label: 'Despesas', icon: Receipt },
-    { href: '/admin/sales', label: 'Vendas', icon: ShoppingCart },
+    // { href: '/admin/sales', label: 'Vendas', icon: ShoppingCart }, // Disabled - not enabled for clients yet
     { href: '/admin/margins', label: 'Margens', icon: TrendingUp },
 ]
 
 const moreItems = [
     { href: '/admin/planning', label: 'Planeamento', icon: CalendarDays },
-    { href: '/admin/menu', label: 'Menu', icon: UtensilsCrossed },
+    // { href: '/admin/menu', label: 'Menu', icon: UtensilsCrossed }, // Disabled - not enabled for clients yet
     { href: '/admin/settings', label: 'Definições', icon: Settings },
 ]
 
