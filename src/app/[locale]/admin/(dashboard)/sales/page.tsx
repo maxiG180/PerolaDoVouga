@@ -51,7 +51,7 @@ export default function SalesPage() {
     const fetchTodaySales = async () => {
         try {
             const todayStr = format(date, 'yyyy-MM-dd')
-            const res = await fetch(/api/sales ? start_date = ${ todayStr } & end_date=${ todayStr })
+            const res = await fetch(`/api/sales?start_date=${todayStr}&end_date=${todayStr}`)
             if (res.ok) {
                 const data = await res.json()
                 setTodaySales(data)
