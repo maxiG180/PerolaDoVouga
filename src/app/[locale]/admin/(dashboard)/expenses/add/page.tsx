@@ -91,20 +91,20 @@ export default function AddExpensePage() {
         <div className="space-y-6 pb-20 max-w-2xl mx-auto">
             {/* Header */}
             <div className="flex items-center gap-4">
-                <Button asChild variant="ghost" size="icon">
+                <Button asChild variant="ghost" size="icon" className="hover:bg-gray-100">
                     <Link href="/admin/expenses">
                         <ArrowLeft className="w-5 h-5" />
                     </Link>
                 </Button>
                 <div>
-                    <h1 className="text-3xl font-serif font-bold text-primary-900">Nova Despesa</h1>
-                    <p className="text-sm text-muted-foreground">Preencha os dados da despesa</p>
+                    <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Nova Despesa</h1>
+                    <p className="text-sm text-gray-600">Preencha os dados da despesa</p>
                 </div>
             </div>
 
             {/* Form */}
-            <Card className="shadow-lg border-none">
-                <CardContent className="p-6">
+            <Card className="shadow-xl border border-gray-200 bg-white">
+                <CardContent className="p-6 sm:p-8">
                     <form onSubmit={handleSubmit} className="space-y-6">
                         {/* Category */}
                         <div className="space-y-2">
@@ -112,7 +112,7 @@ export default function AddExpensePage() {
                                 Categoria *
                             </Label>
                             <Select value={categoryId} onValueChange={setCategoryId} required>
-                                <SelectTrigger className="h-12">
+                                <SelectTrigger className="h-12 border-gray-300 focus:border-primary-900 focus:ring-primary-900">
                                     <SelectValue placeholder="Selecione a categoria" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -136,12 +136,13 @@ export default function AddExpensePage() {
                             <Input
                                 id="amount"
                                 type="number"
+                                inputMode="decimal"
                                 step="0.01"
                                 min="0"
                                 placeholder="0.00"
                                 value={amount}
                                 onChange={(e) => setAmount(e.target.value)}
-                                className="h-12 text-lg"
+                                className="h-12 text-lg border-gray-300 focus:border-primary-900 focus:ring-primary-900"
                                 required
                             />
                         </div>
@@ -154,7 +155,7 @@ export default function AddExpensePage() {
                                     <Button
                                         variant="outline"
                                         className={cn(
-                                            "w-full h-12 text-left font-normal justify-start",
+                                            "w-full h-12 text-left font-normal justify-start border-gray-300 hover:bg-gray-50",
                                             !date && "text-muted-foreground"
                                         )}
                                     >
@@ -162,7 +163,7 @@ export default function AddExpensePage() {
                                         {date ? format(date, "PPP", { locale: pt }) : <span>Selecione a data</span>}
                                     </Button>
                                 </PopoverTrigger>
-                                <PopoverContent className="w-auto p-0" align="start">
+                                <PopoverContent className="w-auto p-3 bg-white shadow-xl border border-gray-200" align="start">
                                     <Calendar
                                         mode="single"
                                         selected={date}
@@ -185,6 +186,7 @@ export default function AddExpensePage() {
                                 value={description}
                                 onChange={(e) => setDescription(e.target.value)}
                                 rows={3}
+                                className="border-gray-300 focus:border-primary-900 focus:ring-primary-900"
                             />
                         </div>
 
@@ -210,7 +212,7 @@ export default function AddExpensePage() {
                         {/* Submit */}
                         <Button
                             type="submit"
-                            className="w-full h-12 text-lg gap-2 bg-red-600 hover:bg-red-700"
+                            className="w-full h-12 text-lg gap-2 bg-red-600 hover:bg-red-700 text-white"
                             disabled={loading}
                         >
                             {loading ? (

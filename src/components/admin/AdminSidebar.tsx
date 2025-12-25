@@ -7,17 +7,16 @@ import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
+import Image from 'next/image'
 
 const navItems = [
     { href: '/admin/home', label: 'Painel', icon: Home },
     { href: '/admin/expenses', label: 'Despesas', icon: Receipt },
-    // { href: '/admin/sales', label: 'Vendas', icon: ShoppingCart }, // Disabled - not enabled for clients yet
     { href: '/admin/margins', label: 'Margens', icon: TrendingUp },
 ]
 
+
 const moreItems = [
-    { href: '/admin/planning', label: 'Planeamento', icon: CalendarDays },
-    // { href: '/admin/menu', label: 'Menu', icon: UtensilsCrossed }, // Disabled - not enabled for clients yet
     { href: '/admin/settings', label: 'Definições', icon: Settings },
 ]
 
@@ -30,8 +29,14 @@ export function AdminSidebar() {
             {/* Header */}
             <div className="p-6 border-b border-gray-200">
                 <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-primary-900 rounded-lg flex items-center justify-center text-white font-bold text-lg">
-                        P
+                    <div className="w-10 h-10 rounded-lg overflow-hidden flex items-center justify-center bg-primary-900">
+                        <Image
+                            src="/logo.png"
+                            alt="Logo"
+                            width={40}
+                            height={40}
+                            className="object-cover"
+                        />
                     </div>
                     <div>
                         <div className="font-bold text-lg text-gray-900">Admin</div>
@@ -100,7 +105,7 @@ export function AdminSidebar() {
             {/* Mobile Bottom Navigation */}
             <div className="md:hidden fixed bottom-0 left-0 right-0 z-50">
                 <div className="bg-white border-t border-gray-300 shadow-lg">
-                    <nav className="grid grid-cols-5 h-16">
+                    <nav className="grid grid-cols-4 h-16">
                         {navItems.map((item) => {
                             const isActive = pathname === item.href
                             return (

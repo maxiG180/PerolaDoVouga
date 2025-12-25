@@ -80,27 +80,16 @@ export default async function AdminDashboardPage() {
         .select('*', { count: 'exact', head: true })
         .lt('margin_percentage', 30)
 
-    // 2. Missing Plan for Tomorrow
-    const tomorrow = new Date()
-    tomorrow.setDate(tomorrow.getDate() + 1)
-    const tomorrowStr = format(tomorrow, 'yyyy-MM-dd')
 
-    const { data: planData } = await supabase
-        .from('daily_menus')
-        .select('id')
-        .eq('date', tomorrowStr)
-        .single()
-
-    const missingPlan = !planData
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 pb-20 md:pb-6">
             {/* Header */}
-            <div>
-                <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-1">
+            <div className="bg-gradient-to-r from-neutral-900 to-neutral-800 rounded-xl p-6 shadow-lg">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-1">
                     Gestão Interna
                 </h1>
-                <p className="text-base text-gray-600">
+                <p className="text-sm sm:text-base text-white/80">
                     {format(today, "EEEE, d 'de' MMMM", { locale: pt })}
                 </p>
             </div>
@@ -108,44 +97,43 @@ export default async function AdminDashboardPage() {
             {/* Smart Insights Section */}
             <SmartInsights
                 lowMarginItems={lowMarginCount || 0}
-                missingPlan={missingPlan}
                 salesTrend="stable"
                 topDishName={top3[0]?.[0] || ''}
             />
 
             {/* Today & This Week Stats */}
-            <div className="grid md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Today */}
-                <Card className="bg-white border border-gray-200 shadow-sm">
+                <Card className="bg-gradient-to-br from-emerald-50 to-green-50 border border-emerald-200 shadow-md hover:shadow-lg transition-shadow">
                     <CardHeader className="pb-2">
-                        <CardTitle className="text-sm font-medium text-gray-600 flex items-center gap-2">
+                        <CardTitle className="text-sm font-medium text-emerald-700 flex items-center gap-2">
                             <ShoppingCart className="w-4 h-4" />
                             Hoje
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <div className="text-4xl font-bold text-gray-900 mb-1">
+                        <div className="text-4xl font-bold text-emerald-900 mb-1">
                             €{todayRevenue.toFixed(2)}
                         </div>
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-emerald-700">
                             {todayQuantity} {todayQuantity === 1 ? 'pedido' : 'pedidos'}
                         </p>
                     </CardContent>
                 </Card>
 
                 {/* This Week */}
-                <Card className="bg-white border border-gray-200 shadow-sm">
+                <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 shadow-md hover:shadow-lg transition-shadow">
                     <CardHeader className="pb-2">
-                        <CardTitle className="text-sm font-medium text-gray-600 flex items-center gap-2">
+                        <CardTitle className="text-sm font-medium text-blue-700 flex items-center gap-2">
                             <ChartIcon className="w-4 h-4" />
                             Esta Semana
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <div className="text-4xl font-bold text-gray-900 mb-1">
+                        <div className="text-4xl font-bold text-blue-900 mb-1">
                             €{weekRevenue.toFixed(2)}
                         </div>
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-blue-700">
                             {format(startOfWeek(today, { weekStartsOn: 1 }), 'dd/MM')} - {format(endOfWeek(today, { weekStartsOn: 1 }), 'dd/MM')}
                         </p>
                     </CardContent>
@@ -153,8 +141,8 @@ export default async function AdminDashboardPage() {
             </div>
 
             {/* This Month Stats */}
-            <Card className="bg-white border border-gray-200 shadow-sm">
-                <CardHeader>
+            <Card className="bg-white border border-gray-200 shadow-md hover:shadow-lg transition-shadow">
+                <CardHeader className="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
                     <CardTitle className="text-lg font-bold text-gray-900 flex items-center gap-2">
                         <Euro className="w-5 h-5" />
                         Este Mês
@@ -193,8 +181,8 @@ export default async function AdminDashboardPage() {
             </Card>
 
             {/* Top 3 Dishes */}
-            <Card className="bg-white border border-gray-200 shadow-sm">
-                <CardHeader>
+            <Card className="bg-white border border-gray-200 shadow-md hover:shadow-lg transition-shadow">
+                <CardHeader className="bg-gradient-to-r from-amber-50 to-yellow-50 border-b border-amber-200">
                     <CardTitle className="text-lg font-bold text-gray-900 flex items-center gap-2">
                         🏆 Top 3 Pratos (Este Mês)
                     </CardTitle>

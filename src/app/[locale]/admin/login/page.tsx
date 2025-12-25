@@ -72,7 +72,7 @@ export default function AdminLoginPage() {
                             unoptimized
                         />
                     </div>
-                    <h1 className="font-serif text-2xl font-bold text-primary-900 mb-2">{t('title')}</h1>
+                    <h1 className="text-2xl font-bold text-primary-900 mb-2">{t('title')}</h1>
                     <p className="text-muted-foreground mb-6">Você já está autenticado.</p>
 
                     <div className="space-y-3">

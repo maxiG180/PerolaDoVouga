@@ -13,8 +13,8 @@ export function Footer() {
                             Uma experiência gastronómica autêntica e memorável.
                         </p>
                         <div className="flex gap-4">
-                            <a href="#" className="hover:text-gold transition-colors"><Facebook className="w-5 h-5" /></a>
-                            <a href="#" className="hover:text-gold transition-colors"><Instagram className="w-5 h-5" /></a>
+                            <a href="https://www.facebook.com/share/1JsK9ftJaX/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" className="hover:text-gold transition-colors"><Facebook className="w-5 h-5" /></a>
+                            <a href="https://www.instagram.com/peroladovougaltd" target="_blank" rel="noopener noreferrer" className="hover:text-gold transition-colors"><Instagram className="w-5 h-5" /></a>
                         </div>
                     </div>
 

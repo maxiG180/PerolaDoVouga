@@ -1,4 +1,4 @@
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { Playfair_Display, Inter } from "next/font/google"
 import "../globals.css"
 import { Toaster } from "sonner"
@@ -22,6 +22,13 @@ export const metadata: Metadata = {
     title: "Pérola do Vouga - Sabores que Encantam",
     description: "Uma experiência gastronómica única onde a tradição encontra a elegância. Pratos feitos com amor, ingredientes frescos e o toque especial da nossa família.",
     keywords: ["restaurante", "comida portuguesa", "takeaway", "Vouga", "gastronomia"],
+}
+
+export const viewport: Viewport = {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false,
 }
 
 export default async function RootLayout({

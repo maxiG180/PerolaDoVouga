@@ -88,10 +88,10 @@ export default function SettingsPage() {
     }
 
     return (
-        <div className="space-y-6">
-            <div>
-                <h1 className="text-3xl font-serif font-bold text-primary-900">Definições do Site</h1>
-                <p className="text-muted-foreground">Gerencie as informações gerais do seu negócio.</p>
+        <div className="space-y-6 pb-20 md:pb-6">
+            <div className="bg-gradient-to-r from-neutral-900 to-neutral-800 rounded-xl p-6 shadow-lg mb-6">
+                <h1 className="text-2xl sm:text-3xl font-bold text-white">Definições do Site</h1>
+                <p className="text-sm sm:text-base text-muted-foreground">Gerencie as informações gerais do seu negócio.</p>
             </div>
 
             <form onSubmit={handleSubmit} className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 space-y-6">
@@ -101,6 +101,7 @@ export default function SettingsPage() {
                         <Input
                             value={settings.business_name}
                             onChange={e => setSettings({ ...settings, business_name: e.target.value })}
+                            className="h-12"
                         />
                     </div>
                     <div className="space-y-2">
@@ -108,6 +109,7 @@ export default function SettingsPage() {
                         <Input
                             value={settings.email}
                             onChange={e => setSettings({ ...settings, email: e.target.value })}
+                            className="h-12"
                         />
                     </div>
                     <div className="space-y-2">
@@ -115,6 +117,7 @@ export default function SettingsPage() {
                         <Input
                             value={settings.phone}
                             onChange={e => setSettings({ ...settings, phone: e.target.value })}
+                            className="h-12"
                         />
                     </div>
                     <div className="space-y-2">
@@ -122,6 +125,7 @@ export default function SettingsPage() {
                         <Input
                             value={settings.address}
                             onChange={e => setSettings({ ...settings, address: e.target.value })}
+                            className="h-12"
                         />
                     </div>
                 </div>
@@ -135,6 +139,7 @@ export default function SettingsPage() {
                                 value={settings.opening_hours_weekdays}
                                 onChange={e => setSettings({ ...settings, opening_hours_weekdays: e.target.value })}
                                 placeholder="Ex: 08:00 - 20:00"
+                                className="h-12"
                             />
                         </div>
                         <div className="space-y-2">
@@ -143,6 +148,7 @@ export default function SettingsPage() {
                                 value={settings.opening_hours_weekend}
                                 onChange={e => setSettings({ ...settings, opening_hours_weekend: e.target.value })}
                                 placeholder="Ex: 09:00 - 22:00"
+                                className="h-12"
                             />
                         </div>
                     </div>
@@ -157,6 +163,7 @@ export default function SettingsPage() {
                                 value={settings.facebook_url}
                                 onChange={e => setSettings({ ...settings, facebook_url: e.target.value })}
                                 placeholder="https://facebook.com/..."
+                                className="h-12"
                             />
                         </div>
                         <div className="space-y-2">
@@ -165,6 +172,7 @@ export default function SettingsPage() {
                                 value={settings.instagram_url}
                                 onChange={e => setSettings({ ...settings, instagram_url: e.target.value })}
                                 placeholder="https://instagram.com/..."
+                                className="h-12"
                             />
                         </div>
                     </div>
