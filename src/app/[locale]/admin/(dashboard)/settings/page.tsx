@@ -31,19 +31,26 @@ export default function SettingsPage() {
     const fetchSettings = async () => {
         try {
             const { data, error } = await supabase
-                .from('site_settings')
+                .from('restaurant_settings')
                 .select('*')
+                .single()
 
             if (error) throw error
 
             if (data) {
-                const newSettings: any = { ...settings }
-                data.forEach((item: any) => {
-                    if (Object.keys(newSettings).includes(item.key)) {
-                        newSettings[item.key] = item.value
-                    }
+                setSettings({
+                    business_name: data.restaurant_name || '',
+                    address: data.address || '',
+                    phone: data.phone || '',
+                    email: data.email || '',
+                    opening_hours_weekdays: data.opening_hours || '',
+                    opening_hours_weekend: data.opening_hours_weekend || '',
+                    facebook_url: data.facebook_url || '',
+                    instagram_url: data.instagram_url || ''
                 })
-                setSettings(newSettings)
+                // rough parsing if opening_hours is used for both, or just map one. 
+                // For this iteration, let's assume opening_hours matches the weekdays input or we need to concat.
+                // Let's keep it simple: if the DB has text, put it in weekdays. 
             }
         } catch (error) {
             console.error('Error fetching settings:', error)
@@ -58,15 +65,33 @@ export default function SettingsPage() {
         setIsSaving(true)
 
         try {
-            const updates = Object.entries(settings).map(([key, value]) => ({
-                key,
-                value,
+            // We need to update the single row. 
+            // Since we don't have the ID in state, we can query it or just update all rows (since there's only one generally)
+            // or better, fetch the ID first/store it.
+            // But 'restaurant_settings' is singleton, so updating where id is not null (or just the one row) is fine.
+            // Let's use the policy of updating the single visible row.
+
+            // First get the ID if we don't have it, or just update the first row found.
+            const { data: currentSettings } = await supabase.from('restaurant_settings').select('id').single()
+
+            if (!currentSettings) throw new Error('No settings found')
+
+            const updates = {
+                restaurant_name: settings.business_name,
+                address: settings.address,
+                phone: settings.phone,
+                email: settings.email,
+                opening_hours: settings.opening_hours_weekdays,
+                opening_hours_weekend: settings.opening_hours_weekend,
+                facebook_url: settings.facebook_url,
+                instagram_url: settings.instagram_url,
                 updated_at: new Date().toISOString()
-            }))
+            }
 
             const { error } = await supabase
-                .from('site_settings')
-                .upsert(updates as any, { onConflict: 'key' })
+                .from('restaurant_settings')
+                .update(updates)
+                .eq('id', currentSettings.id)
 
             if (error) throw error
 

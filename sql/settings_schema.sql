@@ -17,6 +17,10 @@ CREATE TABLE IF NOT EXISTS restaurant_settings (
     is_open BOOLEAN DEFAULT true,
     opening_hours TEXT, -- Can be a JSON or simple text description
     
+    -- Social Media Visibility
+    show_facebook BOOLEAN DEFAULT true,
+    show_instagram BOOLEAN DEFAULT true,
+
     -- System
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()

@@ -378,6 +378,59 @@ export interface Database {
           updated_by?: string | null
         }
       }
+      restaurant_settings: {
+        Row: {
+          id: string
+          restaurant_name: string
+          phone: string | null
+          email: string | null
+          address: string | null
+          google_maps_url: string | null
+          facebook_url: string | null
+          instagram_url: string | null
+          is_open: boolean
+          opening_hours: string | null
+          opening_hours_weekend: string | null
+          show_facebook: boolean
+          show_instagram: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          restaurant_name?: string
+          phone?: string | null
+          email?: string | null
+          address?: string | null
+          google_maps_url?: string | null
+          facebook_url?: string | null
+          instagram_url?: string | null
+          is_open?: boolean
+          opening_hours?: string | null
+          opening_hours_weekend?: string | null
+          show_facebook?: boolean
+          show_instagram?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          restaurant_name?: string
+          phone?: string | null
+          email?: string | null
+          address?: string | null
+          google_maps_url?: string | null
+          facebook_url?: string | null
+          instagram_url?: string | null
+          is_open?: boolean
+          opening_hours?: string | null
+          opening_hours_weekend?: string | null
+          show_facebook?: boolean
+          show_instagram?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+      }
     }
     Views: {
       [_ in never]: never
