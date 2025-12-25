@@ -1,5 +1,8 @@
+'use client'
+
 import { MapPin, Phone, Mail, Instagram, Facebook } from 'lucide-react'
-import { createClient } from '@/lib/supabase/server'
+import { createClient } from '@/lib/supabase/client'
+import { useEffect, useState } from 'react'
 
 interface RestaurantSettings {
     phone: string
@@ -14,16 +17,22 @@ interface RestaurantSettings {
     show_instagram: boolean
 }
 
-export async function Footer() {
-    const supabase = await createClient()
+export function Footer() {
+    const [settings, setSettings] = useState<RestaurantSettings | null>(null)
 
-    // Fetch settings with a single query, safe handling if missing
-    const { data } = await supabase
-        .from('restaurant_settings')
-        .select('*')
-        .single()
+    useEffect(() => {
+        const fetchSettings = async () => {
+            const supabase = createClient()
+            const { data } = await supabase
+                .from('restaurant_settings')
+                .select('*')
+                .single()
 
-    const settings = data as RestaurantSettings | null
+            setSettings(data as RestaurantSettings | null)
+        }
+
+        fetchSettings()
+    }, [])
 
     // Defaults in case DB is empty or fails
     const phone = settings?.phone || '+351 21 846 4584'
