@@ -37,7 +37,7 @@ export function Footer() {
     // Defaults in case DB is empty or fails
     const phone = settings?.phone || '+351 21 846 4584'
     const email = settings?.email || 'peroladovougalda@gmail.com'
-    const address = settings?.address || 'Av. Alm. Reis 243A, 1000-058 Lisboa, Portugal'
+    const address = settings?.address || 'Av. Alm. Reis 243 A, 1000-051 Lisboa'
     const businessName = settings?.restaurant_name || 'Pérola do Vouga'
 
     // Hours logic: display DB values or fallback

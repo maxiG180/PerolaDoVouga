@@ -67,7 +67,7 @@ SELECT
     'Pérola do Vouga',
     '+351 21 846 4584',
     'peroladovougalda@gmail.com',
-    'Av. Alm. Reis 243A, 1000-058 Lisboa, Portugal',
+    'Av. Alm. Reis 243 A, 1000-051 Lisboa',
     'https://goo.gl/maps/example',
     'https://www.facebook.com/share/1JsK9ftJaX/?mibextid=wwXIfr',
     'https://www.instagram.com/peroladovougaltd',

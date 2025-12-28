@@ -214,8 +214,8 @@ export default async function Home() {
                                         <MapPin className="w-8 h-8 text-gold mb-4" />
                                         <h4 className="font-bold text-lg mb-2 text-primary-900">{tCommon('address')}</h4>
                                         <p className="text-stone-600 text-sm">
-                                            Av. Alm. Reis 243A<br />
-                                            1000-058 Lisboa
+                                            Av. Alm. Reis 243 A<br />
+                                            1000-051 Lisboa
                                         </p>
                                     </div>
 
@@ -232,7 +232,7 @@ export default async function Home() {
 
                             <div className="h-[400px] lg:h-[500px] bg-stone-100 rounded-3xl overflow-hidden shadow-xl border border-stone-200 relative group">
                                 <iframe
-                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3112.3!2d-9.1363!3d38.7305!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd19347f3b6d3c7b%3A0x8e3e3e3e3e3e3e3e!2sAv.%20Alm.%20Reis%20243A%2C%201000-058%20Lisboa%2C%20Portugal!5e0!3m2!1sen!2spt!4v1234567890"
+                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3112.3!2d-9.1363!3d38.7305!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd19347f3b6d3c7b%3A0x8e3e3e3e3e3e3e3e!2sAv.%20Alm.%20Reis%20243%20A%2C%201000-051%20Lisboa%2C%20Portugal!5e0!3m2!1sen!2spt!4v1234567890"
                                     width="100%"
                                     height="100%"
                                     style={{ border: 0 }}
