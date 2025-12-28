@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useParams } from 'next/navigation'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -12,8 +12,10 @@ import Link from 'next/link'
 // Using strict relative path imports to avoid any alias issues
 // import { useToast } from "@/components/ui/use-toast" - if available
 
-export default function EditMarginPage({ params }: { params: { id: string } }) {
+export default function EditMarginPage() {
     const router = useRouter()
+    const params = useParams()
+    const id = params.id as string
     const [loading, setLoading] = useState(true)
     const [saving, setSaving] = useState(false)
     const [error, setError] = useState('')
@@ -36,13 +38,15 @@ export default function EditMarginPage({ params }: { params: { id: string } }) {
 
     useEffect(() => {
         async function fetchData() {
+            if (!id) return
+
             try {
                 // We'll fetch from our margins API which returns all, but we filter for one
                 // Or implementing a single fetch endpoint would be better, but for now filtering is okay for prototype
                 const res = await fetch('/api/margins')
                 if (res.ok) {
                     const data = await res.json()
-                    const item = data.find((i: any) => i.id === params.id)
+                    const item = data.find((i: any) => i.id === id)
                     if (item) {
                         setItemName(item.name)
                         setCost(item.ingredient_cost.toString())
@@ -58,7 +62,7 @@ export default function EditMarginPage({ params }: { params: { id: string } }) {
             }
         }
         fetchData()
-    }, [params.id])
+    }, [id])
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -66,11 +70,53 @@ export default function EditMarginPage({ params }: { params: { id: string } }) {
         setError('')
 
         try {
+            // Validation
+            const numCostValue = Number(cost)
+            const numPriceValue = Number(price)
+
+            if (isNaN(numCostValue) || numCostValue < 0) {
+                setError('Custo inválido. Insira um valor positivo.')
+                setSaving(false)
+                return
+            }
+
+            if (isNaN(numPriceValue) || numPriceValue <= 0) {
+                setError('Preço inválido. Insira um valor positivo.')
+                setSaving(false)
+                return
+            }
+
+            if (numPriceValue <= numCostValue) {
+                const confirmLoss = confirm(
+                    '⚠️ AVISO: O preço de venda é menor ou igual ao custo!\n\n' +
+                    `Custo: €${numCostValue.toFixed(2)}\n` +
+                    `Preço: €${numPriceValue.toFixed(2)}\n` +
+                    `Margem: ${margin.toFixed(1)}%\n\n` +
+                    'Isto significa que está a PERDER DINHEIRO neste prato.\n\n' +
+                    'Deseja continuar mesmo assim?'
+                )
+                if (!confirmLoss) {
+                    setSaving(false)
+                    return
+                }
+            } else if (margin < 30) {
+                const confirmLowMargin = confirm(
+                    `⚠️ AVISO: Margem muito baixa (${margin.toFixed(1)}%)\n\n` +
+                    'Margens abaixo de 30% podem não cobrir custos operacionais.\n' +
+                    'Recomenda-se margem mínima de 50%.\n\n' +
+                    'Deseja continuar?'
+                )
+                if (!confirmLowMargin) {
+                    setSaving(false)
+                    return
+                }
+            }
+
             const response = await fetch('/api/margins', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    menu_item_id: params.id,
+                    menu_item_id: id,
                     ingredient_cost: Number(cost),
                     selling_price: Number(price)
                 })
@@ -108,8 +154,8 @@ export default function EditMarginPage({ params }: { params: { id: string } }) {
                     <form onSubmit={handleSubmit} className="space-y-6">
                         {/* Simulation Card */}
                         <div className={`p-4 rounded-lg bg-gray-50 border-2 ${marginStatus === 'excellent' ? 'border-emerald-100 bg-emerald-50' :
-                                marginStatus === 'good' ? 'border-green-100 bg-green-50' :
-                                    marginStatus === 'warning' ? 'border-yellow-100 bg-yellow-50' : 'border-red-100 bg-red-50'
+                            marginStatus === 'good' ? 'border-green-100 bg-green-50' :
+                                marginStatus === 'warning' ? 'border-yellow-100 bg-yellow-50' : 'border-red-100 bg-red-50'
                             }`}>
                             <div className="flex items-center gap-2 mb-2 text-sm font-medium text-muted-foreground">
                                 <Calculator className="w-4 h-4" />
@@ -135,6 +181,7 @@ export default function EditMarginPage({ params }: { params: { id: string } }) {
                                 type="number"
                                 step="0.01"
                                 min="0"
+                                max="10000"
                                 value={cost}
                                 onChange={(e) => setCost(e.target.value)}
                                 className="h-12 text-lg"
@@ -155,6 +202,7 @@ export default function EditMarginPage({ params }: { params: { id: string } }) {
                                 type="number"
                                 step="0.01"
                                 min="0"
+                                max="10000"
                                 value={price}
                                 onChange={(e) => setPrice(e.target.value)}
                                 className="h-12 text-lg"

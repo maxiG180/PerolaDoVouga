@@ -60,9 +60,63 @@ export default function SettingsPage() {
         }
     }
 
+    const validateEmail = (email: string): boolean => {
+        if (!email) return true // Optional field
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+        return emailRegex.test(email)
+    }
+
+    const validatePhone = (phone: string): boolean => {
+        if (!phone) return true // Optional field
+        // Portuguese phone format: accepts various formats like +351 XXX XXX XXX or XXX XXX XXX
+        const phoneRegex = /^(\+351\s?)?[0-9]{9}$/
+        return phoneRegex.test(phone.replace(/\s/g, ''))
+    }
+
+    const validateURL = (url: string): boolean => {
+        if (!url) return true // Optional field
+        try {
+            new URL(url)
+            return true
+        } catch {
+            return false
+        }
+    }
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setIsSaving(true)
+
+        // Validation
+        if (settings.business_name.trim() === '') {
+            toast.error('Nome do negócio é obrigatório')
+            setIsSaving(false)
+            return
+        }
+
+        if (!validateEmail(settings.email)) {
+            toast.error('Email inválido. Use o formato: exemplo@dominio.com')
+            setIsSaving(false)
+            return
+        }
+
+        if (!validatePhone(settings.phone)) {
+            toast.error('Telefone inválido. Use o formato: +351 XXX XXX XXX ou 9 dígitos')
+            setIsSaving(false)
+            return
+        }
+
+        if (!validateURL(settings.facebook_url)) {
+            toast.error('URL do Facebook inválido. Use o formato completo: https://facebook.com/...')
+            setIsSaving(false)
+            return
+        }
+
+        if (!validateURL(settings.instagram_url)) {
+            toast.error('URL do Instagram inválido. Use o formato completo: https://instagram.com/...')
+            setIsSaving(false)
+            return
+        }
 
         try {
             // We need to update the single row. 
@@ -77,14 +131,14 @@ export default function SettingsPage() {
             if (!currentSettings) throw new Error('No settings found')
 
             const updates = {
-                restaurant_name: settings.business_name,
-                address: settings.address,
-                phone: settings.phone,
-                email: settings.email,
-                opening_hours: settings.opening_hours_weekdays,
-                opening_hours_weekend: settings.opening_hours_weekend,
-                facebook_url: settings.facebook_url,
-                instagram_url: settings.instagram_url,
+                restaurant_name: settings.business_name.trim(),
+                address: settings.address.trim(),
+                phone: settings.phone.trim(),
+                email: settings.email.trim(),
+                opening_hours: settings.opening_hours_weekdays.trim(),
+                opening_hours_weekend: settings.opening_hours_weekend.trim(),
+                facebook_url: settings.facebook_url.trim(),
+                instagram_url: settings.instagram_url.trim(),
                 updated_at: new Date().toISOString()
             }
 
@@ -122,27 +176,32 @@ export default function SettingsPage() {
             <form onSubmit={handleSubmit} className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 space-y-6">
                 <div className="grid gap-6 md:grid-cols-2">
                     <div className="space-y-2">
-                        <Label>Nome do Negócio</Label>
+                        <Label>Nome do Negócio <span className="text-red-500">*</span></Label>
                         <Input
                             value={settings.business_name}
                             onChange={e => setSettings({ ...settings, business_name: e.target.value })}
                             className="h-12"
+                            required
                         />
                     </div>
                     <div className="space-y-2">
                         <Label>Email de Contacto</Label>
                         <Input
+                            type="email"
                             value={settings.email}
                             onChange={e => setSettings({ ...settings, email: e.target.value })}
                             className="h-12"
+                            placeholder="exemplo@dominio.com"
                         />
                     </div>
                     <div className="space-y-2">
                         <Label>Telefone</Label>
                         <Input
+                            type="tel"
                             value={settings.phone}
                             onChange={e => setSettings({ ...settings, phone: e.target.value })}
                             className="h-12"
+                            placeholder="+351 XXX XXX XXX"
                         />
                     </div>
                     <div className="space-y-2">
@@ -157,22 +216,25 @@ export default function SettingsPage() {
 
                 <div className="space-y-4">
                     <h3 className="font-medium text-lg border-b pb-2">Horário de Funcionamento</h3>
+                    <p className="text-sm text-muted-foreground">
+                        Este horário é exibido em todo o site (página principal, footer, etc.)
+                    </p>
                     <div className="grid gap-6 md:grid-cols-2">
                         <div className="space-y-2">
-                            <Label>Dias de Semana</Label>
+                            <Label>Segunda a Sábado</Label>
                             <Input
                                 value={settings.opening_hours_weekdays}
                                 onChange={e => setSettings({ ...settings, opening_hours_weekdays: e.target.value })}
-                                placeholder="Ex: 08:00 - 20:00"
+                                placeholder="Ex: 07:00 - 18:30"
                                 className="h-12"
                             />
                         </div>
                         <div className="space-y-2">
-                            <Label>Fim de Semana</Label>
+                            <Label>Domingo</Label>
                             <Input
                                 value={settings.opening_hours_weekend}
                                 onChange={e => setSettings({ ...settings, opening_hours_weekend: e.target.value })}
-                                placeholder="Ex: 09:00 - 22:00"
+                                placeholder="Ex: Encerrado"
                                 className="h-12"
                             />
                         </div>
@@ -185,6 +247,7 @@ export default function SettingsPage() {
                         <div className="space-y-2">
                             <Label>Facebook URL</Label>
                             <Input
+                                type="url"
                                 value={settings.facebook_url}
                                 onChange={e => setSettings({ ...settings, facebook_url: e.target.value })}
                                 placeholder="https://facebook.com/..."
@@ -194,6 +257,7 @@ export default function SettingsPage() {
                         <div className="space-y-2">
                             <Label>Instagram URL</Label>
                             <Input
+                                type="url"
                                 value={settings.instagram_url}
                                 onChange={e => setSettings({ ...settings, instagram_url: e.target.value })}
                                 placeholder="https://instagram.com/..."

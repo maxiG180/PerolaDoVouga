@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { UtensilsCrossed, LogOut, Home, Settings, CalendarDays, ExternalLink, Receipt, ShoppingCart, TrendingUp, Menu } from 'lucide-react'
+import { UtensilsCrossed, LogOut, Home, Settings, CalendarDays, ExternalLink, Receipt, ShoppingCart, TrendingUp, Menu, MessageCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { useState } from 'react'
@@ -13,8 +13,15 @@ const navItems = [
     { href: '/admin/home', label: 'Painel', icon: Home },
     { href: '/admin/expenses', label: 'Despesas', icon: Receipt },
     { href: '/admin/margins', label: 'Margens', icon: TrendingUp },
+    { href: '/admin/chat', label: 'Chat', icon: MessageCircle },
 ]
 
+// Mobile bottom nav (limited to 3 + More button)
+const mobileNavItems = [
+    { href: '/admin/home', label: 'Painel', icon: Home },
+    { href: '/admin/expenses', label: 'Despesas', icon: Receipt },
+    { href: '/admin/margins', label: 'Margens', icon: TrendingUp },
+]
 
 const moreItems = [
     { href: '/admin/settings', label: 'Definições', icon: Settings },
@@ -47,7 +54,7 @@ export function AdminSidebar() {
 
             {/* Navigation */}
             <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
-                {[...navItems, ...moreItems].map((item) => {
+                {navItems.map((item) => {
                     const isActive = pathname === item.href
                     return (
                         <Link
@@ -68,6 +75,26 @@ export function AdminSidebar() {
                 })}
 
                 <div className="border-t border-gray-200 my-4 pt-4">
+                    {moreItems.map((item) => {
+                        const isActive = pathname === item.href
+                        return (
+                            <Link
+                                key={item.href}
+                                href={item.href}
+                                onClick={() => setOpen(false)}
+                                className={cn(
+                                    "flex items-center gap-3 px-4 py-3 rounded-lg transition-colors font-medium",
+                                    isActive
+                                        ? "bg-primary-900 text-white"
+                                        : "text-gray-700 hover:bg-gray-100"
+                                )}
+                            >
+                                <item.icon className="w-5 h-5" />
+                                <span>{item.label}</span>
+                            </Link>
+                        )
+                    })}
+
                     <Link
                         href="/"
                         target="_blank"
@@ -106,7 +133,7 @@ export function AdminSidebar() {
             <div className="md:hidden fixed bottom-0 left-0 right-0 z-50">
                 <div className="bg-white border-t border-gray-300 shadow-lg">
                     <nav className="grid grid-cols-4 h-16">
-                        {navItems.map((item) => {
+                        {mobileNavItems.map((item) => {
                             const isActive = pathname === item.href
                             return (
                                 <Link
@@ -137,6 +164,20 @@ export function AdminSidebar() {
                                 <div className="py-4">
                                     <h3 className="text-lg font-bold mb-4">Mais Opções</h3>
                                     <div className="space-y-2">
+                                        <Link
+                                            href="/admin/chat"
+                                            onClick={() => setOpen(false)}
+                                            className={cn(
+                                                "flex items-center gap-3 px-4 py-3 rounded-lg font-medium",
+                                                pathname === '/admin/chat'
+                                                    ? "bg-primary-900 text-white"
+                                                    : "bg-gray-100 text-gray-900"
+                                            )}
+                                        >
+                                            <MessageCircle className="w-5 h-5" />
+                                            <span>Chat</span>
+                                        </Link>
+
                                         {moreItems.map((item) => {
                                             const isActive = pathname === item.href
                                             return (

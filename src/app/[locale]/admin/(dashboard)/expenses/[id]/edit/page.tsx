@@ -1,8 +1,8 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { useState, useEffect } from 'react'
+import { useRouter, useParams } from 'next/navigation'
+import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -10,10 +10,12 @@ import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { DatePicker } from '@/components/ui/date-picker'
 import { Checkbox } from '@/components/ui/checkbox'
-import { ArrowLeft, Save } from 'lucide-react'
+import { ArrowLeft, Save, Loader2 } from 'lucide-react'
 import { format } from 'date-fns'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
+import { createClient } from '@/lib/supabase/client'
+import { toast } from 'sonner'
 
 const EXPENSE_CATEGORIES = [
     { id: 'agua', name: 'Água', icon: '💧', color: '#3B82F6' },
@@ -26,9 +28,13 @@ const EXPENSE_CATEGORIES = [
     { id: 'outros', name: 'Outros', icon: '📋', color: '#6B7280' },
 ]
 
-export default function AddExpensePage() {
+export default function EditExpensePage() {
     const router = useRouter()
-    const [loading, setLoading] = useState(false)
+    const params = useParams()
+    const id = params.id as string
+    const supabase = createClient() as any
+    const [loading, setLoading] = useState(true)
+    const [saving, setSaving] = useState(false)
     const [error, setError] = useState('')
 
     const [categoryId, setCategoryId] = useState('')
@@ -37,52 +43,90 @@ export default function AddExpensePage() {
     const [description, setDescription] = useState('')
     const [isRecurring, setIsRecurring] = useState(false)
 
+    useEffect(() => {
+        if (id) {
+            fetchExpense()
+        }
+    }, [id])
+
+    const fetchExpense = async () => {
+        try {
+            const { data, error } = await supabase
+                .from('expenses')
+                .select('*')
+                .eq('id', id)
+                .single()
+
+            if (error) throw error
+
+            if (data) {
+                setCategoryId(data.category_id)
+                setAmount(data.amount.toString())
+                setDate(new Date(data.expense_date))
+                setDescription(data.description || '')
+                setIsRecurring(data.is_recurring || false)
+            }
+        } catch (err) {
+            console.error('Error fetching expense:', err)
+            toast.error('Erro ao carregar despesa')
+            router.push('/admin/expenses')
+        } finally {
+            setLoading(false)
+        }
+    }
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setError('')
-        setLoading(true)
+        setSaving(true)
 
         try {
             // Validate
             if (!categoryId) {
                 setError('Por favor selecione uma categoria')
-                setLoading(false)
+                setSaving(false)
                 return
             }
             if (!amount || isNaN(Number(amount)) || Number(amount) <= 0) {
                 setError('Por favor insira um valor válido')
-                setLoading(false)
+                setSaving(false)
                 return
             }
             if (!date) {
                 setError('Por favor selecione uma data')
-                setLoading(false)
+                setSaving(false)
                 return
             }
 
-            // Submit to API
-            const response = await fetch('/api/expenses', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
+            // Update expense
+            const { error } = await supabase
+                .from('expenses')
+                .update({
                     category_id: categoryId,
                     amount: Number(amount),
                     expense_date: format(date, 'yyyy-MM-dd'),
                     description: description || null,
                     is_recurring: isRecurring
                 })
-            })
+                .eq('id', id)
 
-            if (!response.ok) {
-                throw new Error('Erro ao guardar despesa')
-            }
+            if (error) throw error
 
+            toast.success('Despesa atualizada com sucesso')
             router.push('/admin/expenses')
             router.refresh()
         } catch (err) {
-            setError(err instanceof Error ? err.message : 'Erro ao guardar despesa')
-            setLoading(false)
+            setError(err instanceof Error ? err.message : 'Erro ao atualizar despesa')
+            setSaving(false)
         }
+    }
+
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center h-64">
+                <Loader2 className="w-8 h-8 animate-spin text-gold" />
+            </div>
+        )
     }
 
     return (
@@ -95,8 +139,8 @@ export default function AddExpensePage() {
                     </Link>
                 </Button>
                 <div>
-                    <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Nova Despesa</h1>
-                    <p className="text-sm text-gray-600">Preencha os dados da despesa</p>
+                    <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Editar Despesa</h1>
+                    <p className="text-sm text-gray-600">Atualize os dados da despesa</p>
                 </div>
             </div>
 
@@ -202,15 +246,18 @@ export default function AddExpensePage() {
                         {/* Submit */}
                         <Button
                             type="submit"
-                            className="w-full h-12 text-lg gap-2 bg-red-600 hover:bg-red-700 text-white"
-                            disabled={loading}
+                            className="w-full h-12 text-lg gap-2 bg-primary-900 hover:bg-primary-800 text-white"
+                            disabled={saving}
                         >
-                            {loading ? (
-                                'A guardar...'
+                            {saving ? (
+                                <>
+                                    <Loader2 className="w-5 h-5 animate-spin" />
+                                    A guardar...
+                                </>
                             ) : (
                                 <>
                                     <Save className="w-5 h-5" />
-                                    Guardar Despesa
+                                    Guardar Alterações
                                 </>
                             )}
                         </Button>
