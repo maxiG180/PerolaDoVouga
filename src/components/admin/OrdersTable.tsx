@@ -160,52 +160,57 @@ export function OrdersTable({ initialOrders }: { initialOrders: any[] }) {
             </div>
 
             {/* Desktop View */}
-            <div className="hidden md:block bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+            <div className="hidden md:block bg-white border border-gray-300 shadow-sm overflow-hidden">
                 <Table>
-                    <TableHeader>
+                    <TableHeader className="bg-gray-100 border-b-2 border-gray-300">
                         <TableRow>
-                            <TableHead>Nº Pedido</TableHead>
-                            <TableHead>Cliente</TableHead>
-                            <TableHead>Itens</TableHead>
-                            <TableHead>Total</TableHead>
-                            <TableHead>Recolha</TableHead>
-                            <TableHead>Estado</TableHead>
+                            <TableHead className="font-bold text-gray-900 border-r border-gray-300 h-10">Nº Pedido</TableHead>
+                            <TableHead className="font-bold text-gray-900 border-r border-gray-300 h-10">Cliente</TableHead>
+                            <TableHead className="font-bold text-gray-900 border-r border-gray-300 h-10 w-[30%]">Itens</TableHead>
+                            <TableHead className="font-bold text-gray-900 border-r border-gray-300 h-10 text-right">Total</TableHead>
+                            <TableHead className="font-bold text-gray-900 border-r border-gray-300 h-10">Recolha</TableHead>
+                            <TableHead className="font-bold text-gray-900 h-10 text-center">Estado</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {orders.map((order) => (
-                            <TableRow key={order.id}>
-                                <TableCell className="font-medium">{order.order_number}</TableCell>
-                                <TableCell>
+                        {orders.map((order, index) => (
+                            <TableRow key={order.id} className={`hover:bg-blue-50/50 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50/30'}`}>
+                                <TableCell className="font-mono font-medium border-r border-gray-200 py-2">
+                                    #{order.order_number}
+                                </TableCell>
+                                <TableCell className="border-r border-gray-200 py-2">
                                     <div className="flex flex-col">
-                                        <span className="font-medium">{order.customer_name}</span>
-                                        <span className="text-xs text-muted-foreground">{order.customer_phone}</span>
+                                        <span className="font-medium text-xs">{order.customer_name}</span>
+                                        <span className="text-[10px] text-muted-foreground">{order.customer_phone}</span>
                                     </div>
                                 </TableCell>
-                                <TableCell>
-                                    <div className="text-sm max-w-[200px]">
+                                <TableCell className="border-r border-gray-200 py-2">
+                                    <div className="text-xs space-y-0.5">
                                         {order.order_items?.map((item: any) => (
-                                            <div key={item.id} className="truncate">
-                                                {item.quantity}x {item.item_name}
+                                            <div key={item.id} className="flex justify-between gap-2">
+                                                <span className="truncate">{item.item_name}</span>
+                                                <span className="font-mono text-gray-500">x{item.quantity}</span>
                                             </div>
                                         ))}
                                     </div>
                                 </TableCell>
-                                <TableCell>{formatPrice(order.total_amount)}</TableCell>
-                                <TableCell>
+                                <TableCell className="font-mono font-bold text-right border-r border-gray-200 py-2">
+                                    {formatPrice(order.total_amount)}
+                                </TableCell>
+                                <TableCell className="border-r border-gray-200 py-2 text-xs">
                                     {format(new Date(order.pickup_time), "HH:mm, dd MMM", { locale: pt })}
                                 </TableCell>
-                                <TableCell>
+                                <TableCell className="py-2 text-center">
                                     <Select
                                         defaultValue={order.status}
                                         onValueChange={(val: string) => handleStatusChange(order.id, val)}
                                     >
-                                        <SelectTrigger className={`w-[130px] h-8 ${STATUS_MAP[order.status]?.color || ''}`}>
+                                        <SelectTrigger className={`w-[130px] h-7 text-xs mx-auto ${STATUS_MAP[order.status]?.color || ''}`}>
                                             <SelectValue />
                                         </SelectTrigger>
                                         <SelectContent>
                                             {Object.entries(STATUS_MAP).map(([key, { label }]) => (
-                                                <SelectItem key={key} value={key}>
+                                                <SelectItem key={key} value={key} className="text-xs">
                                                     {label}
                                                 </SelectItem>
                                             ))}

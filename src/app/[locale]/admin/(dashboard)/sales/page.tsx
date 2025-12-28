@@ -13,6 +13,14 @@ import { format } from 'date-fns'
 import { pt } from 'date-fns/locale'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table"
 
 export default function SalesPage() {
     const router = useRouter()
@@ -223,79 +231,99 @@ export default function SalesPage() {
                 )}
             </div>
 
-            {/* Excel-Style Table */}
-            <div className="bg-white border border-gray-300 rounded-lg shadow-sm overflow-hidden">
-                {/* Table Header */}
-                <div className="bg-gray-100 border-b border-gray-300">
-                    <div className="grid grid-cols-12 gap-0">
-                        <div className="col-span-2 px-4 py-3 font-bold text-sm text-gray-700 border-r border-gray-300">
-                            Hora
+            {/* Mobile View - Cards */}
+            <div className="md:hidden space-y-4">
+                {todaySales.length > 0 ? (
+                    todaySales.map((sale) => (
+                        <div key={sale.id} className="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+                            <div className="flex justify-between items-start mb-2">
+                                <div>
+                                    <h3 className="font-medium text-gray-900">{sale.item_name}</h3>
+                                    <p className="text-xs text-muted-foreground">{format(new Date(sale.created_at || sale.sale_date), "HH:mm")}</p>
+                                </div>
+                                <span className="font-bold text-green-600">€{Number(sale.total_price).toFixed(2)}</span>
+                            </div>
+                            <div className="flex justify-between items-center text-sm text-gray-600 pt-2 border-t border-gray-100">
+                                <span>{sale.quantity}x €{Number(sale.unit_price).toFixed(2)}</span>
+                            </div>
                         </div>
-                        <div className="col-span-5 px-4 py-3 font-bold text-sm text-gray-700 border-r border-gray-300">
-                            Prato
-                        </div>
-                        <div className="col-span-2 px-4 py-3 font-bold text-sm text-gray-700 border-r border-gray-300 text-center">
-                            Qtd.
-                        </div>
-                        <div className="col-span-2 px-4 py-3 font-bold text-sm text-gray-700 border-r border-gray-300 text-right">
-                            Preço Unit.
-                        </div>
-                        <div className="col-span-1 px-4 py-3 font-bold text-sm text-gray-700 text-right">
-                            Total
-                        </div>
+                    ))
+                ) : (
+                    <div className="text-center py-8 text-muted-foreground bg-white rounded-xl border border-dashed">
+                        Sem vendas registadas para esta data.
                     </div>
-                </div>
+                )}
 
-                {/* Table Body */}
-                <div>
-                    {todaySales.length > 0 ? (
-                        todaySales.map((sale, index) => (
-                            <div
-                                key={sale.id}
-                                className={`grid grid-cols-12 gap-0 border-b border-gray-200 hover:bg-gray-50 transition-colors ${index % 2 === 1 ? 'bg-gray-50/50' : 'bg-white'
-                                    }`}
-                            >
-                                <div className="col-span-2 px-4 py-3 text-sm text-gray-700 border-r border-gray-200">
-                                    {format(new Date(sale.created_at || sale.sale_date), "HH:mm")}
-                                </div>
-                                <div className="col-span-5 px-4 py-3 text-sm font-medium text-gray-900 border-r border-gray-200">
-                                    {sale.item_name}
-                                </div>
-                                <div className="col-span-2 px-4 py-3 text-sm text-gray-900 border-r border-gray-200 text-center font-bold">
-                                    {sale.quantity}
-                                </div>
-                                <div className="col-span-2 px-4 py-3 text-sm text-gray-700 border-r border-gray-200 text-right">
-                                    €{Number(sale.unit_price).toFixed(2)}
-                                </div>
-                                <div className="col-span-1 px-4 py-3 text-sm font-bold text-green-600 text-right">
-                                    €{Number(sale.total_price).toFixed(2)}
-                                </div>
-                            </div>
-                        ))
-                    ) : (
-                        <div className="px-4 py-12 text-center text-gray-500">
-                            <p className="font-medium">Sem vendas registadas para esta data</p>
-                            <p className="text-sm mt-1">Use o formulário acima para registar vendas</p>
-                        </div>
-                    )}
-                </div>
-
-                {/* Table Footer - Totals */}
+                {/* Mobile Totals */}
                 {todaySales.length > 0 && (
-                    <div className="bg-gray-100 border-t-2 border-gray-400">
-                        <div className="grid grid-cols-12 gap-0">
-                            <div className="col-span-7 px-4 py-3 font-bold text-sm text-gray-900 border-r border-gray-300">
-                                TOTAL
-                            </div>
-                            <div className="col-span-2 px-4 py-3 font-bold text-sm text-gray-900 border-r border-gray-300 text-center">
-                                {stats.totalItems}
-                            </div>
-                            <div className="col-span-3 px-4 py-3 font-bold text-base text-green-700 text-right">
-                                €{stats.totalRevenue.toFixed(2)}
-                            </div>
+                    <div className="bg-gray-900 text-white p-4 rounded-xl shadow-lg">
+                        <div className="flex justify-between items-center mb-1">
+                            <span className="text-gray-400 text-sm">Total Itens</span>
+                            <span className="font-medium">{stats.totalItems}</span>
+                        </div>
+                        <div className="flex justify-between items-center text-lg font-bold">
+                            <span>Receita Total</span>
+                            <span className="text-gold">€{stats.totalRevenue.toFixed(2)}</span>
                         </div>
                     </div>
                 )}
+            </div>
+
+            {/* Desktop View - Excel Table */}
+            <div className="hidden md:block bg-white border border-gray-300 shadow-sm overflow-hidden">
+                <Table>
+                    <TableHeader className="bg-gray-100 border-b-2 border-gray-300">
+                        <TableRow>
+                            <TableHead className="font-bold text-gray-900 border-r border-gray-300 h-10 w-[100px]">Hora</TableHead>
+                            <TableHead className="font-bold text-gray-900 border-r border-gray-300 h-10">Prato</TableHead>
+                            <TableHead className="font-bold text-gray-900 border-r border-gray-300 h-10 text-center w-[80px]">Qtd.</TableHead>
+                            <TableHead className="font-bold text-gray-900 border-r border-gray-300 h-10 text-right w-[120px]">Preço Unit.</TableHead>
+                            <TableHead className="font-bold text-gray-900 h-10 text-right w-[120px]">Total</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {todaySales.length > 0 ? (
+                            todaySales.map((sale, index) => (
+                                <TableRow key={sale.id} className={`hover:bg-blue-50/50 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50/30'}`}>
+                                    <TableCell className="border-r border-gray-200 py-2 text-gray-500 font-mono text-xs">
+                                        {format(new Date(sale.created_at || sale.sale_date), "HH:mm")}
+                                    </TableCell>
+                                    <TableCell className="border-r border-gray-200 py-2 font-medium text-gray-900">
+                                        {sale.item_name}
+                                    </TableCell>
+                                    <TableCell className="border-r border-gray-200 py-2 text-center font-bold">
+                                        {sale.quantity}
+                                    </TableCell>
+                                    <TableCell className="border-r border-gray-200 py-2 text-right font-mono text-gray-600">
+                                        €{Number(sale.unit_price).toFixed(2)}
+                                    </TableCell>
+                                    <TableCell className="py-2 text-right font-bold font-mono text-green-700">
+                                        €{Number(sale.total_price).toFixed(2)}
+                                    </TableCell>
+                                </TableRow>
+                            ))
+                        ) : (
+                            <TableRow>
+                                <TableCell colSpan={5} className="text-center py-12 text-muted-foreground">
+                                    <p className="font-medium">Sem vendas registadas para esta data</p>
+                                    <p className="text-xs mt-1">Use o formulário acima para registar vendas</p>
+                                </TableCell>
+                            </TableRow>
+                        )}
+
+                        {/* Table Footer - Totals */}
+                        {todaySales.length > 0 && (
+                            <TableRow className="bg-gray-100 border-t-2 border-gray-300 font-bold hover:bg-gray-100">
+                                <TableCell className="border-r border-gray-300 py-3 text-right" colSpan={2}>TOTAl</TableCell>
+                                <TableCell className="border-r border-gray-300 py-3 text-center">{stats.totalItems}</TableCell>
+                                <TableCell className="border-r border-gray-300 py-3 block md:hidden"></TableCell>
+                                <TableCell className="py-3 text-right text-green-700 font-mono text-lg" colSpan={2}>
+                                    €{stats.totalRevenue.toFixed(2)}
+                                </TableCell>
+                            </TableRow>
+                        )}
+                    </TableBody>
+                </Table>
             </div>
 
             {/* Statistics */}

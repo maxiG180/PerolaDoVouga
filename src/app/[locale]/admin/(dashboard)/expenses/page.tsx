@@ -98,7 +98,7 @@ export default function ExpensesPage() {
                     <p className="text-gray-500">A carregar...</p>
                 </div>
             ) : (
-                <ExpensesList expenses={expenses} />
+                <ExpensesList expenses={expenses} onRefresh={fetchExpenses} />
             )}
         </div>
     )

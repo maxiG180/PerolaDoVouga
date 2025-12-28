@@ -24,9 +24,10 @@ interface Expense {
 
 interface ExpensesListProps {
     expenses: Expense[]
+    onRefresh: () => void
 }
 
-export function ExpensesList({ expenses }: ExpensesListProps) {
+export function ExpensesList({ expenses, onRefresh }: ExpensesListProps) {
     const [search, setSearch] = useState('')
     const [deleting, setDeleting] = useState<number | null>(null)
     const router = useRouter()
@@ -56,7 +57,7 @@ export function ExpensesList({ expenses }: ExpensesListProps) {
             if (error) throw error
 
             toast.success('Despesa eliminada com sucesso')
-            router.refresh()
+            onRefresh() // Trigger parent refresh
         } catch (error) {
             console.error('Error deleting expense:', error)
             toast.error('Erro ao eliminar despesa')
@@ -76,71 +77,69 @@ export function ExpensesList({ expenses }: ExpensesListProps) {
             </div>
 
             {/* Desktop Table View - Hidden on mobile */}
-            <div className="hidden md:block bg-white border border-gray-200 rounded-lg shadow-md overflow-hidden">
+            <div className="hidden md:block overflow-hidden border border-gray-400">
                 {/* Table Header */}
-                <div className="bg-gradient-to-r from-gray-100 to-gray-50 border-b-2 border-gray-300">
+                <div className="bg-gray-200 border-b border-gray-400">
                     <div className="grid grid-cols-12 gap-0">
-                        <div className="col-span-2 px-4 py-3 font-bold text-sm text-gray-700 border-r border-gray-300">Data</div>
-                        <div className="col-span-2 px-4 py-3 font-bold text-sm text-gray-700 border-r border-gray-300">Categoria</div>
-                        <div className="col-span-3 px-4 py-3 font-bold text-sm text-gray-700 border-r border-gray-300">Descrição</div>
-                        <div className="col-span-2 px-4 py-3 font-bold text-sm text-gray-700 border-r border-gray-300 text-right">Valor</div>
-                        <div className="col-span-1 px-4 py-3 font-bold text-sm text-gray-700 border-r border-gray-300 text-center">🔄</div>
-                        <div className="col-span-2 px-4 py-3 font-bold text-sm text-gray-700 text-center">Ações</div>
+                        <div className="col-span-2 px-2 py-1 font-semibold text-xs text-gray-800 border-r border-gray-400 uppercase tracking-wider">Data</div>
+                        <div className="col-span-2 px-2 py-1 font-semibold text-xs text-gray-800 border-r border-gray-400 uppercase tracking-wider">Categoria</div>
+                        <div className="col-span-3 px-2 py-1 font-semibold text-xs text-gray-800 border-r border-gray-400 uppercase tracking-wider">Descrição</div>
+                        <div className="col-span-2 px-2 py-1 font-semibold text-xs text-gray-800 border-r border-gray-400 text-right uppercase tracking-wider">Valor</div>
+                        <div className="col-span-1 px-2 py-1 font-semibold text-xs text-gray-800 border-r border-gray-400 text-center uppercase tracking-wider">Recorrente</div>
+                        <div className="col-span-2 px-2 py-1 font-semibold text-xs text-gray-800 text-center uppercase tracking-wider">Ações</div>
                     </div>
                 </div>
 
                 {/* Table Body */}
-                <div>
+                <div className="bg-white">
                     {filteredExpenses.length > 0 ? (
                         filteredExpenses.map((expense, index) => (
                             <div
                                 key={expense.id}
-                                className={`grid grid-cols-12 gap-0 border-b border-gray-200 hover:bg-gray-50 transition-colors ${index % 2 === 1 ? 'bg-gray-50/50' : 'bg-white'}`}
+                                className={`grid grid-cols-12 gap-0 border-b border-gray-300 hover:bg-blue-50 transition-colors ${index % 2 === 1 ? 'bg-gray-50' : 'bg-white'}`}
                             >
-                                <div className="col-span-2 px-4 py-3 text-sm text-gray-900 border-r border-gray-200">
+                                <div className="col-span-2 px-2 py-1 text-xs text-gray-900 border-r border-gray-300 font-mono flex items-center">
                                     {format(new Date(expense.expense_date), "dd/MM/yyyy")}
                                 </div>
-                                <div className="col-span-2 px-4 py-3 text-sm border-r border-gray-200">
-                                    <div className="flex items-center gap-2">
-                                        <span className="text-lg">{expense.expense_categories?.icon || '📋'}</span>
-                                        <span className="font-medium text-gray-900">
+                                <div className="col-span-2 px-2 py-1 text-xs border-r border-gray-300 flex items-center">
+                                    <div className="flex items-center gap-1.5 truncate">
+                                        <span>{expense.expense_categories?.icon || '📋'}</span>
+                                        <span className="text-gray-900 truncate">
                                             {expense.expense_categories?.name || 'Outros'}
                                         </span>
                                     </div>
                                 </div>
-                                <div className="col-span-3 px-4 py-3 text-sm text-gray-700 border-r border-gray-200">
+                                <div className="col-span-3 px-2 py-1 text-xs text-gray-700 border-r border-gray-300 truncate flex items-center">
                                     {expense.description || '-'}
                                 </div>
-                                <div className="col-span-2 px-4 py-3 text-sm font-bold text-red-600 border-r border-gray-200 text-right">
+                                <div className="col-span-2 px-2 py-1 text-xs font-mono font-medium text-gray-900 border-r border-gray-300 text-right flex items-center justify-end">
                                     €{Number(expense.amount).toFixed(2)}
                                 </div>
-                                <div className="col-span-1 px-4 py-3 text-sm border-r border-gray-200 text-center">
-                                    {expense.is_recurring ? '✓' : ''}
+                                <div className="col-span-1 px-2 py-1 text-xs border-r border-gray-300 text-center flex items-center justify-center">
+                                    {expense.is_recurring ? 'Sim' : ''}
                                 </div>
-                                <div className="col-span-2 px-4 py-3 text-sm text-center flex gap-1 justify-center">
-                                    <Button
-                                        variant="ghost"
-                                        size="sm"
-                                        className="h-8 px-2 hover:bg-blue-50 hover:text-blue-600"
+                                <div className="col-span-2 px-2 py-1 text-xs text-center flex gap-1 justify-center items-center">
+                                    <button
+                                        className="text-blue-600 hover:text-blue-800 p-1 hover:bg-blue-100 rounded"
                                         onClick={() => router.push(`/admin/expenses/${expense.id}/edit`)}
+                                        title="Editar"
                                     >
-                                        <Edit className="w-4 h-4" />
-                                    </Button>
-                                    <Button
-                                        variant="ghost"
-                                        size="sm"
-                                        className="h-8 px-2 hover:bg-red-50 hover:text-red-600"
+                                        <Edit className="w-3.5 h-3.5" />
+                                    </button>
+                                    <button
+                                        className="text-red-600 hover:text-red-800 p-1 hover:bg-red-100 rounded"
                                         onClick={() => handleDelete(expense.id)}
                                         disabled={deleting === expense.id}
+                                        title="Eliminar"
                                     >
-                                        <Trash2 className="w-4 h-4" />
-                                    </Button>
+                                        <Trash2 className="w-3.5 h-3.5" />
+                                    </button>
                                 </div>
                             </div>
                         ))
                     ) : (
-                        <div className="px-4 py-12 text-center text-gray-500">
-                            <p className="font-medium">Nenhuma despesa encontrada</p>
+                        <div className="px-4 py-8 text-center text-gray-500 text-sm">
+                            <p>Nenhuma despesa encontrada</p>
                         </div>
                     )}
                 </div>
@@ -149,16 +148,13 @@ export function ExpensesList({ expenses }: ExpensesListProps) {
                 {filteredExpenses.length > 0 && (
                     <div className="bg-gray-100 border-t-2 border-gray-400">
                         <div className="grid grid-cols-12 gap-0">
-                            <div className="col-span-7 px-4 py-3 font-bold text-sm text-gray-900 border-r border-gray-300">
-                                TOTAL
+                            <div className="col-span-7 px-2 py-1.5 font-bold text-xs text-gray-900 border-r border-gray-400 text-right pr-4">
+                                TOTAL GERAL:
                             </div>
-                            <div className="col-span-2 px-4 py-3 font-bold text-base text-red-700 border-r border-gray-300 text-right">
+                            <div className="col-span-2 px-2 py-1.5 font-mono font-bold text-sm text-gray-900 border-r border-gray-400 text-right">
                                 €{totalExpenses.toFixed(2)}
                             </div>
-                            <div className="col-span-1 px-4 py-3 text-sm text-center text-gray-600 border-r border-gray-300">
-                                {filteredExpenses.filter(e => e.is_recurring).length}
-                            </div>
-                            <div className="col-span-2 px-4 py-3"></div>
+                            <div className="col-span-3 px-2 py-1.5 bg-gray-200"></div>
                         </div>
                     </div>
                 )}

@@ -44,12 +44,12 @@ export default async function Home() {
                                 </p>
 
                                 <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
-                                    <Button asChild size="lg" className="bg-stone-800 text-white hover:bg-stone-900">
+                                    {/* <Button asChild size="lg" className="bg-stone-800 text-white hover:bg-stone-900">
                                         <Link href="/menu">
                                             {t('cta_menu')}
                                             <ArrowRight className="ml-2 w-4 h-4" />
                                         </Link>
-                                    </Button>
+                                    </Button> */}
                                     <Button asChild variant="outline" size="lg" className="border-stone-300 text-stone-800 hover:bg-stone-50">
                                         <Link href="/about">
                                             {t('cta_about')}
@@ -94,11 +94,11 @@ export default async function Home() {
                                     {t('featured_title')}
                                 </h2>
                             </div>
-                            <Button asChild variant="ghost" className="text-primary-900 hover:text-gold hover:bg-transparent gap-2 group text-lg">
+                            {/* <Button asChild variant="ghost" className="text-primary-900 hover:text-gold hover:bg-transparent gap-2 group text-lg">
                                 <Link href="/menu">
                                     Ver Menu Completo <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                                 </Link>
-                            </Button>
+                            </Button> */}
                         </div>
 
                         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">

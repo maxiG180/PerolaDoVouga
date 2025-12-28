@@ -56,9 +56,9 @@ export function Header() {
                     <Link href="/" className="text-sm font-medium text-beige-900 hover:text-gold transition-colors">
                         {t('home')}
                     </Link>
-                    <Link href="/menu" className="text-sm font-medium text-beige-900 hover:text-gold transition-colors">
+                    {/* <Link href="/menu" className="text-sm font-medium text-beige-900 hover:text-gold transition-colors">
                         {t('menu')}
-                    </Link>
+                    </Link> */}
                     <Link href="/about" className="text-sm font-medium text-beige-900 hover:text-gold transition-colors">
                         {t('about')}
                     </Link>
@@ -99,13 +99,13 @@ export function Header() {
                     >
                         {t('home')}
                     </Link>
-                    <Link
+                    {/* <Link
                         href="/menu"
                         className="p-4 hover:bg-beige-50 rounded-xl text-lg font-medium border border-transparent hover:border-beige-200 transition-all"
                         onClick={() => setIsMobileMenuOpen(false)}
                     >
                         {t('menu')}
-                    </Link>
+                    </Link> */}
                     <Link
                         href="/about"
                         className="p-4 hover:bg-beige-50 rounded-xl text-lg font-medium border border-transparent hover:border-beige-200 transition-all"

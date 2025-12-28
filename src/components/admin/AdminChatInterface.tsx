@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
-import { Send, User, Clock, CheckCircle2, MessageCircle, ArrowLeft } from 'lucide-react'
+import { Send, User, Clock, CheckCircle2, MessageCircle, ArrowLeft, Trash2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { format } from 'date-fns'
 import { pt } from 'date-fns/locale'
@@ -147,6 +147,25 @@ export function AdminChatInterface() {
         }
     }
 
+    const handleDeleteConversation = async () => {
+        if (!selectedConversationId || !confirm('Tem a certeza que deseja eliminar esta conversa?')) return
+
+        try {
+            const { error } = await supabase
+                .from('chat_conversations')
+                .delete()
+                .eq('id', selectedConversationId)
+
+            if (error) throw error
+            toast.success('Conversa eliminada')
+            setSelectedConversationId(null)
+            fetchConversations()
+        } catch (error) {
+            console.error('Error deleting conversation:', error)
+            toast.error('Erro ao eliminar conversa')
+        }
+    }
+
     const [isMobileListVisible, setIsMobileListVisible] = useState(true)
 
     // Handle back button on mobile
@@ -247,11 +266,22 @@ export function AdminChatInterface() {
                             </div>
                             <div className="flex gap-2">
                                 {selectedConversation?.status === 'active' && (
-                                    <Button variant="outline" size="sm" onClick={handleCloseConversation} className="gap-2 h-8 text-xs px-2 md:px-4 md:text-sm md:h-9">
-                                        <CheckCircle2 className="w-3 h-3 md:w-4 md:h-4" />
-                                        <span className="hidden md:inline">Marcar como Resolvido</span>
-                                        <span className="md:hidden">Resolver</span>
-                                    </Button>
+                                    <>
+                                        <Button
+                                            variant="destructive"
+                                            size="sm"
+                                            onClick={handleDeleteConversation}
+                                            className="gap-2 h-8 text-xs px-2 md:px-4 md:text-sm md:h-9"
+                                        >
+                                            <Trash2 className="w-3 h-3 md:w-4 md:h-4" />
+                                            <span className="hidden md:inline">Eliminar</span>
+                                        </Button>
+                                        <Button variant="outline" size="sm" onClick={handleCloseConversation} className="gap-2 h-8 text-xs px-2 md:px-4 md:text-sm md:h-9">
+                                            <CheckCircle2 className="w-3 h-3 md:w-4 md:h-4" />
+                                            <span className="hidden md:inline">Marcar como Resolvido</span>
+                                            <span className="md:hidden">Resolver</span>
+                                        </Button>
+                                    </>
                                 )}
                             </div>
                         </div>
@@ -269,7 +299,7 @@ export function AdminChatInterface() {
                                     <div className={cn(
                                         "max-w-[85%] md:max-w-[70%] rounded-2xl px-4 py-3 text-sm shadow-sm",
                                         msg.sender_type === 'admin'
-                                            ? "bg-primary-900 text-white rounded-br-none"
+                                            ? "bg-stone-800 text-white rounded-br-none"
                                             : "bg-white border border-gray-200 text-gray-800 rounded-bl-none"
                                     )}>
                                         {msg.content}
