@@ -13,5 +13,5 @@ Disallow: /*admin*
 # Block chat-related endpoints
 Disallow: /api/chat/
 
-# Sitemap (optional - create this later)
-# Sitemap: https://peroladovouga.com/sitemap.xml
+# Sitemap
+Sitemap: https://peroladovouga.com/sitemap.xml

@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
 import { ArrowRight, Utensils, Coffee, Star, MapPin, Clock, Phone, ChefHat } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
+import { LocalBusinessSchema } from '@/components/seo/LocalBusinessSchema'
 
 export default async function Home() {
     const t = await getTranslations('home')
@@ -13,6 +14,7 @@ export default async function Home() {
 
     return (
         <div className="min-h-screen flex flex-col bg-beige-100/30">
+            <LocalBusinessSchema />
             <Header />
 
             <main className="flex-1">

@@ -19,9 +19,63 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-    title: "Pérola do Vouga - Sabores que Encantam",
-    description: "Uma experiência gastronómica única onde a tradição encontra a elegância. Pratos feitos com amor, ingredientes frescos e o toque especial da nossa família.",
-    keywords: ["restaurante", "comida portuguesa", "takeaway", "Vouga", "gastronomia"],
+    title: "Pérola do Vouga - Restaurante Português em Lisboa | Av. Alm. Reis",
+    description: "Restaurante português autêntico em Lisboa. Comida caseira tradicional, ingredientes frescos, pratos típicos portugueses. Visite-nos na Av. Alm. Reis 243 A.",
+    keywords: [
+        "Pérola do Vouga",
+        "restaurante português Lisboa",
+        "comida portuguesa",
+        "restaurante Av. Alm. Reis",
+        "comida tradicional portuguesa",
+        "bacalhau com natas Lisboa",
+        "bitoque Lisboa",
+        "café restaurante Lisboa",
+        "takeaway Lisboa",
+        "gastronomia portuguesa",
+        "pratos típicos portugueses"
+    ],
+    authors: [{ name: 'Pérola do Vouga' }],
+    openGraph: {
+        type: 'website',
+        locale: 'pt_PT',
+        alternateLocale: 'en_US',
+        url: 'https://peroladovouga.com',
+        siteName: 'Pérola do Vouga',
+        title: 'Pérola do Vouga - Restaurante Português em Lisboa',
+        description: 'Restaurante português autêntico em Lisboa. Comida caseira tradicional, ingredientes frescos, pratos típicos portugueses.',
+        images: [
+            {
+                url: '/cafe.jpg',
+                width: 1200,
+                height: 630,
+                alt: 'Pérola do Vouga - Restaurante Português'
+            }
+        ]
+    },
+    twitter: {
+        card: 'summary_large_image',
+        title: 'Pérola do Vouga - Restaurante Português em Lisboa',
+        description: 'Comida portuguesa autêntica no coração de Lisboa. Visite-nos!',
+        images: ['/cafe.jpg']
+    },
+    alternates: {
+        canonical: 'https://peroladovouga.com',
+        languages: {
+            'pt-PT': 'https://peroladovouga.com/pt',
+            'en-US': 'https://peroladovouga.com/en'
+        }
+    },
+    robots: {
+        index: true,
+        follow: true,
+        googleBot: {
+            index: true,
+            follow: true,
+            'max-video-preview': -1,
+            'max-image-preview': 'large',
+            'max-snippet': -1
+        }
+    }
 }
 
 export const viewport: Viewport = {
