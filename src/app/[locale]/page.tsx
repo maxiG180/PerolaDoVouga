@@ -102,7 +102,7 @@ export default async function Home() {
                         </div>
 
                         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {/* Dish 1 */}
+                            {/* Dish 1 - Keep Bacalhau */}
                             <div className="group relative h-[450px] rounded-3xl overflow-hidden cursor-pointer">
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10"></div>
                                 <img
@@ -119,36 +119,36 @@ export default async function Home() {
                                 </div>
                             </div>
 
-                            {/* Dish 2 */}
+                            {/* Dish 2 - Perna de Peru */}
                             <div className="group relative h-[450px] rounded-3xl overflow-hidden cursor-pointer">
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10"></div>
                                 <img
-                                    src="/bitoque-de-vaca.jpg"
-                                    alt="Bitoque de Novilho"
+                                    src="/Perna de peru assada no forno.jpeg"
+                                    alt="Perna de Peru Assada"
                                     className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
                                 />
                                 <div className="absolute bottom-0 left-0 right-0 p-8 z-20 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
                                     <Badge className="bg-primary-900 text-white mb-3 hover:bg-primary-800">Recomendado</Badge>
-                                    <h3 className="text-white font-serif text-3xl font-bold mb-2">Bitoque de Novilho</h3>
+                                    <h3 className="text-white font-serif text-3xl font-bold mb-2">Perna de Peru Assada</h3>
                                     <p className="text-white/80 line-clamp-2 group-hover:line-clamp-none transition-all duration-300">
-                                        Suculento bife com ovo, batata frita e o nosso molho especial.
+                                        Assada no forno, suculenta e cheia de sabor tradicional.
                                     </p>
                                 </div>
                             </div>
 
-                            {/* Dish 3 */}
+                            {/* Dish 3 - Chocos à Lagareiro */}
                             <div className="group relative h-[450px] rounded-3xl overflow-hidden cursor-pointer md:col-span-2 lg:col-span-1">
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10"></div>
                                 <img
-                                    src="/secretos-de-porco.jpg"
-                                    alt="Secretos de Porco"
+                                    src="/Chocos à lagareiro.jpeg"
+                                    alt="Chocos à Lagareiro"
                                     className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
                                 />
                                 <div className="absolute bottom-0 left-0 right-0 p-8 z-20 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                                    <Badge className="bg-accent text-white mb-3 hover:bg-accent">Grelhados</Badge>
-                                    <h3 className="text-white font-serif text-3xl font-bold mb-2">Secretos de Porco</h3>
+                                    <Badge className="bg-accent text-white mb-3 hover:bg-accent">Especialidade</Badge>
+                                    <h3 className="text-white font-serif text-3xl font-bold mb-2">Chocos à Lagareiro</h3>
                                     <p className="text-white/80 line-clamp-2 group-hover:line-clamp-none transition-all duration-300">
-                                        Grelhados no ponto, tenros e cheios de sabor.
+                                        Preparados à moda tradicional, com azeite e batatas assadas.
                                     </p>
                                 </div>
                             </div>
