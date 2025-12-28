@@ -47,6 +47,12 @@ BEGIN
     EXCEPTION
         WHEN duplicate_column THEN NULL;
     END;
+    
+    BEGIN
+        ALTER TABLE restaurant_settings ADD COLUMN opening_hours_saturday TEXT;
+    EXCEPTION
+        WHEN duplicate_column THEN NULL;
+    END;
 END $$;
 
 -- 3. Ensure a row exists (Singleton Pattern)
@@ -59,6 +65,7 @@ INSERT INTO restaurant_settings (
     facebook_url,
     instagram_url,
     opening_hours,
+    opening_hours_saturday,
     opening_hours_weekend,
     show_facebook,
     show_instagram
@@ -71,7 +78,8 @@ SELECT
     'https://goo.gl/maps/example',
     'https://www.facebook.com/share/1JsK9ftJaX/?mibextid=wwXIfr',
     'https://www.instagram.com/peroladovougaltd',
-    '07:00 - 18:30',
+    '07:00 - 18:00',
+    '08:00 - 15:00',
     'Encerrado',
     true,
     true

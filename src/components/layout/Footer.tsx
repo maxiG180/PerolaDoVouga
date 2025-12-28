@@ -10,6 +10,7 @@ interface RestaurantSettings {
     address: string
     restaurant_name: string
     opening_hours: string
+    opening_hours_saturday: string
     opening_hours_weekend: string
     facebook_url: string
     instagram_url: string
@@ -41,8 +42,9 @@ export function Footer() {
     const businessName = settings?.restaurant_name || 'Pérola do Vouga'
 
     // Hours logic: display DB values or fallback
-    const hoursWeekday = settings?.opening_hours || '07:00 - 18:30'
-    const hoursWeekend = settings?.opening_hours_weekend || 'Encerrado'
+    const hoursWeekday = settings?.opening_hours || '07:00 - 18:00'
+    const hoursSaturday = settings?.opening_hours_saturday || '08:00 - 15:00'
+    const hoursSunday = settings?.opening_hours_weekend || 'Encerrado'
 
     // Socials
     const facebookUrl = settings?.facebook_url || 'https://www.facebook.com/share/1JsK9ftJaX/?mibextid=wwXIfr'
@@ -99,12 +101,16 @@ export function Footer() {
                         <h4 className="font-serif text-lg font-bold text-white mb-6">Horário</h4>
                         <ul className="space-y-2 text-beige-300">
                             <li className="flex justify-between">
-                                <span>Segunda - Sábado</span>
+                                <span>Segunda - Sexta</span>
                                 <span>{hoursWeekday}</span>
+                            </li>
+                            <li className="flex justify-between">
+                                <span>Sábado</span>
+                                <span>{hoursSaturday}</span>
                             </li>
                             <li className="flex justify-between text-gold">
                                 <span>Domingo</span>
-                                <span>{hoursWeekend}</span>
+                                <span>{hoursSunday}</span>
                             </li>
                         </ul>
                     </div>
