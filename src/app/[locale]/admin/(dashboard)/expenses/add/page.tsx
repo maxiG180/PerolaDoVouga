@@ -96,127 +96,128 @@ export default function AddExpensePage() {
                 </Button>
                 <div>
                     <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Nova Despesa</h1>
-                    <p className="text-sm text-gray-600">Preencha os dados da despesa</p>
+                    <p className="text-sm text-gray-600">Selecione a categoria</p>
                 </div>
             </div>
 
-            {/* Form */}
-            <Card className="shadow-xl border border-gray-200 bg-white">
-                <CardContent className="p-6 sm:p-8">
-                    <form onSubmit={handleSubmit} className="space-y-6">
-                        {/* Category */}
-                        <div className="space-y-2">
-                            <Label htmlFor="category" className="text-base font-medium">
-                                Categoria *
-                            </Label>
-                            <Select value={categoryId} onValueChange={setCategoryId} required>
-                                <SelectTrigger className="h-12 border-gray-300 focus:border-primary-900 focus:ring-primary-900">
-                                    <SelectValue placeholder="Selecione a categoria">
-                                        {categoryId && (() => {
-                                            const selected = EXPENSE_CATEGORIES.find(c => c.id === categoryId)
-                                            return selected ? (
-                                                <span className="flex items-center gap-2">
-                                                    <span>{selected.icon}</span>
-                                                    <span>{selected.name}</span>
-                                                </span>
-                                            ) : 'Selecione a categoria'
-                                        })()}
-                                    </SelectValue>
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {EXPENSE_CATEGORIES.map((cat) => (
-                                        <SelectItem key={cat.id} value={cat.id}>
-                                            <span className="flex items-center gap-2">
-                                                <span>{cat.icon}</span>
-                                                <span>{cat.name}</span>
-                                            </span>
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-                        </div>
-
-                        {/* Amount */}
-                        <div className="space-y-2">
-                            <Label htmlFor="amount" className="text-base font-medium">
-                                Valor (€) *
-                            </Label>
-                            <Input
-                                id="amount"
-                                type="number"
-                                inputMode="decimal"
-                                step="0.01"
-                                min="0"
-                                placeholder="0.00"
-                                value={amount}
-                                onChange={(e) => setAmount(e.target.value)}
-                                className="h-12 text-lg border-gray-300 focus:border-primary-900 focus:ring-primary-900"
-                                required
-                            />
-                        </div>
-
-                        {/* Date */}
-                        <div className="space-y-2">
-                            <Label className="text-base font-medium">Data *</Label>
-                            <DatePicker
-                                value={date}
-                                onChange={(newDate) => newDate && setDate(newDate)}
-                                label="Selecione a data"
-                            />
-                        </div>
-
-                        {/* Description */}
-                        <div className="space-y-2">
-                            <Label htmlFor="description" className="text-base font-medium">
-                                Nota (opcional)
-                            </Label>
-                            <Textarea
-                                id="description"
-                                placeholder="Detalhes adicionais..."
-                                value={description}
-                                onChange={(e) => setDescription(e.target.value)}
-                                rows={3}
-                                className="border-gray-300 focus:border-primary-900 focus:ring-primary-900"
-                            />
-                        </div>
-
-                        {/* Recurring */}
-                        <div className="flex items-center space-x-2 p-4 bg-blue-50 rounded-lg">
-                            <Checkbox
-                                id="recurring"
-                                checked={isRecurring}
-                                onCheckedChange={(checked) => setIsRecurring(checked as boolean)}
-                            />
-                            <Label htmlFor="recurring" className="text-sm font-medium cursor-pointer">
-                                🔄 Despesa Recorrente (mensal)
-                            </Label>
-                        </div>
-
-                        {/* Error */}
-                        {error && (
-                            <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
-                                {error}
-                            </div>
+            {/* Quick Category Selector */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                {EXPENSE_CATEGORIES.slice(0, 8).map((cat) => (
+                    <button
+                        key={cat.id}
+                        type="button"
+                        onClick={() => setCategoryId(cat.id)}
+                        className={cn(
+                            "p-4 rounded-xl border-2 transition-all text-left",
+                            "hover:scale-[1.02] active:scale-[0.98]",
+                            categoryId === cat.id
+                                ? "border-red-600 bg-red-50 shadow-md"
+                                : "border-gray-200 bg-white hover:border-gray-300 hover:shadow-sm"
                         )}
+                    >
+                        <div className="text-3xl mb-2">{cat.icon}</div>
+                        <div className="font-medium text-sm text-gray-900">{cat.name}</div>
+                    </button>
+                ))}
+            </div>
 
-                        {/* Submit */}
-                        <Button
-                            type="submit"
-                            className="w-full h-12 text-lg gap-2 bg-red-600 hover:bg-red-700 text-white"
-                            disabled={loading}
-                        >
-                            {loading ? (
-                                'A guardar...'
-                            ) : (
-                                <>
-                                    <Save className="w-5 h-5" />
-                                    Guardar Despesa
-                                </>
+            {/* Form */}
+            {categoryId && (
+                <Card className="shadow-xl border border-gray-200 bg-white">
+                    <CardContent className="p-6 sm:p-8">
+                        <form onSubmit={handleSubmit} className="space-y-5">
+
+                            {/* Amount */}
+                            <div className="space-y-2">
+                                <Label htmlFor="amount" className="text-base font-medium">
+                                    Valor (€) *
+                                </Label>
+                                <Input
+                                    id="amount"
+                                    type="number"
+                                    inputMode="decimal"
+                                    step="0.01"
+                                    min="0"
+                                    placeholder="0.00"
+                                    value={amount}
+                                    onChange={(e) => setAmount(e.target.value)}
+                                    className="h-14 text-2xl font-bold border-gray-300 focus:border-primary-900 focus:ring-primary-900"
+                                    required
+                                    autoFocus
+                                />
+                            </div>
+
+                            {/* Date */}
+                            <div className="space-y-2">
+                                <Label className="text-base font-medium">Data</Label>
+                                <DatePicker
+                                    value={date}
+                                    onChange={(newDate) => newDate && setDate(newDate)}
+                                    label={format(date, "dd/MM/yyyy")}
+                                />
+                            </div>
+
+                            {/* Recurring - More Prominent */}
+                            <div className="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border-2 border-blue-200">
+                                <div className="flex items-center space-x-3">
+                                    <Checkbox
+                                        id="recurring"
+                                        checked={isRecurring}
+                                        onCheckedChange={(checked) => setIsRecurring(checked as boolean)}
+                                        className="w-5 h-5"
+                                    />
+                                    <Label htmlFor="recurring" className="text-base font-semibold cursor-pointer text-gray-900">
+                                        🔄 Despesa Recorrente
+                                    </Label>
+                                </div>
+                                {isRecurring && (
+                                    <span className="text-xs bg-blue-600 text-white px-3 py-1 rounded-full font-medium">
+                                        Mensal
+                                    </span>
+                                )}
+                            </div>
+
+                            {/* Description */}
+                            <div className="space-y-2">
+                                <Label htmlFor="description" className="text-sm font-medium text-gray-600">
+                                    Nota (opcional)
+                                </Label>
+                                <Textarea
+                                    id="description"
+                                    placeholder="Detalhes adicionais..."
+                                    value={description}
+                                    onChange={(e) => setDescription(e.target.value)}
+                                    rows={2}
+                                    className="border-gray-300 focus:border-primary-900 focus:ring-primary-900 text-sm"
+                                />
+                            </div>
+
+                            {/* Error */}
+                            {error && (
+                                <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+                                    {error}
+                                </div>
                             )}
-                        </Button>
-                    </form>
-                </CardContent>
-            </Card>
+
+                            {/* Submit */}
+                            <Button
+                                type="submit"
+                                className="w-full h-14 text-xl gap-2 bg-red-600 hover:bg-red-700 text-white font-bold shadow-lg hover:shadow-xl transition-all"
+                                disabled={loading}
+                            >
+                                {loading ? (
+                                    'A guardar...'
+                                ) : (
+                                    <>
+                                        <Save className="w-5 h-5" />
+                                        Guardar
+                                    </>
+                                )}
+                            </Button>
+                        </form>
+                    </CardContent>
+                </Card>
+            )}
         </div>
     )
 }

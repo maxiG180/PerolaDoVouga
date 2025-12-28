@@ -75,9 +75,10 @@ export function ExpensesList({ expenses }: ExpensesListProps) {
                 />
             </div>
 
-            <div className="bg-white border border-gray-200 rounded-lg shadow-md overflow-x-auto">
+            {/* Desktop Table View - Hidden on mobile */}
+            <div className="hidden md:block bg-white border border-gray-200 rounded-lg shadow-md overflow-hidden">
                 {/* Table Header */}
-                <div className="bg-gradient-to-r from-gray-100 to-gray-50 border-b-2 border-gray-300 min-w-[700px]">
+                <div className="bg-gradient-to-r from-gray-100 to-gray-50 border-b-2 border-gray-300">
                     <div className="grid grid-cols-12 gap-0">
                         <div className="col-span-2 px-4 py-3 font-bold text-sm text-gray-700 border-r border-gray-300">Data</div>
                         <div className="col-span-2 px-4 py-3 font-bold text-sm text-gray-700 border-r border-gray-300">Categoria</div>
@@ -159,6 +160,105 @@ export function ExpensesList({ expenses }: ExpensesListProps) {
                             </div>
                             <div className="col-span-2 px-4 py-3"></div>
                         </div>
+                    </div>
+                )}
+            </div>
+
+            {/* Mobile Card View - Hidden on desktop */}
+            <div className="md:hidden space-y-3">
+                {filteredExpenses.length > 0 ? (
+                    <>
+                        {filteredExpenses.map((expense) => (
+                            <div
+                                key={expense.id}
+                                className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden"
+                            >
+                                {/* Card Header with Category */}
+                                <div className="bg-gradient-to-r from-gray-50 to-gray-100 px-4 py-3 border-b border-gray-200">
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-xl">{expense.expense_categories?.icon || '📋'}</span>
+                                            <span className="font-bold text-gray-900">
+                                                {expense.expense_categories?.name || 'Outros'}
+                                            </span>
+                                        </div>
+                                        {expense.is_recurring && (
+                                            <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full font-medium">
+                                                🔄 Recorrente
+                                            </span>
+                                        )}
+                                    </div>
+                                </div>
+
+                                {/* Card Body */}
+                                <div className="px-4 py-3 space-y-2">
+                                    {/* Amount - Most Important */}
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-sm text-gray-600">Valor</span>
+                                        <span className="text-2xl font-bold text-red-600">
+                                            €{Number(expense.amount).toFixed(2)}
+                                        </span>
+                                    </div>
+
+                                    {/* Date */}
+                                    <div className="flex items-center justify-between text-sm">
+                                        <span className="text-gray-600">Data</span>
+                                        <span className="font-medium text-gray-900">
+                                            {format(new Date(expense.expense_date), "dd/MM/yyyy")}
+                                        </span>
+                                    </div>
+
+                                    {/* Description */}
+                                    {expense.description && (
+                                        <div className="pt-2 border-t border-gray-100">
+                                            <p className="text-sm text-gray-700">
+                                                <span className="font-medium">Nota:</span> {expense.description}
+                                            </p>
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Card Footer with Actions */}
+                                <div className="px-4 py-3 bg-gray-50 border-t border-gray-200 flex gap-2">
+                                    <Button
+                                        variant="outline"
+                                        className="flex-1 h-11 gap-2 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-300"
+                                        onClick={() => router.push(`/admin/expenses/${expense.id}/edit`)}
+                                    >
+                                        <Edit className="w-4 h-4" />
+                                        Editar
+                                    </Button>
+                                    <Button
+                                        variant="outline"
+                                        className="flex-1 h-11 gap-2 hover:bg-red-50 hover:text-red-600 hover:border-red-300"
+                                        onClick={() => handleDelete(expense.id)}
+                                        disabled={deleting === expense.id}
+                                    >
+                                        <Trash2 className="w-4 h-4" />
+                                        Eliminar
+                                    </Button>
+                                </div>
+                            </div>
+                        ))}
+
+                        {/* Mobile Total Summary */}
+                        <div className="bg-gradient-to-r from-red-50 to-red-100 border-2 border-red-300 rounded-lg p-4 shadow-md">
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <p className="text-sm font-medium text-gray-700">Total do Mês</p>
+                                    <p className="text-xs text-gray-600 mt-0.5">
+                                        {filteredExpenses.filter(e => e.is_recurring).length} recorrentes
+                                    </p>
+                                </div>
+                                <span className="text-3xl font-bold text-red-700">
+                                    €{totalExpenses.toFixed(2)}
+                                </span>
+                            </div>
+                        </div>
+                    </>
+                ) : (
+                    <div className="px-4 py-12 text-center text-gray-500 bg-white border border-gray-200 rounded-lg">
+                        <p className="font-medium">Nenhuma despesa encontrada</p>
                     </div>
                 )}
             </div>

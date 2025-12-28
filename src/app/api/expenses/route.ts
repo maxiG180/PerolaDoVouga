@@ -14,7 +14,8 @@ export async function GET(request: NextRequest) {
 
         // Get query params
         const { searchParams } = new URL(request.url)
-        const month = searchParams.get('month') // Format: YYYY-MM
+        const start = searchParams.get('start') // Format: YYYY-MM-DD
+        const end = searchParams.get('end')     // Format: YYYY-MM-DD
         const categoryId = searchParams.get('category_id')
 
         let query = supabase
@@ -30,11 +31,8 @@ export async function GET(request: NextRequest) {
             .order('expense_date', { ascending: false })
 
         // Apply filters
-        if (month) {
-            const [year, monthNum] = month.split('-')
-            const startDate = `${year}-${monthNum}-01`
-            const endDate = new Date(Number(year), Number(monthNum), 0).toISOString().split('T')[0]
-            query = query.gte('expense_date', startDate).lte('expense_date', endDate)
+        if (start && end) {
+            query = query.gte('expense_date', start).lte('expense_date', end)
         }
 
         if (categoryId) {
@@ -47,7 +45,7 @@ export async function GET(request: NextRequest) {
             return NextResponse.json({ error: error.message }, { status: 500 })
         }
 
-        return NextResponse.json(data)
+        return NextResponse.json({ expenses: data })
     } catch (error) {
         return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
     }

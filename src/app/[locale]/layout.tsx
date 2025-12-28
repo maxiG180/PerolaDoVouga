@@ -35,6 +35,12 @@ export const metadata: Metadata = {
         "pratos típicos portugueses"
     ],
     authors: [{ name: 'Pérola do Vouga' }],
+    manifest: '/manifest.json',
+    appleWebApp: {
+        capable: true,
+        statusBarStyle: 'black-translucent',
+        title: 'PDV Admin'
+    },
     openGraph: {
         type: 'website',
         locale: 'pt_PT',
@@ -81,8 +87,9 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
     width: 'device-width',
     initialScale: 1,
-    maximumScale: 1,
-    userScalable: false,
+    maximumScale: 5,
+    userScalable: true,
+    themeColor: '#991b1b'
 }
 
 export default async function RootLayout({
@@ -97,6 +104,12 @@ export default async function RootLayout({
 
     return (
         <html lang={locale} className={`${playfair.variable} ${inter.variable}`}>
+            <head>
+                <link rel="apple-touch-icon" href="/icon-192.png" />
+                <meta name="apple-mobile-web-app-capable" content="yes" />
+                <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+                <meta name="mobile-web-app-capable" content="yes" />
+            </head>
             <body className="font-sans antialiased" suppressHydrationWarning>
                 <style dangerouslySetInnerHTML={{
                     __html: `
