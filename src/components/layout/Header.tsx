@@ -54,7 +54,7 @@ export function Header() {
             )}
         >
             {/* Top Bar - Info */}
-            <div className="bg-stone-900 text-beige-100/90 text-[11px] py-1.5 hidden lg:block">
+            <div className="bg-primary-900 text-white text-[11px] py-1.5 hidden lg:block">
                 <div className="container mx-auto px-4 flex justify-between items-center">
                     <div className="flex items-center gap-6">
                         <div className="flex items-center gap-2">
