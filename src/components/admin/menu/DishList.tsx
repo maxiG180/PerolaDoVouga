@@ -1,18 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { formatPrice } from '@/lib/utils'
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow
-} from '@/components/ui/table'
+import { formatPrice, cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import {
     Select,
@@ -22,7 +13,7 @@ import {
     SelectValue,
 } from '@/components/ui/select'
 import { toast } from 'sonner'
-import { Plus, Pencil, Trash2, Search, Copy, Image as ImageIcon, Upload, Coffee } from 'lucide-react'
+import { Plus, Pencil, Trash2, Search, Upload, Coffee } from 'lucide-react'
 
 import { DishForm } from './DishForm'
 import {
@@ -37,6 +28,52 @@ interface DishListProps {
     initialItems: any[]
 }
 
+// Category color scheme with vibrant, appetizing colors
+const categoryColors = {
+    'Sopas': {
+        bg: 'bg-orange-50',
+        border: 'border-orange-500',
+        text: 'text-orange-700',
+        gradient: 'from-orange-500 to-orange-600',
+        light: 'bg-orange-100'
+    },
+    'Peixe': {
+        bg: 'bg-blue-50',
+        border: 'border-blue-500',
+        text: 'text-blue-700',
+        gradient: 'from-blue-500 to-blue-600',
+        light: 'bg-blue-100'
+    },
+    'Carne': {
+        bg: 'bg-red-50',
+        border: 'border-red-500',
+        text: 'text-red-700',
+        gradient: 'from-red-500 to-red-600',
+        light: 'bg-red-100'
+    },
+    'Vegetariano': {
+        bg: 'bg-emerald-50',
+        border: 'border-emerald-500',
+        text: 'text-emerald-700',
+        gradient: 'from-emerald-500 to-emerald-600',
+        light: 'bg-emerald-100'
+    },
+    'Sobremesas': {
+        bg: 'bg-pink-50',
+        border: 'border-pink-500',
+        text: 'text-pink-700',
+        gradient: 'from-pink-500 to-pink-600',
+        light: 'bg-pink-100'
+    },
+    'Bebidas': {
+        bg: 'bg-teal-50',
+        border: 'border-teal-500',
+        text: 'text-teal-700',
+        gradient: 'from-teal-500 to-teal-600',
+        light: 'bg-teal-100'
+    }
+} as const
+
 export function DishList({ initialItems }: DishListProps) {
     const [items, setItems] = useState(initialItems)
     const [filteredItems, setFilteredItems] = useState(initialItems)
@@ -45,6 +82,25 @@ export function DishList({ initialItems }: DishListProps) {
     const [searchTerm, setSearchTerm] = useState('')
     const [categoryFilter, setCategoryFilter] = useState('all')
     const supabase = createClient()
+
+    // Group items by category for organized display
+    const groupedItems = useMemo(() => {
+        const categoryOrder = ['Sopas', 'Peixe', 'Carne', 'Vegetariano', 'Sobremesas', 'Bebidas']
+        const groups: Record<string, any[]> = {}
+
+        filteredItems.forEach(item => {
+            const category = item.category || 'Outros'
+            if (!groups[category]) {
+                groups[category] = []
+            }
+            groups[category].push(item)
+        })
+
+        // Sort categories by predefined order
+        return categoryOrder
+            .filter(cat => groups[cat] && groups[cat].length > 0)
+            .map(cat => ({ category: cat, items: groups[cat] }))
+    }, [filteredItems])
 
     // Filter logic
     const handleFilter = (search: string, category: string) => {
@@ -205,7 +261,8 @@ export function DishList({ initialItems }: DishListProps) {
     }
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 pb-6">
+            {/* Header Controls */}
             <div className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
                 <div className="flex gap-2 w-full sm:w-auto">
                     <div className="relative w-full sm:w-64">
@@ -232,215 +289,185 @@ export function DishList({ initialItems }: DishListProps) {
                         </SelectContent>
                     </Select>
                 </div>
-                <Button className="bg-[#D4AF37] hover:bg-[#B39226] text-white gap-2" onClick={handleCreate}>
+                <Button className="bg-[#D4AF37] hover:bg-[#B39226] text-white gap-2 w-full sm:w-auto" onClick={handleCreate}>
                     <Plus className="w-4 h-4" />
                     Novo Prato
                 </Button>
             </div>
 
-            {/* Mobile View (Cards) */}
-            <div className="grid grid-cols-1 gap-4 md:hidden">
-                {filteredItems.map((item) => (
-                    <div key={item.id} className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 flex gap-4">
-                        {/* Image */}
-                        {item.category !== 'Bebidas' && (
-                            <div className="relative w-24 h-24 shrink-0 rounded-lg overflow-hidden bg-gray-100 group cursor-pointer">
-                                <label className="absolute inset-0 cursor-pointer">
-                                    <input
-                                        type="file"
-                                        accept="image/*"
-                                        className="hidden"
-                                        onChange={(e) => handleQuickImageUpload(e, item)}
-                                    />
-                                    {item.photo_url ? (
-                                        <>
-                                            <Image
-                                                src={item.photo_url}
-                                                alt={item.name}
-                                                fill
-                                                className="object-cover"
-                                            />
-                                            <div className="absolute inset-0 flex items-center justify-center bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                <Upload className="w-6 h-6 text-white" />
-                                            </div>
-                                        </>
-                                    ) : (
-                                        <div className="flex items-center justify-center h-full text-gray-400 bg-gray-50">
-                                            <Upload className="w-6 h-6" />
-                                        </div>
-                                    )}
-                                </label>
-                            </div>
-                        )}
+            {/* Category-based Grid Layout */}
+            {groupedItems.length > 0 ? (
+                <div className="space-y-8">
+                    {groupedItems.map(({ category, items }) => {
+                        const colors = categoryColors[category as keyof typeof categoryColors]
 
-                        {/* Content */}
-                        <div className="flex-1 min-w-0 flex flex-col justify-between">
-                            <div>
-                                <div className="flex justify-between items-start">
-                                    <h3 className="font-semibold text-gray-900 truncate pr-2">{item.name}</h3>
-                                    <span className="font-medium text-gray-900">{formatPrice(item.price)}</span>
+                        return (
+                            <div key={category} className="space-y-4">
+                                {/* Category Header */}
+                                <div className={cn(
+                                    "flex items-center gap-3 pb-3 border-b-2",
+                                    colors.border
+                                )}>
+                                    <div className={cn(
+                                        "px-4 py-1.5 rounded-full bg-gradient-to-r text-white font-semibold text-sm shadow-md",
+                                        colors.gradient
+                                    )}>
+                                        {category}
+                                    </div>
+                                    <span className="text-sm text-gray-500">
+                                        {items.length} {items.length === 1 ? 'prato' : 'pratos'}
+                                    </span>
                                 </div>
-                                <p className="text-sm text-gray-500 truncate">{item.category}</p>
-                            </div>
 
-                            <div className="flex items-center justify-between mt-2">
-                                <button
-                                    onClick={() => toggleAvailability(item)}
-                                    className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${item.is_available
-                                        ? 'bg-green-100 text-green-700'
-                                        : 'bg-red-100 text-red-700'
-                                        }`}
-                                >
-                                    {item.is_available ? 'Disponível' : 'Esgotado'}
-                                </button>
-
-                                <div className="flex gap-1">
-                                    <Button size="icon" variant="ghost" className="h-8 w-8" onClick={() => handleEdit(item)}>
-                                        <Pencil className="w-4 h-4 text-blue-600" />
-                                    </Button>
-                                    <Button size="icon" variant="ghost" className="h-8 w-8 text-red-500" onClick={() => handleDelete(item.id)}>
-                                        <Trash2 className="w-4 h-4" />
-                                    </Button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                ))}
-                {filteredItems.length === 0 && (
-                    <div className="text-center py-12 text-muted-foreground bg-white rounded-xl">
-                        {searchTerm ? 'Nenhum prato encontrado.' : 'Sem pratos no menu.'}
-                    </div>
-                )}
-            </div>
-
-            {/* Desktop View (Table) */}
-            <div className="hidden md:block bg-white rounded-xl overflow-hidden">
-                <Table>
-                    <TableHeader className="bg-gray-50">
-                        <TableRow className="hover:bg-gray-50 border-b border-gray-100">
-                            <TableHead className="w-[80px] font-semibold text-gray-600">Foto</TableHead>
-                            <TableHead className="font-semibold text-gray-600">Nome</TableHead>
-                            <TableHead className="font-semibold text-gray-600">Categoria</TableHead>
-                            <TableHead className="font-semibold text-gray-600">Preço</TableHead>
-                            <TableHead className="font-semibold text-gray-600">Estado</TableHead>
-                            <TableHead className="font-semibold text-gray-600">Tipo</TableHead>
-                            <TableHead className="text-right font-semibold text-gray-600">Ações</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {filteredItems.map((item) => (
-                            <TableRow key={item.id} className="border-b border-gray-50 hover:bg-gray-50/50">
-                                <TableCell>
-                                    {item.category !== 'Bebidas' ? (
-                                        <div className="relative w-12 h-12 rounded-md overflow-hidden bg-gray-100 group cursor-pointer">
-                                            <label className="absolute inset-0 cursor-pointer">
-                                                <input
-                                                    type="file"
-                                                    accept="image/*"
-                                                    className="hidden"
-                                                    onChange={(e) => handleQuickImageUpload(e, item)}
-                                                />
-                                                {item.photo_url ? (
-                                                    <>
-                                                        <Image
-                                                            src={item.photo_url}
-                                                            alt={item.name}
-                                                            fill
-                                                            className="object-cover transition-opacity group-hover:opacity-75"
+                                {/* Dishes Grid */}
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                                    {items.map((item) => (
+                                        <div
+                                            key={item.id}
+                                            className={cn(
+                                                "rounded-xl p-4 shadow-sm border-2 transition-all hover:shadow-md",
+                                                colors.bg,
+                                                colors.border,
+                                                "hover:scale-[1.02]"
+                                            )}
+                                        >
+                                            {/* Image */}
+                                            {category !== 'Bebidas' && (
+                                                <div className="relative w-full aspect-square mb-3 rounded-lg overflow-hidden bg-white group cursor-pointer">
+                                                    <label className="absolute inset-0 cursor-pointer z-10">
+                                                        <input
+                                                            type="file"
+                                                            accept="image/*"
+                                                            className="hidden"
+                                                            onChange={(e) => handleQuickImageUpload(e, item)}
                                                         />
-                                                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-black/30 transition-opacity">
-                                                            <Upload className="w-4 h-4 text-white" />
-                                                        </div>
-                                                    </>
-                                                ) : (
-                                                    <div className="flex items-center justify-center h-full text-gray-400 group-hover:bg-gray-200 transition-colors">
-                                                        <Upload className="w-5 h-5" />
-                                                    </div>
-                                                )}
-                                            </label>
-                                        </div>
-                                    ) : (
-                                        <div className="w-12 h-12 flex items-center justify-center bg-gray-50 rounded-md text-gray-300">
-                                            <Coffee className="w-5 h-5" />
-                                        </div>
-                                    )}
-                                </TableCell>
-                                <TableCell className="font-medium">
-                                    <div>{item.name}</div>
-                                    {item.name_en && (
-                                        <div className="text-xs text-muted-foreground">{item.name_en}</div>
-                                    )}
-                                </TableCell>
-                                <TableCell>
-                                    <Badge variant="outline">{item.category}</Badge>
-                                </TableCell>
-                                <TableCell>{formatPrice(item.price)}</TableCell>
-                                <TableCell>
-                                    <button
-                                        onClick={() => toggleAvailability(item)}
-                                        className={`px-2 py-1 rounded-full text-xs font-medium transition-colors ${item.is_available
-                                            ? 'bg-green-100 text-green-700 hover:bg-green-200'
-                                            : 'bg-red-100 text-red-700 hover:bg-red-200'
-                                            }`}
-                                    >
-                                        {item.is_available ? 'Disponível' : 'Esgotado'}
-                                    </button>
-                                </TableCell>
-                                <TableCell>
-                                    <div className="flex flex-col gap-1">
-                                        {item.is_always_available && (
-                                            <Badge className="bg-blue-100 text-blue-700 hover:bg-blue-200 border-none w-fit">Menu Fixo</Badge>
-                                        )}
-                                        {item.daily_type === 'soup' && (
-                                            <Badge className="bg-orange-100 text-orange-700 hover:bg-orange-200 border-none w-fit">Sopa Dia</Badge>
-                                        )}
-                                        {item.daily_type === 'dish' && (
-                                            <Badge className="bg-purple-100 text-purple-700 hover:bg-purple-200 border-none w-fit">Prato Dia</Badge>
-                                        )}
-                                    </div>
-                                </TableCell>
-                                <TableCell className="text-right">
-                                    <div className="flex justify-end gap-2">
-                                        <Button
-                                            size="icon"
-                                            variant="ghost"
-                                            title="Duplicar"
-                                            onClick={() => handleDuplicate(item)}
-                                        >
-                                            <Copy className="w-4 h-4 text-gray-500" />
-                                        </Button>
-                                        <Button
-                                            size="icon"
-                                            variant="ghost"
-                                            title="Editar"
-                                            onClick={() => handleEdit(item)}
-                                        >
-                                            <Pencil className="w-4 h-4 text-blue-600" />
-                                        </Button>
-                                        <Button
-                                            size="icon"
-                                            variant="ghost"
-                                            className="text-red-500 hover:text-red-600 hover:bg-red-50"
-                                            title="Apagar"
-                                            onClick={() => handleDelete(item.id)}
-                                        >
-                                            <Trash2 className="w-4 h-4" />
-                                        </Button>
-                                    </div>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                        {filteredItems.length === 0 && (
-                            <TableRow>
-                                <TableCell colSpan={7} className="text-center py-12 text-muted-foreground">
-                                    {searchTerm ? 'Nenhum prato encontrado com essa pesquisa.' : 'Sem pratos no menu.'}
-                                </TableCell>
-                            </TableRow>
-                        )}
-                    </TableBody>
-                </Table>
-            </div>
+                                                        {item.photo_url ? (
+                                                            <>
+                                                                <Image
+                                                                    src={item.photo_url}
+                                                                    alt={item.name}
+                                                                    fill
+                                                                    className="object-cover"
+                                                                />
+                                                                <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                                    <Upload className="w-8 h-8 text-white" />
+                                                                </div>
+                                                            </>
+                                                        ) : (
+                                                            <div className={cn(
+                                                                "flex flex-col items-center justify-center h-full text-gray-400 transition-colors",
+                                                                colors.light,
+                                                                "group-hover:bg-gray-100"
+                                                            )}>
+                                                                <Upload className="w-8 h-8 mb-1" />
+                                                                <span className="text-xs">Adicionar foto</span>
+                                                            </div>
+                                                        )}
+                                                    </label>
+                                                </div>
+                                            )}
 
+                                            {category === 'Bebidas' && (
+                                                <div className={cn(
+                                                    "w-full aspect-square mb-3 flex items-center justify-center rounded-lg",
+                                                    colors.light
+                                                )}>
+                                                    <Coffee className={cn("w-12 h-12", colors.text)} />
+                                                </div>
+                                            )}
+
+                                            {/* Content */}
+                                            <div className="space-y-2">
+                                                <div className="flex justify-between items-start gap-2">
+                                                    <h3 className="font-semibold text-gray-900 text-sm leading-tight line-clamp-2 flex-1">
+                                                        {item.name}
+                                                    </h3>
+                                                    <span className="font-bold text-gray-900 text-sm whitespace-nowrap">
+                                                        {formatPrice(item.price)}
+                                                    </span>
+                                                </div>
+
+                                                {item.name_en && (
+                                                    <p className="text-xs text-gray-500 line-clamp-1">{item.name_en}</p>
+                                                )}
+
+                                                {/* Type Badges */}
+                                                <div className="flex flex-wrap gap-1">
+                                                    {item.is_always_available && (
+                                                        <span className="px-2 py-0.5 bg-blue-100 text-blue-700 text-[10px] font-medium rounded-full">
+                                                            Menu Fixo
+                                                        </span>
+                                                    )}
+                                                    {item.daily_type === 'soup' && (
+                                                        <span className="px-2 py-0.5 bg-orange-100 text-orange-700 text-[10px] font-medium rounded-full">
+                                                            Sopa Dia
+                                                        </span>
+                                                    )}
+                                                    {item.daily_type === 'dish' && (
+                                                        <span className="px-2 py-0.5 bg-purple-100 text-purple-700 text-[10px] font-medium rounded-full">
+                                                            Prato Dia
+                                                        </span>
+                                                    )}
+                                                </div>
+
+                                                {/* Availability Toggle */}
+                                                <button
+                                                    onClick={() => toggleAvailability(item)}
+                                                    className={cn(
+                                                        "w-full px-3 py-1.5 rounded-lg text-xs font-medium transition-colors",
+                                                        item.is_available
+                                                            ? 'bg-green-100 text-green-700 hover:bg-green-200'
+                                                            : 'bg-red-100 text-red-700 hover:bg-red-200'
+                                                    )}
+                                                >
+                                                    {item.is_available ? '✓ Disponível' : '✕ Esgotado'}
+                                                </button>
+
+                                                {/* Action Buttons */}
+                                                <div className="flex gap-1 pt-1">
+                                                    <Button
+                                                        size="sm"
+                                                        variant="ghost"
+                                                        className="flex-1 h-8 text-xs hover:bg-white/50"
+                                                        onClick={() => handleEdit(item)}
+                                                    >
+                                                        <Pencil className="w-3 h-3 mr-1" />
+                                                        Editar
+                                                    </Button>
+                                                    <Button
+                                                        size="sm"
+                                                        variant="ghost"
+                                                        className="h-8 px-2 text-red-600 hover:bg-red-50"
+                                                        onClick={() => handleDelete(item.id)}
+                                                    >
+                                                        <Trash2 className="w-3 h-3" />
+                                                    </Button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )
+                    })}
+                </div>
+            ) : (
+                <div className="text-center py-20 bg-white rounded-xl border-2 border-dashed border-gray-200">
+                    <div className="text-gray-400 mb-3">
+                        <Search className="w-12 h-12 mx-auto mb-2 opacity-50" />
+                    </div>
+                    <p className="text-gray-600 font-medium">
+                        {searchTerm || categoryFilter !== 'all'
+                            ? 'Nenhum prato encontrado com esses filtros.'
+                            : 'Sem pratos no menu.'}
+                    </p>
+                    <p className="text-sm text-gray-500 mt-1">
+                        {!searchTerm && categoryFilter === 'all' && 'Clique em "Novo Prato" para adicionar.'}
+                    </p>
+                </div>
+            )}
+
+            {/* Form Dialog */}
             <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
                 <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
                     <DialogHeader>
