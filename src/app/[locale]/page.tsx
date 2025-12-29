@@ -18,11 +18,14 @@ export default async function Home() {
     const supabase = await createClient()
     const { data: settings } = await supabase
         .from('restaurant_settings')
-        .select('phone, email')
+        .select('*')
         .single()
 
     const phone = (settings as any)?.phone || '+351 21 846 4584'
     const email = (settings as any)?.email || 'peroladovougalda@gmail.com'
+    const address = (settings as any)?.address || 'Av. Alm. Reis 243 A, 1000-051 Lisboa'
+    const hours = (settings as any)?.opening_hours || '07:00 - 19:00'
+    const hoursWeekend = (settings as any)?.opening_hours_weekend || '08:00 - 13:00'
 
 
 
@@ -394,8 +397,7 @@ export default async function Home() {
                                         <MapPin className="w-8 h-8 text-gold mb-4" />
                                         <h4 className="font-bold text-lg mb-2 text-primary-900">{tCommon('address')}</h4>
                                         <p className="text-stone-600 text-sm">
-                                            Av. Alm. Reis 243 A<br />
-                                            1000-051 Lisboa
+                                            {address}
                                         </p>
                                     </div>
 
@@ -403,8 +405,8 @@ export default async function Home() {
                                         <Clock className="w-8 h-8 text-gold mb-4" />
                                         <h4 className="font-bold text-lg mb-2 text-primary-900">{tCommon('hours')}</h4>
                                         <p className="text-stone-600 text-sm">
-                                            Seg-Sáb: 07:00 - 18:30<br />
-                                            Domingo: Encerrado
+                                            Seg-Sex: {hours}<br />
+                                            Fim de Semana: {hoursWeekend}
                                         </p>
                                     </div>
                                 </div>
