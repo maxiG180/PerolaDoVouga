@@ -23,6 +23,7 @@ export default function SettingsPage() {
         facebook_url: '',
         instagram_url: ''
     })
+    const [lastUpdated, setLastUpdated] = useState<string | null>(null)
 
     useEffect(() => {
         fetchSettings()
@@ -48,6 +49,9 @@ export default function SettingsPage() {
                     facebook_url: data.facebook_url || '',
                     instagram_url: data.instagram_url || ''
                 })
+                if (data.updated_at) {
+                    setLastUpdated(new Date(data.updated_at).toLocaleString('pt-PT'))
+                }
                 // rough parsing if opening_hours is used for both, or just map one. 
                 // For this iteration, let's assume opening_hours matches the weekdays input or we need to concat.
                 // Let's keep it simple: if the DB has text, put it in weekdays. 
@@ -119,16 +123,8 @@ export default function SettingsPage() {
         }
 
         try {
-            // We need to update the single row. 
-            // Since we don't have the ID in state, we can query it or just update all rows (since there's only one generally)
-            // or better, fetch the ID first/store it.
-            // But 'restaurant_settings' is singleton, so updating where id is not null (or just the one row) is fine.
-            // Let's use the policy of updating the single visible row.
-
-            // First get the ID if we don't have it, or just update the first row found.
-            const { data: currentSettings } = await supabase.from('restaurant_settings').select('id').single()
-
-            if (!currentSettings) throw new Error('No settings found')
+            // Check if settings exist using maybeSingle to avoid error on empty table
+            const { data: currentSettings } = await supabase.from('restaurant_settings').select('id').maybeSingle()
 
             const updates = {
                 restaurant_name: settings.business_name.trim(),
@@ -142,12 +138,21 @@ export default function SettingsPage() {
                 updated_at: new Date().toISOString()
             }
 
-            const { error } = await supabase
-                .from('restaurant_settings')
-                .update(updates)
-                .eq('id', currentSettings.id)
+            // Update local state timestamp immediately
+            setLastUpdated(new Date().toLocaleString('pt-PT'))
 
-            if (error) throw error
+            if (currentSettings) {
+                const { error } = await supabase
+                    .from('restaurant_settings')
+                    .update(updates)
+                    .eq('id', currentSettings.id)
+                if (error) throw error
+            } else {
+                const { error } = await supabase
+                    .from('restaurant_settings')
+                    .insert(updates)
+                if (error) throw error
+            }
 
             toast.success('Definições guardadas com sucesso')
         } catch (error) {
@@ -267,7 +272,12 @@ export default function SettingsPage() {
                     </div>
                 </div>
 
-                <div className="flex justify-end pt-4">
+                <div className="flex flex-col md:flex-row justify-end items-center gap-4 pt-4">
+                    {lastUpdated && (
+                        <p className="text-sm text-muted-foreground">
+                            Última atualização: {lastUpdated}
+                        </p>
+                    )}
                     <Button type="submit" variant="gold" disabled={isSaving} className="w-full md:w-auto gap-2">
                         {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
                         Guardar Alterações
