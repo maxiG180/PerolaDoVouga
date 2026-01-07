@@ -405,8 +405,9 @@ export default async function Home() {
                                         <Clock className="w-8 h-8 text-gold mb-4" />
                                         <h4 className="font-bold text-lg mb-2 text-primary-900">{tCommon('hours')}</h4>
                                         <p className="text-stone-600 text-sm">
-                                            Seg-Sex: {hours}<br />
-                                            Fim de Semana: {hoursWeekend}
+                                            Seg-Sex: 07:00 - 18:00<br />
+                                            Sáb: 08:00 - 15:00<br />
+                                            Dom: {locale === 'pt' ? 'Encerrado' : 'Closed'}
                                         </p>
                                     </div>
                                 </div>
