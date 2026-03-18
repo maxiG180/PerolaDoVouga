@@ -71,6 +71,11 @@ export const metadata: Metadata = {
             'en-US': 'https://peroladovouga.com/en'
         }
     },
+    icons: {
+        icon: '/logo.png',
+        shortcut: '/logo.png',
+        apple: '/logo.png',
+    },
     robots: {
         index: true,
         follow: true,
