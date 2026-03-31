@@ -113,14 +113,14 @@ export default async function Home() {
                 {/* Online Ordering Coming Soon Banner */}
                 <section className="bg-stone-900 py-12">
                     <div className="container mx-auto px-4 text-center">
-                        <Badge className="bg-gold text-white mb-4 hover:bg-gold text-lg py-1 px-4">{locale === 'pt' ? 'Em Breve' : 'Coming Soon'}</Badge>
+                        <Badge className="bg-gold text-white mb-4 hover:bg-gold text-lg py-1 px-4">{locale === 'pt' ? 'Serviço Disponível' : 'Service Available'}</Badge>
                         <h2 className="text-3xl md:text-4xl font-serif font-bold text-white mb-4">
-                            {locale === 'pt' ? 'Encomendas Online' : 'Online Ordering'}
+                            {locale === 'pt' ? 'Almoços Take-Away & Encomendas' : 'Take-Away Lunches & Orders'}
                         </h2>
                         <p className="text-stone-300 text-lg max-w-2xl mx-auto">
                             {locale === 'pt'
-                                ? 'Estamos a preparar o nosso sistema de encomendas online para que possa desfrutar dos nossos pratos no conforto da sua casa. Fique atento!'
-                                : 'We are preparing our online ordering system so you can enjoy our dishes in the comfort of your home. Stay tuned!'}
+                                ? 'Já fazemos almoços take-away todos os dias! Estamos também a preparar o nosso sistema de encomendas online completo para sua maior conveniência.'
+                                : 'We now serve take-away lunches every day! We are also preparing our full online ordering system for your convenience.'}
                         </p>
                     </div>
                 </section>
@@ -208,6 +208,15 @@ export default async function Home() {
                                     <div className="flex-1 h-0.5 bg-gradient-to-r from-red-200 to-transparent"></div>
                                 </div>
                                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                    <div className="group relative h-[380px] rounded-3xl overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl transition-all duration-500 ring-1 ring-black/5">
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent z-10"></div>
+                                        <img src="/images/espetadas.png" alt="Espetadas à Moda da Casa" className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" />
+                                        <div className="absolute bottom-0 left-0 right-0 p-8 z-20 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                                            <Badge className="bg-gold text-white mb-3 hover:bg-gold-dark border-none shadow-sm">{locale === 'pt' ? 'Especialidade' : 'Specialty'}</Badge>
+                                            <h3 className="text-white font-serif text-3xl font-bold mb-2 drop-shadow-md">{locale === 'pt' ? 'Espetadas à Moda da Casa' : 'House Style Skewers'}</h3>
+                                            <p className="text-white/90 font-medium">{locale === 'pt' ? 'Grelhadas na perfeição com o nosso tempero especial' : 'Grilled to perfection with our special seasoning'}</p>
+                                        </div>
+                                    </div>
                                     <div className="group relative h-[380px] rounded-3xl overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl transition-all duration-500 ring-1 ring-black/5">
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent z-10"></div>
                                         <img src="/Perna de peru assada no forno.jpeg" alt="Perna de Peru" className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" />
