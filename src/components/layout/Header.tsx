@@ -1,7 +1,7 @@
 'use client'
 import { Link } from '@/i18n/navigation'
 import { useState, useEffect } from 'react'
-import { Menu, ShoppingBag, X, Phone, Clock, MapPin } from 'lucide-react'
+import { List, ShoppingBag, X, Phone, Clock, MapPin } from '@phosphor-icons/react'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
@@ -125,7 +125,7 @@ export function Header() {
                         className="p-2 rounded-full text-beige-900 hover:bg-beige-100 transition-colors"
                         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                     >
-                        {isMobileMenuOpen ? <X /> : <Menu />}
+                        {isMobileMenuOpen ? <X size={24} /> : <List size={24} />}
                     </button>
                 </div>
             </div>

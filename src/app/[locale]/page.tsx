@@ -4,10 +4,21 @@ import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
-import { ArrowRight, Utensils, Coffee, Star, MapPin, Clock, Phone, ChefHat } from 'lucide-react'
 import { getTranslations, getLocale } from 'next-intl/server'
 import { LocalBusinessSchema } from '@/components/seo/LocalBusinessSchema'
 import { createClient } from '@/lib/supabase/server'
+import { HomeClient } from '@/components/layout/HomeClient'
+import {
+    ArrowRight,
+    ForkKnife,
+    Coffee,
+    Star,
+    MapPin,
+    Clock,
+    Phone,
+    ChefHat,
+    EnvelopeSimple
+} from '@phosphor-icons/react/dist/ssr'
 
 export default async function Home() {
     const t = await getTranslations('home')
@@ -37,7 +48,8 @@ export default async function Home() {
             <LocalBusinessSchema />
             <Header />
 
-            <main className="flex-1">
+            <HomeClient>
+                <main className="flex-1">
                 {/* Hero Section - Redesigned for Mobile First */}
                 {/* Hero Section - Light & Airy Split Layout */}
                 <section className="relative min-h-[90vh] flex items-center pt-24 pb-12 lg:pt-32 lg:pb-20 overflow-hidden">
@@ -55,17 +67,17 @@ export default async function Home() {
                                     </span>
                                 </div>
 
-                                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-stone-800 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+                                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-stone-800 gsap-hero-title">
                                     {t('tagline')}
                                 </h1>
 
-                                <p className="text-lg md:text-xl text-stone-600 max-w-xl mx-auto lg:mx-0 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+                                <p className="text-lg md:text-xl text-stone-600 max-w-xl mx-auto lg:mx-0 gsap-hero-text">
                                     {locale === 'pt'
                                         ? 'Trazemos a elegância e os sabores do Rio Vouga para o coração de Lisboa. Uma experiência gastronómica autêntica e memorável.'
                                         : 'We bring the elegance and flavors of the Vouga River to the heart of Lisbon. An authentic and memorable dining experience.'}
                                 </p>
 
-                                <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
+                                <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start gsap-hero-btns">
                                     {/* <Button asChild size="lg" className="bg-stone-800 text-white hover:bg-stone-900">
                                         <Link href="/menu">
                                             {t('cta_menu')}
@@ -73,15 +85,16 @@ export default async function Home() {
                                         </Link>
                                     </Button> */}
                                     <Button asChild variant="outline" size="lg" className="border-stone-300 text-stone-800 hover:bg-stone-50">
-                                        <Link href="/about">
+                                        <a href="#menu-section">
                                             {t('cta_about')}
-                                        </Link>
+                                            <ForkKnife className="ml-2 w-4 h-4" />
+                                        </a>
                                     </Button>
                                 </div>
                             </div>
 
                             {/* Right Image */}
-                            <div className="lg:w-1/2 relative animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+                            <div className="lg:w-1/2 relative gsap-hero-image">
                                 {/* Main Dish Image */}
                                 <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white h-[350px] lg:h-[500px] z-10 w-full transform hover:scale-[1.02] transition-transform duration-700">
                                     <img
@@ -91,7 +104,7 @@ export default async function Home() {
                                     />
                                     {/* Badge */}
                                     <div className="absolute bottom-6 right-6 bg-white/95 backdrop-blur-sm px-6 py-3 rounded-full shadow-lg border border-stone-100 flex items-center gap-2">
-                                        <Star className="w-5 h-5 text-gold fill-current" />
+                                        <Star className="w-5 h-5 text-gold fill-current" weight="fill" />
                                         <span className="font-serif font-bold text-stone-800 text-lg">{locale === 'pt' ? 'Bacalhau com Natas' : 'Codfish with Cream'}</span>
                                     </div>
                                 </div>
@@ -126,7 +139,7 @@ export default async function Home() {
                 </section>
 
                 {/* All Menu Items - Compact & Organized */}
-                <section className="py-16 bg-white">
+                <section id="menu-section" className="py-16 bg-white">
                     <div className="container mx-auto px-4">
                         <div className="text-center mb-12">
                             <h2 className="text-3xl md:text-4xl font-bold text-stone-800 mb-3">
@@ -372,7 +385,7 @@ export default async function Home() {
                                                     <Phone className="w-4 h-4" /> {phone}
                                                 </a>
                                                 <a href={`mailto:${email}`} className="flex items-center gap-2 hover:text-gold transition-colors">
-                                                    <span>✉️</span> {email}
+                                                    <EnvelopeSimple className="w-4 h-4" /> {email}
                                                 </a>
                                             </div>
                                         </div>
@@ -439,6 +452,7 @@ export default async function Home() {
 
 
             </main>
+            </HomeClient>
 
             <Footer />
         </div>

@@ -1,6 +1,6 @@
 'use client'
 
-import { MapPin, Phone, Mail, Instagram, Facebook } from 'lucide-react'
+import { MapPin, Phone, EnvelopeSimple as Mail, InstagramLogo as Instagram, FacebookLogo as Facebook } from '@phosphor-icons/react'
 import { createClient } from '@/lib/supabase/client'
 import { useEffect, useState } from 'react'
 
