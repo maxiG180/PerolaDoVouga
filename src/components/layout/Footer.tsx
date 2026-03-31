@@ -60,8 +60,7 @@ export function Footer() {
                     <div>
                         <h3 className="font-serif text-2xl font-bold text-gold mb-4">{businessName}</h3>
                         <p className="text-beige-300 mb-6 leading-relaxed">
-                            Trazemos a elegância e os sabores do Rio Vouga para o coração de Lisboa.
-                            Uma experiência gastronómica autêntica e memorável.
+                            Ambiente familiar e acolhedor com o melhor da gastronomia tradicional portuguesa no coração de Lisboa.
                         </p>
                         <div className="flex gap-4">
                             {showFacebook && (

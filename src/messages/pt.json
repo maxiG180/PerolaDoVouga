@@ -6,9 +6,9 @@
         "contact": "Contactos"
     },
     "home": {
-        "welcome": "Bem-vindo",
-        "tagline": "Comida Portuguesa de Verdade",
-        "description": "Fazemos comida caseira como a da sua avó. Ingredientes frescos, receitas tradicionais, preços honestos.",
+        "welcome": "Ambiente Familiar",
+        "tagline": "Comida Tradicional Portuguesa",
+        "description": "Pratos típicos cozinhados com amor e os melhores ingredientes. Um espaço acolhedor onde se sente em casa.",
         "cta_menu": "Ver Menu",
         "cta_about": "O Nosso Menu",
         "featured_title": "Os Nossos Pratos",
@@ -19,10 +19,10 @@
         "waiting_for_you": "Venha conhecer-nos",
         "visit_description": "Somos uma tasca de bairro em Lisboa. Boa comida, ambiente simples, pessoas genuínas.",
         "roots": {
-            "subtitle": "A Nossa Origem",
-            "title": "Do Rio Vouga para Lisboa",
-            "description1": "O nome \"Pérola do Vouga\" não é um acaso. Inspiramo-nos na beleza e riqueza do Rio Vouga para trazer até si uma experiência gastronómica que une a tradição das nossas raízes à elegância da capital.",
-            "description2": "Cada prato conta uma história, cada sabor é uma viagem."
+            "subtitle": "Tradição Familiar",
+            "title": "Sabores que nos Unem",
+            "description1": "A Pérola do Vouga nasceu com o objetivo de servir o melhor da gastronomia tradicional portuguesa num ambiente que o faz sentir-se em casa.",
+            "description2": "Ingredientes frescos, receitas de família e o carinho em cada prato."
         },
         "features": {
             "authentic": {

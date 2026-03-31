@@ -18,38 +18,38 @@ export default async function AboutPage() {
                         </h1>
                     </div>
 
-                    <div className="grid md:grid-cols-2 gap-10 items-center mb-16">
-                        <div className="relative h-[350px] md:h-[400px] rounded-lg overflow-hidden shadow-md border-2 border-gray-200">
+                    <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
+                        <div className="relative h-[400px] md:h-[500px] rounded-[2rem] overflow-hidden shadow-xl border-8 border-white">
                             <img
-                                src="/vouga.jpg"
-                                alt="Rio Vouga"
+                                src="/cafe.jpg"
+                                alt="Nosso Espaço Acolhedor"
                                 className="w-full h-full object-cover"
                             />
                         </div>
 
-                        <div className="space-y-4">
-                            <h2 className="text-2xl md:text-3xl font-bold text-stone-800">
-                                {locale === 'pt' ? 'Do Rio Vouga para Lisboa' : 'From the Vouga River to Lisbon'}
+                        <div className="space-y-6">
+                            <h2 className="text-3xl md:text-4xl font-bold text-stone-800">
+                                {locale === 'pt' ? 'Tradição e Família' : 'Tradition and Family'}
                             </h2>
-                            <p className="text-base text-gray-700 leading-relaxed">
+                            <p className="text-lg text-stone-600 leading-relaxed font-medium">
                                 {locale === 'pt'
-                                    ? 'A Pérola do Vouga nasceu de um sonho familiar: trazer os sabores autênticos e a hospitalidade calorosa da região do Vouga para o coração da capital.'
-                                    : 'Pérola do Vouga was born from a family dream: to bring the authentic flavors and warm hospitality of the Vouga region to the heart of the capital.'}
+                                    ? 'A Pérola do Vouga nasceu com um propósito simples: servir comida real num ambiente onde todos se sentem em casa.'
+                                    : 'Pérola do Vouga was born with a simple purpose: to serve real food in an environment where everyone feels at home.'}
                             </p>
-                            <p className="text-base text-gray-700 leading-relaxed">
+                            <p className="text-lg text-stone-600 leading-relaxed">
                                 {locale === 'pt'
-                                    ? 'Com muitos anos de história, este espaço sempre foi mais do que um café ou restaurante. É um ponto de encontro, uma extensão da nossa sala de estar, onde cada cliente é tratado como família.'
-                                    : 'With many years of history, this space has always been more than just a café or restaurant. It is a meeting point, an extension of our living room, where every customer is treated like family.'}
+                                    ? 'Com anos de dedicação, o nosso espaço tornou-se um ponto de encontro para quem valoriza a hospitalidade genuína e o sabor da cozinha caseira.'
+                                    : 'With years of dedication, our space has become a meeting point for those who value genuine hospitality and the taste of home-cooked food.'}
                             </p>
-                            <p className="text-base text-gray-700 leading-relaxed">
+                            <p className="text-lg text-stone-600 leading-relaxed">
                                 {locale === 'pt'
-                                    ? <>A nossa cozinha é uma celebração de culturas. Servimos a tradicional <strong>cozinha portuguesa</strong>, enriquecida com o tempero da <strong>cozinha africana</strong> pelas mãos da nossa cozinheira, e com sabores da <strong>cozinha de leste (ucraniana)</strong>, honrando as origens dos nossos proprietários.</>
-                                    : <>Our kitchen is a celebration of cultures. We serve traditional <strong>Portuguese cuisine</strong>, enriched with the seasoning of <strong>African cuisine</strong> by the hands of our cook, and with flavors of <strong>Eastern European cuisine (Ukrainian)</strong>, honoring the origins of our owners.</>}
+                                    ? <>A nossa cozinha é uma celebração de culturas. Servimos a tradicional <strong>cozinha portuguesa</strong>, enriquecida com o tempero da <strong>cozinha africana</strong> e toques da <strong>cozinha ucraniana</strong>, honrando as diversas raízes da nossa equipa.</>
+                                    : <>Our kitchen is a celebration of cultures. We serve traditional <strong>Portuguese cuisine</strong>, enriched with <strong>African seasoning</strong> and touches of <strong>Ukrainian cuisine</strong>, honoring the diverse roots of our team.</>}
                             </p>
-                            <p className="text-base text-gray-700 leading-relaxed">
+                            <p className="text-lg text-stone-600 leading-relaxed italic">
                                 {locale === 'pt'
-                                    ? 'O nome "Pérola" reflete o cuidado que dedicamos a cada prato, a cada café, a cada sorriso que partilhamos convosco.'
-                                    : 'The name "Pérola" (Pearl) reflects the care we dedicate to every dish, every coffee, and every smile we share with you.'}
+                                    ? '“O nome Pérola reflete o carinho que colocamos em cada detalhe, em cada prato e em cada sorriso que partilhamos consigo.”'
+                                    : '“The name Pérola reflects the care we put into every detail, every dish, and every smile we share with you.”'}
                             </p>
                         </div>
                     </div>

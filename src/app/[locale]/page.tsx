@@ -50,74 +50,56 @@ export default async function Home() {
 
             <HomeClient>
                 <main className="flex-1">
-                {/* Hero Section - Redesigned for Mobile First */}
-                {/* Hero Section - Light & Airy Split Layout */}
-                <section className="relative min-h-[90vh] flex items-center pt-24 pb-12 lg:pt-32 lg:pb-20 overflow-hidden">
-                    {/* Decorative Background Elements */}
-                    <div className="absolute top-0 right-0 w-1/2 h-full bg-beige-100/50 -z-10 rounded-l-[100px] hidden lg:block" />
-                    <div className="absolute -top-20 -left-20 w-96 h-96 bg-gold/5 rounded-full blur-3xl -z-10" />
-
+                {/* Hero Section - Elegant & Simple */}
+                <section className="relative min-h-[85vh] flex items-center pt-24 pb-12 lg:pt-32 lg:pb-20 overflow-hidden bg-beige-50/30">
                     <div className="container mx-auto px-4">
-                        <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+                        <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
                             {/* Left Content */}
-                            <div className="lg:w-1/2 text-center lg:text-left space-y-8">
-                                <div className="inline-block animate-fade-in-up">
-                                    <span className="px-4 py-1.5 rounded-lg bg-beige-100 text-beige-900 text-sm font-medium">
-                                        {t('welcome')}
+                            <div className="lg:w-1/2 text-center lg:text-left space-y-8 relative z-10">
+                                <div className="inline-block animate-fade-in">
+                                    <span className="px-4 py-1.5 rounded-full bg-stone-100 text-stone-600 text-sm font-semibold tracking-wide uppercase">
+                                        ✨ {t('welcome')}
                                     </span>
                                 </div>
 
-                                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-stone-800 gsap-hero-title">
+                                <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold leading-tight text-stone-800 gsap-hero-title">
                                     {t('tagline')}
                                 </h1>
 
-                                <p className="text-lg md:text-xl text-stone-600 max-w-xl mx-auto lg:mx-0 gsap-hero-text">
-                                    {locale === 'pt'
-                                        ? 'Trazemos a elegância e os sabores do Rio Vouga para o coração de Lisboa. Uma experiência gastronómica autêntica e memorável.'
-                                        : 'We bring the elegance and flavors of the Vouga River to the heart of Lisbon. An authentic and memorable dining experience.'}
+                                <p className="text-lg md:text-xl text-stone-600 max-w-xl mx-auto lg:mx-0 gsap-hero-text leading-relaxed font-medium">
+                                    {t('description')}
                                 </p>
 
-                                <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start gsap-hero-btns">
-                                    {/* <Button asChild size="lg" className="bg-stone-800 text-white hover:bg-stone-900">
-                                        <Link href="/menu">
-                                            {t('cta_menu')}
-                                            <ArrowRight className="ml-2 w-4 h-4" />
-                                        </Link>
-                                    </Button> */}
-                                    <Button asChild variant="outline" size="lg" className="border-stone-300 text-stone-800 hover:bg-stone-50">
+                                <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start gsap-hero-btns">
+                                    <Button asChild size="lg" className="bg-stone-800 text-white hover:bg-stone-900 rounded-full px-8">
                                         <a href="#menu-section">
                                             {t('cta_about')}
                                             <ForkKnife className="ml-2 w-4 h-4" />
                                         </a>
+                                    </Button>
+                                    <Button asChild variant="outline" size="lg" className="border-stone-300 text-stone-800 hover:bg-white rounded-full px-8">
+                                        <Link href="/about">
+                                            {t('nav.about')}
+                                            <ArrowRight className="ml-2 w-4 h-4" />
+                                        </Link>
                                     </Button>
                                 </div>
                             </div>
 
                             {/* Right Image */}
                             <div className="lg:w-1/2 relative gsap-hero-image">
-                                {/* Main Dish Image */}
-                                <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white h-[350px] lg:h-[500px] z-10 w-full transform hover:scale-[1.02] transition-transform duration-700">
+                                <div className="relative rounded-[2.5rem] overflow-hidden shadow-2xl border-[12px] border-white h-[400px] lg:h-[550px] w-full transform hover:scale-[1.01] transition-all duration-700">
                                     <img
                                         src="/Bacalhau-com-natas.jpg"
-                                        alt="Bacalhau com Natas - Nossa Especialidade"
+                                        alt="Comida Caseira Portuguesa"
                                         className="w-full h-full object-cover"
                                     />
-                                    {/* Badge */}
-                                    <div className="absolute bottom-6 right-6 bg-white/95 backdrop-blur-sm px-6 py-3 rounded-full shadow-lg border border-stone-100 flex items-center gap-2">
-                                        <Star className="w-5 h-5 text-gold fill-current" weight="fill" />
-                                        <span className="font-serif font-bold text-stone-800 text-lg">{locale === 'pt' ? 'Bacalhau com Natas' : 'Codfish with Cream'}</span>
-                                    </div>
+                                    <div className="absolute inset-0 bg-black/5" />
                                 </div>
-
-                                {/* Floating Cafe Image (Inset) */}
-                                <div className="absolute -top-6 -right-6 w-32 h-24 lg:w-48 lg:h-32 rounded-2xl overflow-hidden shadow-xl border-4 border-white transform rotate-6 hover:rotate-0 transition-transform duration-500 z-20 hidden md:block group cursor-pointer">
-                                    <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors"></div>
-                                    <img
-                                        src="/cafe.jpg"
-                                        alt="Nosso Espaço"
-                                        className="w-full h-full object-cover"
-                                    />
-                                </div>
+                                
+                                {/* Simplified Decorative Element */}
+                                <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-gold/10 rounded-full blur-2xl -z-10" />
+                                <div className="absolute -top-10 -left-10 w-48 h-48 bg-stone-200/40 rounded-full blur-3xl -z-10" />
                             </div>
                         </div>
                     </div>

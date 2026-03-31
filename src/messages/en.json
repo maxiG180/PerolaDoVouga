@@ -6,9 +6,9 @@
         "contact": "Contact"
     },
     "home": {
-        "welcome": "Welcome",
-        "tagline": "Real Portuguese Food",
-        "description": "Home-cooked meals like your grandmother used to make. Fresh ingredients, traditional recipes, honest prices.",
+        "welcome": "Family Atmosphere",
+        "tagline": "Traditional Portuguese Cuisine",
+        "description": "Typical dishes cooked with love and the best ingredients. A cozy space where you feel at home.",
         "cta_menu": "See Menu",
         "cta_about": "Our Menu",
         "featured_title": "Our Dishes",
@@ -18,6 +18,12 @@
         "visit_us": "Visit Us",
         "waiting_for_you": "Come say hello",
         "visit_description": "We're a neighborhood spot in Lisbon. Good food, simple setting, real people.",
+        "roots": {
+            "subtitle": "Family Tradition",
+            "title": "Flavors That Bring Us Together",
+            "description1": "Pérola do Vouga was born with the goal of serving the best traditional Portuguese gastronomy in an environment that makes you feel at home.",
+            "description2": "Fresh ingredients, family recipes, and care in every dish."
+        },
         "features": {
             "authentic": {
                 "title": "No Tricks",
