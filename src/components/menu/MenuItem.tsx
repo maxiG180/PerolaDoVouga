@@ -5,10 +5,12 @@ import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { formatPrice } from '@/lib/utils'
 import { useCartStore } from '@/stores/cart-store'
-import { Plus, Clock, Users } from 'lucide-react'
+import { Plus, Clock, Users, ArrowUpRight } from 'lucide-react'
 import Image from 'next/image'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
+import { motion } from 'framer-motion'
+import { PremiumPlaceholder } from './PremiumPlaceholder'
 
 interface MenuItemProps {
     item: {
@@ -52,100 +54,107 @@ export function MenuItem({
     }
 
     return (
-        <Card className={cn(
-            "overflow-hidden group transition-all duration-300 border-0 shadow-sm hover:shadow-md bg-white rounded-2xl",
-            hideImage ? "hover:-translate-y-0.5" : "hover:-translate-y-1"
-        )}>
-            {!hideImage && (
-                <div className="relative h-48 bg-beige-50 overflow-hidden shrink-0">
-                    {item.image_url ? (
-                        <Image
-                            src={item.image_url}
-                            alt={item.name}
-                            fill
-                            className="object-cover group-hover:scale-105 transition-transform duration-500"
-                        />
-                    ) : (
-                        <div className="w-full h-full flex items-center justify-center text-4xl bg-beige-50/50">
-                            🍽️
-                        </div>
-                    )}
-
-                    {/* Sold Out Overlay */}
-                    {isSoldOut && (
-                        <div className="absolute inset-0 bg-white/60 backdrop-blur-sm flex items-center justify-center">
-                            <span className="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold shadow-sm">
-                                ESGOTADO
-                            </span>
-                        </div>
-                    )}
-
-                    {/* Quantity Remaining Badge */}
-                    {!isSoldOut && quantityRemaining !== null && quantityRemaining !== undefined && (
-                        <div className="absolute top-2 right-2">
-                            <Badge className={`${quantityRemaining <= 3
-                                ? 'bg-red-500 hover:bg-red-600'
-                                : 'bg-gold hover:bg-gold-dark'
-                                } text-white shadow-sm`}>
-                                🔥 {quantityRemaining} restantes
-                            </Badge>
-                        </div>
-                    )}
-
-                    {/* General Unavailable */}
-                    {!item.is_available && !isSoldOut && (
-                        <div className="absolute inset-0 bg-white/60 backdrop-blur-sm flex items-center justify-center">
-                            <span className="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold shadow-sm">
-                                Esgotado
-                            </span>
-                        </div>
-                    )}
-                </div>
-            )}
-
-            <div className={cn("flex flex-col flex-grow", hideImage ? "p-3" : "p-4")}>
-                <div className="flex justify-between items-start mb-1 gap-2">
-                    <h3 className={cn("font-serif font-bold text-beige-900 leading-tight", hideImage ? "text-base" : "text-lg")}>
-                        {item.name}
-                    </h3>
-                    <span className="font-medium text-gold-dark whitespace-nowrap">{formatPrice(item.price)}</span>
-                </div>
-
+        <motion.div
+            whileHover={{ y: -5 }}
+            transition={{ duration: 0.3 }}
+        >
+            <Card className={cn(
+                "overflow-hidden group transition-all duration-300 border border-stone-200/50 shadow-sm hover:shadow-2xl bg-white rounded-3xl",
+                hideImage ? "hover:-translate-y-0.5" : ""
+            )}>
                 {!hideImage && (
-                    <p className="text-sm text-muted-foreground line-clamp-2 mb-4 min-h-[2.5rem] flex-grow">
-                        {item.description || 'Sem descrição disponível.'}
-                    </p>
-                )}
+                    <div className="relative h-48 lg:h-52 overflow-hidden shrink-0">
+                        {item.image_url ? (
+                            <Image
+                                src={item.image_url}
+                                alt={item.name}
+                                fill
+                                className="object-cover group-hover:scale-105 transition-transform duration-700 opacity-95 group-hover:opacity-100"
+                            />
+                        ) : (
+                            <PremiumPlaceholder name={item.name} />
+                        )}
 
-                {/* Advance Order Info */}
-                {advanceNotice && (
-                    <div className="mb-3 space-y-1">
-                        <div className="flex items-center gap-1 text-xs text-accent">
-                            <Clock className="w-3 h-3" />
-                            <span>{advanceNotice} dias de antecedência</span>
-                        </div>
-                        {minimumQuantity && (
-                            <div className="flex items-center gap-1 text-xs text-accent">
-                                <Users className="w-3 h-3" />
-                                <span className="whitespace-nowrap">Mín. {minimumQuantity} un.</span>
+                        {/* Sold Out Overlay */}
+                        {isSoldOut && (
+                            <div className="absolute inset-0 bg-white/70 backdrop-blur-[2px] flex items-center justify-center z-20">
+                                <span className="bg-red-500 text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-lg tracking-widest uppercase">
+                                    ESGOTADO
+                                </span>
                             </div>
                         )}
+
+                        {/* Quantity Remaining Badge */}
+                        {!isSoldOut && quantityRemaining !== null && quantityRemaining !== undefined && (
+                            <div className="absolute top-3 right-3 z-10">
+                                <Badge className={cn(
+                                    "shadow-md px-3 py-1 scale-90 md:scale-100",
+                                    quantityRemaining <= 3
+                                        ? 'bg-red-500 hover:bg-red-600'
+                                        : 'bg-gold hover:bg-gold-dark'
+                                    )}>
+                                    🔥 {quantityRemaining} restantes
+                                </Badge>
+                            </div>
+                        )}
+
+                        {/* Elegant Glass Header */}
+                        <div className="absolute inset-x-0 top-0 h-1/3 bg-gradient-to-b from-stone-900/40 to-transparent pointer-events-none" />
                     </div>
                 )}
 
-                {/* <Button
-                    onClick={handleAdd}
-                    disabled={!item.is_available || isSoldOut}
-                    size={hideImage ? "sm" : "default"}
-                    className={cn(
-                        "w-full gap-2 bg-beige-100 text-beige-900 hover:bg-gold hover:text-white transition-colors disabled:opacity-50 mt-auto",
-                        hideImage ? "h-8 text-xs" : ""
+                <div className={cn("flex flex-col p-5", hideImage ? "p-4" : "")}>
+                    <div className="flex justify-between items-start mb-2 gap-3">
+                        <h3 className={cn("font-serif font-bold text-stone-800 leading-tight group-hover:text-gold transition-colors duration-300", hideImage ? "text-base" : "text-xl")}>
+                            {item.name}
+                        </h3>
+                        <div className="flex flex-col items-end">
+                            <span className="text-lg md:text-xl font-bold text-gold-dark tracking-tight">{formatPrice(item.price)}</span>
+                        </div>
+                    </div>
+
+                    {!hideImage && (
+                        <p className="text-sm text-stone-500/80 leading-relaxed line-clamp-2 mb-6 min-h-[2.5rem] flex-grow font-medium">
+                            {item.description || 'Sabores tradicionais preparados diariamente com os melhores ingredientes.'}
+                        </p>
                     )}
-                >
-                    <Plus className={cn("w-4 h-4", hideImage ? "w-3 h-3" : "")} />
-                    {hideImage ? "Adicionar" : "Adicionar ao Pedido"}
-                </Button> */}
-            </div>
-        </Card>
+
+                    {/* Advance Order Info */}
+                    {advanceNotice && (
+                        <div className="mb-4 p-3 rounded-2xl bg-accent/5 flex items-center justify-between border border-accent/10">
+                            <div className="flex items-center gap-2 text-xs text-stone-600 font-semibold">
+                                <Clock className="w-3.5 h-3.5 text-accent" />
+                                <span>{advanceNotice} dias</span>
+                            </div>
+                            {minimumQuantity && (
+                                <div className="flex items-center gap-2 text-xs text-stone-600 font-semibold">
+                                    <Users className="w-3.5 h-3.5 text-accent" />
+                                    <span>Mín. {minimumQuantity}</span>
+                                </div>
+                            )}
+                        </div>
+                    )}
+
+                    <div className="flex items-center gap-2 mt-auto pt-2">
+                        <Button
+                            onClick={handleAdd}
+                            disabled={!item.is_available || isSoldOut}
+                            className={cn(
+                                "flex-1 gap-2 bg-stone-900 text-white hover:bg-gold hover:text-white transition-all duration-500 rounded-2xl shadow-sm hover:shadow-xl border-0 h-11 active:scale-95",
+                                hideImage ? "h-9 text-xs" : ""
+                            )}
+                        >
+                            <Plus className={cn("w-4 h-4", hideImage ? "w-3 h-3" : "")} />
+                            {hideImage ? "Adicionar" : "Adicionar ao Pedido"}
+                        </Button>
+                        {!hideImage && (
+                            <div className="w-11 h-11 flex items-center justify-center bg-stone-100/50 rounded-2xl group-hover:bg-gold/10 group-hover:text-gold transition-colors duration-300 cursor-pointer">
+                                <ArrowUpRight className="w-5 h-5 opacity-40 group-hover:opacity-100" />
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </Card>
+        </motion.div>
     )
 }

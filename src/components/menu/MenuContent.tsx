@@ -25,6 +25,7 @@ interface MenuContentProps {
     menuData: {
         alwaysAvailable: any[]
         todaysSoup: any
+        todaysSoups?: any[]
         todaysPratos: any[]
         advanceOrderItems: any[]
     }
@@ -54,7 +55,8 @@ export function MenuContent({ menuData }: MenuContentProps) {
 
     // Extract all unique categories
     const allCategories = new Set<string>(['Todos'])
-    if (menuData.todaysSoup) allCategories.add('Sopa do Dia')
+    const hasSoups = menuData.todaysSoups && menuData.todaysSoups.length > 0;
+    if (hasSoups || menuData.todaysSoup) allCategories.add('Sopa do Dia')
     if (menuData.todaysPratos.length > 0) allCategories.add('Pratos do Dia')
 
     menuData.alwaysAvailable.forEach(item => {
@@ -119,13 +121,13 @@ export function MenuContent({ menuData }: MenuContentProps) {
     return (
         <div className="space-y-8">
             {/* Search and Category Filter */}
-            <div className="sticky top-[72px] z-30 bg-beige-100/95 backdrop-blur-md py-4 -mx-4 px-4 md:mx-0 md:px-0 space-y-4 shadow-sm transition-all">
+            <div className="sticky top-[72px] z-30 bg-white/80 backdrop-blur-xl py-6 -mx-4 px-4 md:mx-0 md:px-0 space-y-6 transition-all border-b border-stone-100">
                 <div className="flex justify-center">
-                    <div className="relative w-full max-w-md">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
+                    <div className="relative w-full max-w-xl group">
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 w-5 h-5 group-focus-within:text-gold transition-colors" />
                         <Input
-                            placeholder="Pesquisar pratos..."
-                            className="pl-10 bg-white border-beige-200 focus:border-gold shadow-sm"
+                            placeholder="Procura o seu sabor favorito..."
+                            className="pl-12 h-12 bg-stone-50/50 border-stone-200 focus:border-gold focus:ring-gold/20 shadow-sm rounded-2xl text-base"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
@@ -133,7 +135,7 @@ export function MenuContent({ menuData }: MenuContentProps) {
                 </div>
 
                 {/* Categories Scroll */}
-                <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide px-2">
+                <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide px-2 max-w-5xl mx-auto justify-start md:justify-center">
                     {categoriesList.map((cat) => {
                         const Icon = CATEGORY_ICONS[cat] || (cat.includes('Sopa') ? Soup : (cat.includes('Pratos') ? Utensils : (cat.includes('Encomenda') ? Calendar : Utensils)))
                         const isSelected = selectedCategory === cat
@@ -143,14 +145,24 @@ export function MenuContent({ menuData }: MenuContentProps) {
                                 key={cat}
                                 onClick={() => setSelectedCategory(cat)}
                                 className={cn(
-                                    "flex items-center gap-2 px-5 py-2.5 rounded-full whitespace-nowrap transition-all duration-300 font-medium",
-                                    isSelected
-                                        ? "bg-stone-900 text-white shadow-lg scale-105"
-                                        : "bg-stone-100 text-stone-600 hover:bg-stone-200 hover:text-stone-900"
+                                    "flex flex-col items-center gap-2 group min-w-[80px] transition-all duration-300",
+                                    isSelected ? "scale-110" : "opacity-60 hover:opacity-100"
                                 )}
                             >
-                                <Icon className={cn("w-4 h-4", isSelected ? "text-gold" : "text-stone-400")} />
-                                <span className="text-sm">{cat}</span>
+                                <div className={cn(
+                                    "w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl flex items-center justify-center transition-all duration-500 shadow-sm",
+                                    isSelected 
+                                        ? "bg-stone-900 text-white shadow-gold/20 shadow-lg" 
+                                        : "bg-white border border-stone-200 text-stone-400 group-hover:border-gold/50"
+                                )}>
+                                    <Icon className={cn("w-4 h-4 md:w-5 md:h-5", isSelected ? "text-gold" : "group-hover:text-gold/70")} />
+                                </div>
+                                <span className={cn(
+                                    "text-[9px] md:text-[10px] font-bold uppercase tracking-widest transition-colors",
+                                    isSelected ? "text-stone-900" : "text-stone-400"
+                                )}>
+                                    {cat}
+                                </span>
                             </button>
                         )
                     })}
@@ -159,43 +171,51 @@ export function MenuContent({ menuData }: MenuContentProps) {
 
             <div className="space-y-12 pb-20">
                 {/* Today's Soup */}
-                {menuData.todaysSoup && shouldShowSection('Sopa do Dia') && (
-                    <section className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                        <div className="flex items-center gap-4">
-                            <div className="flex items-center gap-2">
+                {(menuData.todaysSoups || [menuData.todaysSoup]).filter(Boolean).length > 0 && shouldShowSection('Sopa do Dia') && (
+                    <section className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                        <div className="flex flex-col items-center gap-2 text-center mb-4">
+                            <div className="w-12 h-12 rounded-2xl bg-gold/10 flex items-center justify-center mb-2">
                                 <Soup className="w-6 h-6 text-gold" />
-                                <h2 className="text-2xl font-serif font-bold text-beige-900">Sopa do Dia</h2>
                             </div>
-                            <Badge className="bg-gold/10 text-gold hover:bg-gold/20 border-0">
-                                {today}
-                            </Badge>
+                            <h2 className="text-3xl font-serif font-bold text-stone-900 tracking-tight">Sopa do Dia</h2>
+                            <div className="flex items-center gap-3">
+                                <div className="h-px w-8 bg-gold/30"></div>
+                                <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-gold-dark">{today}</span>
+                                <div className="h-px w-8 bg-gold/30"></div>
+                            </div>
                         </div>
-                        <div className="max-w-md">
-                            <MenuItem item={menuData.todaysSoup} hideImage={false} />
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-8">
+                            {(menuData.todaysSoups || [menuData.todaysSoup]).filter(Boolean).map((soup: any) => (
+                                <MenuItem key={soup.id} item={soup} hideImage={false} />
+                            ))}
                         </div>
                     </section>
                 )}
 
                 {/* Today's Pratos */}
                 {Object.keys(groupedTodaysPratos).length > 0 && shouldShowSection('Pratos do Dia') && (
-                    <section className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-100">
-                        <div className="flex items-center gap-4">
-                            <div className="flex items-center gap-2">
+                    <section className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-100">
+                        <div className="flex flex-col items-center gap-2 text-center">
+                            <div className="w-12 h-12 rounded-2xl bg-gold/10 flex items-center justify-center mb-2">
                                 <Clock className="w-6 h-6 text-gold" />
-                                <h2 className="text-2xl font-serif font-bold text-beige-900">Hoje Disponível</h2>
                             </div>
-                            <Badge className="bg-gold/10 text-gold hover:bg-gold/20 border-0">
-                                {today}
-                            </Badge>
+                            <h2 className="text-3xl font-serif font-bold text-stone-900 tracking-tight">Pratos de Hoje</h2>
+                            <div className="flex items-center gap-3">
+                                <div className="h-px w-8 bg-gold/30"></div>
+                                <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-gold-dark">Sugestões do Chefe</span>
+                                <div className="h-px w-8 bg-gold/30"></div>
+                            </div>
                         </div>
 
                         {Object.entries(groupedTodaysPratos).map(([categoryName, items]) => (
-                            <div key={categoryName} className="space-y-4">
-                                <h3 className="text-lg font-semibold text-beige-800 flex items-center gap-2">
-                                    <span className="w-2 h-2 bg-gold rounded-full"></span>
-                                    {categoryName}
-                                </h3>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                            <div key={categoryName} className="space-y-6">
+                                <div className="flex items-center gap-3">
+                                    <h3 className="text-sm font-bold text-stone-400 uppercase tracking-[0.2em]">
+                                        {categoryName}
+                                    </h3>
+                                    <div className="flex-1 h-px bg-stone-100"></div>
+                                </div>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-8">
                                     {(items as any[]).map((item: any) => (
                                         <MenuItem
                                             key={item.id}
@@ -213,12 +233,17 @@ export function MenuContent({ menuData }: MenuContentProps) {
 
                 {/* Always Available */}
                 {Object.keys(groupedAlwaysAvailable).length > 0 && (
-                    <section className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-200">
+                    <section className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-200 pt-8">
                         {(selectedCategory === 'Todos' || !['Sopa do Dia', 'Pratos do Dia', 'Sob Encomenda'].includes(selectedCategory)) && (
-                            <div className="flex items-center gap-4">
-                                <div className="flex items-center gap-2">
-                                    <Utensils className="w-6 h-6 text-beige-600" />
-                                    <h2 className="text-2xl font-serif font-bold text-beige-900">Sempre Disponível</h2>
+                            <div className="flex flex-col items-center gap-2 text-center">
+                                <div className="w-12 h-12 rounded-2xl bg-stone-100 flex items-center justify-center mb-2">
+                                    <Utensils className="w-6 h-6 text-stone-400" />
+                                </div>
+                                <h2 className="text-3xl font-serif font-bold text-stone-900 tracking-tight">Sempre Disponível</h2>
+                                <div className="flex items-center gap-3">
+                                    <div className="h-px w-8 bg-stone-200"></div>
+                                    <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-stone-400">Pratos Fixos</span>
+                                    <div className="h-px w-8 bg-stone-200"></div>
                                 </div>
                             </div>
                         )}
@@ -228,11 +253,13 @@ export function MenuContent({ menuData }: MenuContentProps) {
                             const isDrinks = isDrinkCategory(categoryName)
 
                             return (
-                                <div key={categoryName} className="space-y-4">
-                                    <h3 className="text-lg font-semibold text-beige-800 flex items-center gap-2">
-                                        <span className="w-2 h-2 bg-beige-900 rounded-full"></span>
-                                        {categoryName}
-                                    </h3>
+                                <div key={categoryName} className="space-y-6">
+                                    <div className="flex items-center gap-3">
+                                        <h3 className="text-sm font-bold text-stone-400 uppercase tracking-[0.2em]">
+                                            {categoryName}
+                                        </h3>
+                                        <div className="flex-1 h-px bg-stone-100"></div>
+                                    </div>
                                     <div className={cn(
                                         "grid gap-4",
                                         isDrinks
@@ -255,17 +282,19 @@ export function MenuContent({ menuData }: MenuContentProps) {
 
                 {/* Advance Order Items */}
                 {filteredAdvanceOrder.length > 0 && shouldShowSection('Sob Encomenda') && (
-                    <section className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-300">
-                        <div className="flex items-center gap-4">
-                            <div className="flex items-center gap-2">
+                    <section className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-300 pt-8">
+                        <div className="flex flex-col items-center gap-2 text-center">
+                            <div className="w-12 h-12 rounded-2xl bg-accent/10 flex items-center justify-center mb-2">
                                 <Calendar className="w-6 h-6 text-accent" />
-                                <h2 className="text-2xl font-serif font-bold text-beige-900">Sob Encomenda</h2>
                             </div>
-                            <Badge className="bg-accent/10 text-accent hover:bg-accent/20 border-0">
-                                Requer antecedência
-                            </Badge>
+                            <h2 className="text-3xl font-serif font-bold text-stone-900 tracking-tight">Sob Encomenda</h2>
+                            <div className="flex items-center gap-3">
+                                <div className="h-px w-8 bg-accent/30"></div>
+                                <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-accent">Reserva Antecipada</span>
+                                <div className="h-px w-8 bg-accent/30"></div>
+                            </div>
                         </div>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-8">
                             {filteredAdvanceOrder.map((item: any) => (
                                 <MenuItem
                                     key={item.id}

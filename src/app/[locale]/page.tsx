@@ -22,6 +22,7 @@ import {
 
 export default async function Home() {
     const t = await getTranslations('home')
+    const tNav = await getTranslations('nav')
     const tCommon = await getTranslations('common')
     const locale = await getLocale()
 
@@ -79,7 +80,7 @@ export default async function Home() {
                                     </Button>
                                     <Button asChild variant="outline" size="lg" className="border-stone-300 text-stone-800 hover:bg-white rounded-full px-8">
                                         <Link href="/about">
-                                            {t('nav.about')}
+                                            {tNav('about')}
                                             <ArrowRight className="ml-2 w-4 h-4" />
                                         </Link>
                                     </Button>
@@ -124,13 +125,14 @@ export default async function Home() {
                 <section id="menu-section" className="py-16 bg-white">
                     <div className="container mx-auto px-4">
                         <div className="text-center mb-12">
-                            <h2 className="text-3xl md:text-4xl font-bold text-stone-800 mb-3">
+                            <Badge className="bg-stone-100 text-stone-600 mb-4 hover:bg-stone-200 border-stone-200 uppercase tracking-widest text-[10px] py-1 px-3">
+                                {locale === 'pt' ? 'Menu de Demonstração' : 'Sample Menu'}
+                            </Badge>
+                            <h2 className="text-3xl md:text-5xl font-bold text-stone-800 mb-4">
                                 {t('featured_title')}
                             </h2>
-                            <p className="text-stone-600 max-w-2xl mx-auto">
-                                {locale === 'pt'
-                                    ? 'Descubra a nossa seleção completa de pratos tradicionais portugueses'
-                                    : 'Discover our complete selection of traditional Portuguese dishes'}
+                            <p className="text-stone-500 max-w-2xl mx-auto italic">
+                                {t('featured_subtitle')}
                             </p>
                         </div>
 

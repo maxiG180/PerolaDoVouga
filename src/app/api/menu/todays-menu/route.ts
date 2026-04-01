@@ -55,10 +55,14 @@ export async function GET() {
             .eq('is_available', true)
             .order('display_order');
 
-        return NextResponse.json({
-            alwaysAvailable: alwaysAvailable || [],
-            todaysSoup: todayPlanning?.soup || null,
-            todaysPratos: todayPlanning?.daily_menu_items?.map((item: any) => ({
+        const todaysSoups = [];
+        if (todayPlanning?.soup) {
+            todaysSoups.push(todayPlanning.soup);
+        }
+
+        const todaysPratos: any[] = [];
+        todayPlanning?.daily_menu_items?.forEach((item: any) => {
+            const menuItem = {
                 ...item.menu_items,
                 quantity_available: item.quantity_available,
                 quantity_sold: item.quantity_sold,
@@ -66,7 +70,23 @@ export async function GET() {
                 quantity_remaining: item.quantity_available
                     ? item.quantity_available - item.quantity_sold
                     : null,
-            })) || [],
+            };
+
+            if (item.menu_items?.daily_type === 'soup') {
+                // If it's not already the primary soup, add it to soups
+                if (item.menu_item_id !== todayPlanning.soup_id) {
+                    todaysSoups.push(menuItem);
+                }
+            } else {
+                todaysPratos.push(menuItem);
+            }
+        });
+
+        return NextResponse.json({
+            alwaysAvailable: alwaysAvailable || [],
+            todaysSoup: todaysSoups[0] || null, // Keep for compatibility
+            todaysSoups: todaysSoups,
+            todaysPratos: todaysPratos,
             advanceOrderItems: advanceOrderItems || [],
         });
     } catch (error) {

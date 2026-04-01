@@ -15,9 +15,10 @@ import {
     PopoverTrigger,
     PopoverClose,
 } from '@/components/ui/popover'
-import { Loader2, Save, Copy, ArrowRight, Check, X } from 'lucide-react'
+import { Loader2, Save, Copy, ArrowRight, Check, X, MessageSquare } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import Image from 'next/image'
+import { WhatsAppImportDialog } from './WhatsAppImportDialog'
 
 interface MenuItem {
     id: string
@@ -38,6 +39,7 @@ export function PlanningWizard() {
     const [loading, setLoading] = useState(true)
     const [saving, setSaving] = useState(false)
     const [step, setStep] = useState(1) // 1: Soup, 2: Dishes, 3: Review
+    const [isWhatsAppDialogOpen, setIsWhatsAppDialogOpen] = useState(false)
 
     const supabase = createClient()
 
@@ -133,6 +135,31 @@ export function PlanningWizard() {
         }
     }
 
+    const handleImportedFromWhatsApp = (importedSoups: any[], importedDishes: any[]) => {
+        // Update state with imported items
+        if (importedSoups.length > 0) {
+            setSelectedSoup(importedSoups[0].id)
+            // Add other soups as regular dishes (but they will be filtered as soups in API)
+            const otherSoupIds = importedSoups.slice(1).map(s => s.id)
+            setSelectedDishes(prev => Array.from(new Set([...prev, ...otherSoupIds, ...importedDishes.map(d => d.id)])))
+        } else {
+            setSelectedDishes(prev => Array.from(new Set([...prev, ...importedDishes.map(d => d.id)])))
+        }
+        
+        // Add new items to local lists so they appear in selection
+        const allNewItems = [...importedSoups, ...importedDishes]
+        allNewItems.forEach(item => {
+            if (item.daily_type === 'soup') {
+                if (!soups.find(s => s.id === item.id)) setSoups(prev => [item, ...prev])
+            } else {
+                if (!dishes.find(d => d.id === item.id)) setDishes(prev => [item, ...prev])
+            }
+        })
+
+        toast.success(`Importados ${importedSoups.length} sopas e ${importedDishes.length} pratos.`)
+        setStep(3) // Jump to review
+    }
+
     const toggleDish = (id: string) => {
         if (selectedDishes.includes(id)) {
             setSelectedDishes(selectedDishes.filter(d => d !== id))
@@ -177,6 +204,14 @@ export function PlanningWizard() {
                     <Button variant="outline" onClick={copyFromYesterday} className="w-full sm:w-auto">
                         <Copy className="w-4 h-4 mr-2" />
                         Copiar de Ontem
+                    </Button>
+                    <Button 
+                        variant="outline" 
+                        onClick={() => setIsWhatsAppDialogOpen(true)} 
+                        className="w-full sm:w-auto border-green-200 hover:bg-green-50 text-green-700"
+                    >
+                        <MessageSquare className="w-4 h-4 mr-2" />
+                        Importar WhatsApp
                     </Button>
                     <Button
                         className="bg-[#D4AF37] hover:bg-[#B39226] text-white w-full sm:w-auto"
@@ -287,6 +322,12 @@ export function PlanningWizard() {
                     />
                 </CardContent>
             </Card>
+
+            <WhatsAppImportDialog 
+                isOpen={isWhatsAppDialogOpen}
+                onOpenChangeAction={setIsWhatsAppDialogOpen}
+                onImportedAction={handleImportedFromWhatsApp}
+            />
         </div >
     )
 }
