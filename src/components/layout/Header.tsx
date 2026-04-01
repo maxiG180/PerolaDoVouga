@@ -85,7 +85,7 @@ export function Header() {
                         />
                     </div>
                     <div className="flex flex-col">
-                        <span className="font-serif text-lg md:text-xl font-bold leading-none tracking-tight text-beige-900">
+                        <span className="font-serif text-lg md:text-xl font-bold leading-none tracking-tight text-stone-800">
                             Pérola do Vouga
                         </span>
                         <span className="text-[9px] md:text-[10px] uppercase tracking-[0.2em] font-medium mt-0.5 text-gold-dark">
@@ -96,20 +96,20 @@ export function Header() {
 
                 {/* Desktop Nav */}
                 <nav className="hidden md:flex items-center gap-8">
-                    <Link href="/" className="text-sm font-medium text-beige-900 hover:text-gold transition-colors">
+                    <Link href="/" className="text-sm font-medium text-stone-800 hover:text-gold transition-colors">
                         {t('home')}
                     </Link>
-                    <Link href="/menu" className="text-sm font-medium text-beige-900 hover:text-gold transition-colors">
+                    <Link href="/menu" className="text-sm font-medium text-stone-800 hover:text-gold transition-colors">
                         {t('menu')}
                     </Link>
-                    <Link href="/about" className="text-sm font-medium text-beige-900 hover:text-gold transition-colors">
+                    <Link href="/about" className="text-sm font-medium text-stone-800 hover:text-gold transition-colors">
                         {t('about')}
                     </Link>
 
                     <div className="h-6 w-px bg-gold/30 mx-2"></div>
 
                     <div className="flex items-center gap-4">
-                        <a href={`tel:${phone}`} className="flex items-center gap-2 text-sm font-medium text-beige-900 hover:text-gold transition-colors">
+                        <a href={`tel:${phone}`} className="flex items-center gap-2 text-sm font-medium text-stone-800 hover:text-gold transition-colors">
                             <Phone className="w-4 h-4" />
                             <span className="hidden xl:inline">{phone}</span>
                         </a>
@@ -122,7 +122,7 @@ export function Header() {
                 <div className="flex items-center gap-4 md:hidden">
                     <LanguageSwitcher />
                     <button
-                        className="p-2 rounded-full text-beige-900 hover:bg-beige-100 transition-colors"
+                        className="p-2 rounded-full text-stone-800 hover:bg-beige-100 transition-colors"
                         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                     >
                         {isMobileMenuOpen ? <X size={24} /> : <List size={24} />}
@@ -135,21 +135,21 @@ export function Header() {
                 <div className="absolute top-full left-0 right-0 bg-white border-t p-4 md:hidden shadow-lg flex flex-col gap-4 animate-in slide-in-from-top-5 h-screen">
                     <Link
                         href="/"
-                        className="p-4 hover:bg-beige-50 rounded-xl text-lg font-medium border border-transparent hover:border-beige-200 transition-all"
+                        className="p-4 hover:bg-beige-50 rounded-xl text-lg font-medium text-stone-800 border border-transparent hover:border-beige-200 transition-all"
                         onClick={() => setIsMobileMenuOpen(false)}
                     >
                         {t('home')}
                     </Link>
                     <Link
                         href="/menu"
-                        className="p-4 hover:bg-beige-50 rounded-xl text-lg font-medium border border-transparent hover:border-beige-200 transition-all"
+                        className="p-4 hover:bg-beige-50 rounded-xl text-lg font-medium text-stone-800 border border-transparent hover:border-beige-200 transition-all"
                         onClick={() => setIsMobileMenuOpen(false)}
                     >
                         {t('menu')}
                     </Link>
                     <Link
                         href="/about"
-                        className="p-4 hover:bg-beige-50 rounded-xl text-lg font-medium border border-transparent hover:border-beige-200 transition-all"
+                        className="p-4 hover:bg-beige-50 rounded-xl text-lg font-medium text-stone-800 border border-transparent hover:border-beige-200 transition-all"
                         onClick={() => setIsMobileMenuOpen(false)}
                     >
                         {t('about')}

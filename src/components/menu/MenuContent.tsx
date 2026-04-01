@@ -15,8 +15,10 @@ import {
     Wine,
     Sandwich,
     Pizza,
-    IceCream
+    IceCream,
+    Phone
 } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
@@ -29,6 +31,7 @@ interface MenuContentProps {
         todaysPratos: any[]
         advanceOrderItems: any[]
     }
+    phone: string
 }
 
 const CATEGORY_ICONS: Record<string, any> = {
@@ -49,7 +52,7 @@ const CATEGORY_ICONS: Record<string, any> = {
     'Outros': Utensils
 }
 
-export function MenuContent({ menuData }: MenuContentProps) {
+export function MenuContent({ menuData, phone }: MenuContentProps) {
     const [searchQuery, setSearchQuery] = useState('')
     const [selectedCategory, setSelectedCategory] = useState<string>('Todos')
 
@@ -170,6 +173,54 @@ export function MenuContent({ menuData }: MenuContentProps) {
             </div>
 
             <div className="space-y-12 pb-20">
+                {/* Daily Menu Not Updated Alert */}
+                {menuData.todaysPratos.length === 0 && !(menuData.todaysSoups && menuData.todaysSoups.length > 0) && !menuData.todaysSoup && (
+                    <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-top-4 duration-700">
+                        <div className="bg-white rounded-[2.5rem] p-8 md:p-12 border border-stone-100 shadow-xl shadow-stone-200/50 text-center space-y-6 relative overflow-hidden">
+                            {/* Decorative background element */}
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-gold/5 rounded-full -mr-16 -mt-16 blur-3xl"></div>
+                            
+                            <div className="w-16 h-16 bg-gold/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                                <Clock className="w-8 h-8 text-gold" />
+                            </div>
+                            
+                            <div className="space-y-2">
+                                <h3 className="text-2xl md:text-3xl font-serif font-bold text-stone-800">
+                                    Menu do dia ainda não atualizado
+                                </h3>
+                                <p className="text-stone-500 text-lg max-w-md mx-auto">
+                                    Pedimos desculpa, mas o chef ainda está a preparar as sugestões de hoje. Volte mais tarde ou contacte-nos diretamente.
+                                </p>
+                            </div>
+
+                            <div className="flex flex-wrap justify-center gap-4 pt-4">
+                                <Button 
+                                    asChild
+                                    size="lg" 
+                                    className="bg-stone-800 hover:bg-stone-900 text-gold rounded-full px-8 h-12 shadow-lg transition-all"
+                                >
+                                    <a href={`tel:${phone}`} className="flex items-center gap-2">
+                                        <Phone className="w-5 h-5" />
+                                        Contactar Restaurante
+                                    </a>
+                                </Button>
+                                <Button 
+                                    variant="outline"
+                                    size="lg"
+                                    className="rounded-full px-8 h-12 border-stone-200 text-stone-600 hover:bg-stone-50"
+                                    onClick={() => window.location.reload()}
+                                >
+                                    Tentar Novamente
+                                </Button>
+                            </div>
+
+                            <p className="text-stone-400 text-sm italic pt-2">
+                                {new Date().toLocaleDateString('pt-PT', { weekday: 'long', day: 'numeric', month: 'long' })}
+                            </p>
+                        </div>
+                    </div>
+                )}
+
                 {/* Today's Soup */}
                 {(menuData.todaysSoups || [menuData.todaysSoup]).filter(Boolean).length > 0 && shouldShowSection('Sopa do Dia') && (
                     <section className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
