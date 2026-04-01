@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
+import { getLocalDate } from '@/lib/utils';
 import { calculateOrderTotals, generateOrderNumber } from '@/lib/order-utils';
 import { Resend } from 'resend';
 
@@ -86,7 +87,7 @@ export async function POST(req: NextRequest) {
         }
 
         // Update quantities for daily items
-        const today = new Date().toISOString().split('T')[0];
+        const today = getLocalDate();
         for (const item of orderData.items) {
             if (item.menuItemId) {
                 await updateDailyItemQuantity(supabase, item.menuItemId, item.quantity, today);

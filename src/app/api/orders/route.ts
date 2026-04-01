@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
+import { getLocalDate } from '@/lib/utils'
 import { Resend } from 'resend'
 import { z } from 'zod'
 
@@ -37,7 +38,7 @@ export async function POST(request: Request) {
                 customer_name: customer.name,
                 customer_email: customer.email,
                 customer_phone: customer.phone,
-                pickup_time: new Date().toISOString().split('T')[0] + 'T' + customer.pickupTime + ':00',
+                pickup_time: getLocalDate() + 'T' + customer.pickupTime + ':00',
                 special_instructions: customer.notes,
                 total_amount: total,
                 status: 'pending'

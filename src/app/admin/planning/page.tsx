@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
+import { getLocalDate } from '@/lib/utils';
 
 interface MenuItem {
     id: string;
@@ -29,10 +30,8 @@ export default function DailyPlanningPage() {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        // Set default date to tomorrow
-        const tomorrow = new Date();
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        setSelectedDate(tomorrow.toISOString().split('T')[0]);
+        // Set default date to today
+        setSelectedDate(getLocalDate());
     }, []);
 
     useEffect(() => {
@@ -121,9 +120,9 @@ export default function DailyPlanningPage() {
     };
 
     const copyFromYesterday = async () => {
-        const yesterday = new Date(selectedDate);
-        yesterday.setDate(yesterday.getDate() - 1);
-        const yesterdayStr = yesterday.toISOString().split('T')[0];
+        const date = new Date(selectedDate);
+        date.setDate(date.getDate() - 1);
+        const yesterdayStr = getLocalDate(date);
 
         try {
             const res = await fetch(`/api/admin/daily-planning?date=${yesterdayStr}`);

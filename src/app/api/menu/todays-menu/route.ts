@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
+import { getLocalDate } from '@/lib/utils';
 
 export async function GET() {
     try {
         const supabase = await createClient() as any;
-        const today = new Date().toISOString().split('T')[0];
+        const today = getLocalDate();
 
         // 1. Get always-available items
         const { data: alwaysAvailable } = await supabase

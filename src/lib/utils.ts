@@ -12,9 +12,11 @@ export function formatPrice(price: number) {
     }).format(price)
 }
 
-export function formatDate(date: string) {
-    return new Intl.DateTimeFormat('pt-PT', {
-        dateStyle: 'medium',
-        timeStyle: 'short',
-    }).format(new Date(date))
+export function getLocalDate(date = new Date()) {
+    return new Intl.DateTimeFormat('en-CA', {
+        timeZone: 'Europe/Lisbon',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+    }).format(date);
 }
