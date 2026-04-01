@@ -1,2 +1,54 @@
 @import "tailwindcss";
 @import "flag-icons/css/flag-icons.min.css";
+
+@theme {
+  /* Brand Colors */
+  --color-gold: #D4AF37;
+  --color-gold-light: #E5C55D;
+  --color-gold-dark: #B39226;
+
+  --color-beige-100: #F5F1EB;
+  --color-beige-200: #EBE3D6;
+  --color-beige-300: #E0D4C2;
+  --color-beige-400: #D4C5B0;
+  --color-beige-500: #C4B094;
+  --color-beige-600: #B39B7A;
+  --color-beige-700: #9E8663;
+  --color-beige-800: #8A7250;
+  --color-beige-900: #755F40;
+
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+
+  --color-primary-50: #F5F1EB;
+  --color-primary-100: #EBE3D6;
+  --color-primary-200: #E0D4C2;
+  --color-primary-300: #D4C5B0;
+  --color-primary-400: #C4B094;
+  --color-primary-500: #B39B7A;
+  --color-primary-600: #9E8663;
+  --color-primary-700: #8A7250;
+  --color-primary-800: #755F40;
+  --color-primary-900: #362F24;
+  --color-primary-950: #1A1611;
+
+  --color-turquoise: #40E0D0;
+  --color-turquoise-light: #7FFFD4;
+  --color-turquoise-dark: #20B2AA;
+
+  /* Fonts */
+  --font-sans: var(--font-inter), sans-serif;
+  --font-serif: var(--font-playfair), serif;
+}
+
