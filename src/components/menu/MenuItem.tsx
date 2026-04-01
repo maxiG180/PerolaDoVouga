@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -36,6 +37,7 @@ export function MenuItem({
     advanceNotice,
     minimumQuantity
 }: MenuItemProps) {
+    const [isAdded, setIsAdded] = useState(false)
     const addItem = useCartStore((state) => state.addItem)
 
     const handleAdd = () => {
@@ -43,6 +45,7 @@ export function MenuItem({
             toast.error('Este item está esgotado')
             return
         }
+        setIsAdded(true)
         addItem({
             menuItemId: item.id,
             name: item.name,
@@ -50,6 +53,8 @@ export function MenuItem({
             quantity: 1,
             image_url: item.image_url || undefined
         })
+        
+        setTimeout(() => setIsAdded(false), 1500)
         toast.success('Adicionado ao carrinho!')
     }
 
@@ -132,19 +137,29 @@ export function MenuItem({
                     )}
 
                     <div className="flex items-center gap-2 mt-auto pt-2">
-                        <Button
-                            onClick={handleAdd}
-                            disabled={!item.is_available || isSoldOut}
-                            className={cn(
-                                "flex-1 gap-2 bg-stone-900 text-white hover:bg-gold hover:text-white transition-all duration-500 rounded-2xl shadow-sm hover:shadow-xl border-0 h-11 active:scale-95",
-                                hideImage ? "h-9 px-2" : ""
-                            )}
-                        >
-                            <Plus className={cn("w-3 h-3 md:w-4 md:h-4")} />
-                            <span className="text-[10px] md:text-sm font-bold uppercase tracking-wider">
-                                {hideImage ? "Add" : "Adicionar"}
-                            </span>
-                        </Button>
+                                <Button
+                                    onClick={handleAdd}
+                                    disabled={!item.is_available || isSoldOut}
+                                    className={cn(
+                                        "flex-1 gap-2 transition-all duration-500 rounded-2xl shadow-sm hover:shadow-xl border-0 h-11 active:scale-95",
+                                        isAdded ? "bg-green-500 hover:bg-green-600 text-white" : "bg-stone-900 text-white hover:bg-gold",
+                                        hideImage ? "h-9 px-2" : ""
+                                    )}
+                                >
+                                    {isAdded ? (
+                                        <>
+                                            <ArrowUpRight className={cn("w-3 h-3 md:w-4 md:h-4")} />
+                                            <span className="text-[10px] md:text-sm font-bold uppercase tracking-wider">OK!</span>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Plus className={cn("w-3 h-3 md:w-4 md:h-4")} />
+                                            <span className="text-[10px] md:text-sm font-bold uppercase tracking-wider">
+                                                {hideImage ? "Add" : "Adicionar"}
+                                            </span>
+                                        </>
+                                    )}
+                                </Button>
                     </div>
                 </div>
             </Card>

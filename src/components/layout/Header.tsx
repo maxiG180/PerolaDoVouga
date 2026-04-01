@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils'
 import { LanguageSwitcher } from '@/components/LanguageSwitcher'
 import { useTranslations } from 'next-intl'
 import { createClient } from '@/lib/supabase/client'
+import { CartDrawer } from '@/components/order/CartDrawer'
 
 interface RestaurantSettings {
     phone: string
@@ -112,6 +113,7 @@ export function Header() {
                         </a>
 
                         <LanguageSwitcher />
+                        <CartDrawer />
 
                         <Button asChild variant="gold" size="sm" className="rounded-full px-6 shadow-sm">
                             <Link href="/menu">
@@ -123,6 +125,7 @@ export function Header() {
 
                 {/* Mobile Toggle */}
                 <div className="flex items-center gap-4 md:hidden">
+                    <CartDrawer />
                     <LanguageSwitcher />
                     <button
                         className="p-2 rounded-full text-stone-800 hover:bg-beige-100 transition-colors"
