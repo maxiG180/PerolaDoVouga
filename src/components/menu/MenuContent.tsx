@@ -243,8 +243,8 @@ export function MenuContent({ menuData, phone }: MenuContentProps) {
                                 <div className="h-px w-8 bg-gold/30"></div>
                             </div>
                         </div>
-                        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-8">
-                            {(menuData.todaysSoups || [menuData.todaysSoup]).filter(Boolean).map((soup: any) => (
+                        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-4">
+                            {menuData.todaysSoups?.map((soup: any) => (
                                 <MenuItem key={soup.id} item={soup} hideImage={false} />
                             ))}
                         </div>
@@ -276,7 +276,7 @@ export function MenuContent({ menuData, phone }: MenuContentProps) {
                                         </h3>
                                         <div className="flex-1 h-px bg-gold/10"></div>
                                     </div>
-                                    <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-8">
+                                    <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-4">
                                         {(items as any[]).map((item: any) => (
                                             <MenuItem
                                                 key={item.id}
@@ -304,7 +304,7 @@ export function MenuContent({ menuData, phone }: MenuContentProps) {
                                 Estes pratos requerem encomenda prévia (2+ dias). Perfeitos para grupos ou ocasiões especiais.
                             </p>
                         </div>
-                        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-8">
+                        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-4">
                             {filteredAdvanceOrder.map((item: any) => (
                                 <MenuItem key={item.id} item={item} />
                             ))}

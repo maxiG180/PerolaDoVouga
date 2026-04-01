@@ -51,14 +51,6 @@ export async function getTodaysMenuData() {
             .eq('date', today)
             .maybeSingle();
 
-        // 3. Get advance-order items
-        const { data: advanceOrderItems } = await (supabase
-            .from('menu_items')
-            .select('*, categories(name)')
-            .eq('availability_type', 'advance_order')
-            .eq('is_available', true)
-            .order('display_order') as any);
-
         if (todayPlanning?.soup) {
             todaysSoups.push(todayPlanning.soup);
         }
@@ -86,12 +78,26 @@ export async function getTodaysMenuData() {
             }
         });
 
+        const displayedIds = new Set<string>();
+        todaysSoups.forEach(s => displayedIds.add(s.id));
+        todaysPratos.forEach(p => displayedIds.add(p.id));
+
+        // 3. Get advance-order items and filter out any that are already in today's special sections
+        const { data: advanceOrderData } = await (supabase
+            .from('menu_items')
+            .select('*, categories(name)')
+            .eq('availability_type', 'advance_order')
+            .eq('is_available', true)
+            .order('display_order') as any);
+
+        const advanceOrderItems = (advanceOrderData || []).filter((item: any) => !displayedIds.has(item.id));
+
         return {
             alwaysAvailable: [], // HIDDEN per user request
             todaysSoup: todaysSoups[0] || null,
             todaysSoups: todaysSoups,
             todaysPratos: todaysPratos,
-            advanceOrderItems: advanceOrderItems || [],
+            advanceOrderItems: advanceOrderItems,
         };
     } catch (error) {
         console.error('Error fetching menu service:', error);
