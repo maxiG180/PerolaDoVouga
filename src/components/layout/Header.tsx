@@ -75,7 +75,7 @@ export function Header() {
 
             <div className={cn("container mx-auto px-4 flex items-center justify-between transition-all duration-300", isScrolled ? "py-2" : "py-3")}>
                 {/* Logo */}
-                <Link href="/" className="flex items-center gap-3 group">
+                <Link href="/" className="flex items-center gap-3 group cursor-pointer">
                     <div className="relative w-10 h-10 md:w-12 md:h-12 transition-transform group-hover:scale-110 duration-300">
                         <Image
                             src="/logo.png"
@@ -128,7 +128,7 @@ export function Header() {
                     <CartDrawer />
                     <LanguageSwitcher />
                     <button
-                        className="p-2 rounded-full text-stone-800 hover:bg-beige-100 transition-colors"
+                        className="p-2 rounded-full text-stone-800 hover:bg-beige-100 transition-colors cursor-pointer"
                         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                     >
                         {isMobileMenuOpen ? <X size={24} /> : <List size={24} />}
