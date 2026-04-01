@@ -71,12 +71,12 @@ export default function OrderConfirmationPage() {
 
                         <div className="pt-4 flex flex-col gap-3">
                             <Link href="/" className="block">
-                                <Button variant="gold" className="w-full h-14 rounded-2xl font-bold text-base shadow-lg shadow-gold/20 hover:scale-[1.02] transition-all">
+                                <Button variant="gold" className="w-full h-14 rounded-2xl font-bold text-base shadow-lg shadow-gold/20 hover:scale-[1.02] transition-all cursor-pointer">
                                     Voltar ao Início
                                 </Button>
                             </Link>
                             <Link href="/menu" className="block">
-                                <Button variant="ghost" className="w-full h-12 rounded-xl text-stone-500 hover:text-gold transition-colors font-medium">
+                                <Button variant="ghost" className="w-full h-12 rounded-xl text-stone-500 hover:text-gold transition-colors font-medium cursor-pointer">
                                     Fazer novo pedido
                                 </Button>
                             </Link>

@@ -89,7 +89,7 @@ export function MenuContent({ menuData, phone }: MenuContentProps) {
 
     // Group always available items by category
     const groupedAlwaysAvailable = filteredAlwaysAvailable.reduce((acc, item) => {
-        const categoryName = item.categories?.name || 'Outros'
+        const categoryName = item.categories?.name || 'Sugestão da Casa'
         if (!acc[categoryName]) {
             acc[categoryName] = []
         }
@@ -97,9 +97,8 @@ export function MenuContent({ menuData, phone }: MenuContentProps) {
         return acc
     }, {} as Record<string, any[]>)
 
-    // Group today's pratos by category
     const groupedTodaysPratos = filteredTodaysPratos.reduce((acc, item) => {
-        const categoryName = item.categories?.name || 'Outros'
+        const categoryName = item.categories?.name || 'Sugestão da Casa'
         if (!acc[categoryName]) {
             acc[categoryName] = []
         }
@@ -151,10 +150,11 @@ export function MenuContent({ menuData, phone }: MenuContentProps) {
 
                         return (
                             <button
+                                style={{ cursor: 'pointer' }}
                                 key={cat}
                                 onClick={() => setSelectedCategory(cat)}
                                 className={cn(
-                                    "flex flex-col items-center gap-2 group min-w-[80px] transition-all duration-300",
+                                    "flex flex-col items-center gap-2 group min-w-[80px] transition-all duration-300 cursor-pointer",
                                     isSelected ? "scale-110" : "opacity-60 hover:opacity-100"
                                 )}
                             >
@@ -215,7 +215,7 @@ export function MenuContent({ menuData, phone }: MenuContentProps) {
                                 <Button 
                                     variant="outline"
                                     size="lg"
-                                    className="rounded-full px-8 h-12 border-stone-200 text-stone-600 hover:bg-stone-50"
+                                    className="rounded-full px-8 h-12 border-stone-200 text-stone-600 hover:bg-stone-50 cursor-pointer"
                                     onClick={() => window.location.reload()}
                                 >
                                     Tentar Novamente
@@ -334,7 +334,7 @@ export function MenuContent({ menuData, phone }: MenuContentProps) {
                                 ></textarea>
                                 <Button 
                                     variant="gold" 
-                                    className="w-full rounded-full h-12 text-base font-bold shadow-lg shadow-gold/20"
+                                    className="w-full rounded-full h-12 text-base font-bold shadow-lg shadow-gold/20 cursor-pointer"
                                     onClick={() => {
                                         const text = (document.getElementById('custom-request-text') as HTMLTextAreaElement).value;
                                         if (!text.trim()) return;

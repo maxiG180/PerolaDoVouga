@@ -119,7 +119,7 @@ export function MenuItem({
                     </div>
                 </div>
 
-                <div className="flex items-center gap-2 mt-auto pt-2 relative z-[60]">
+                <div className="flex items-center gap-2 mt-auto pt-2 relative z-10">
                     <Button
                         onClick={() => {
                             console.log('Adding item:', item.id);
@@ -127,7 +127,7 @@ export function MenuItem({
                         }}
                         type="button"
                         className={cn(
-                            "flex-1 gap-1.5 transition-all duration-300 rounded-xl shadow-sm border-0 h-9 md:h-10 active:scale-95 cursor-pointer relative z-[60] pointer-events-auto",
+                            "flex-1 gap-1.5 transition-all duration-300 rounded-xl shadow-sm border-0 h-9 md:h-10 active:scale-95 cursor-pointer relative z-10 pointer-events-auto",
                             isAdded ? "bg-green-500 text-white" : "bg-stone-900 text-white hover:bg-gold",
                         )}
                     >
