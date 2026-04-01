@@ -1,7 +1,7 @@
 {
     "nav": {
         "home": "Home",
-        "menu": "Menu",
+        "menu": "Daily Menu / Orders",
         "about": "About Us",
         "contact": "Contact"
     },
@@ -9,8 +9,8 @@
         "welcome": "Family Atmosphere",
         "tagline": "Traditional Portuguese Cuisine",
         "description": "Typical dishes cooked with love and the best ingredients. A cozy space where you feel at home.",
-        "cta_menu": "See Menu",
-        "cta_about": "Our Menu",
+        "cta_menu": "Order / See Menu",
+        "cta_about": "Order Our Menu",
         "featured_title": "A Taste of Our Flavors",
         "featured_subtitle": "*These are examples only. Our daily menu varies based on fresh ingredients.*",
         "why_choose": "Why Choose Us",
@@ -40,7 +40,7 @@
         }
     },
     "menu": {
-        "title": "Our Menu",
+        "title": "Daily Menu / Orders",
         "subtitle": "Explore our selection of delicious dishes, prepared with fresh and local ingredients.",
         "search_placeholder": "Search dishes...",
         "all": "All",

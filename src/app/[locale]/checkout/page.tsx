@@ -19,6 +19,7 @@ const checkoutSchema = z.object({
     name: z.string().min(2, 'Nome é obrigatório'),
     email: z.string().email('Email inválido'),
     phone: z.string().min(9, 'Telefone inválido'),
+    pickupDate: z.string().min(1, 'Data de recolha é obrigatória'),
     pickupTime: z.string().min(1, 'Hora de recolha é obrigatória'),
     notes: z.string().optional(),
 })
@@ -30,8 +31,13 @@ export default function CheckoutPage() {
     const router = useRouter()
     const [isSubmitting, setIsSubmitting] = useState(false)
 
+    const todayDate = new Date().toISOString().split('T')[0]
+
     const { register, handleSubmit, formState: { errors } } = useForm<CheckoutForm>({
         resolver: zodResolver(checkoutSchema),
+        defaultValues: {
+            pickupDate: todayDate,
+        }
     })
 
     const onSubmit = async (data: CheckoutForm) => {
@@ -111,10 +117,18 @@ export default function CheckoutPage() {
                                         {errors.phone && <span className="text-red-500 text-xs">{errors.phone.message}</span>}
                                     </div>
 
-                                    <div>
-                                        <label className="text-sm font-medium mb-1 block">Hora de Recolha</label>
-                                        <Input {...register('pickupTime')} type="time" />
-                                        {errors.pickupTime && <span className="text-red-500 text-xs">{errors.pickupTime.message}</span>}
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label className="text-sm font-medium mb-1 block">Data de Recolha</label>
+                                            <Input {...register('pickupDate')} type="date" min={todayDate} />
+                                            {errors.pickupDate && <span className="text-red-500 text-xs">{errors.pickupDate.message}</span>}
+                                        </div>
+
+                                        <div>
+                                            <label className="text-sm font-medium mb-1 block">Hora de Recolha</label>
+                                            <Input {...register('pickupTime')} type="time" />
+                                            {errors.pickupTime && <span className="text-red-500 text-xs">{errors.pickupTime.message}</span>}
+                                        </div>
                                     </div>
 
                                     <div>

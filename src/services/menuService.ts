@@ -91,7 +91,7 @@ export async function getTodaysMenuData() {
             todaysSoup: todaysSoups[0] || null,
             todaysSoups: todaysSoups,
             todaysPratos: todaysPratos,
-            advanceOrderItems: [], // HIDDEN per user request
+            advanceOrderItems: advanceOrderItems || [],
         };
     } catch (error) {
         console.error('Error fetching menu service:', error);

@@ -2,6 +2,8 @@
 
 import { useState } from 'react'
 import { MenuItem } from './MenuItem'
+import { useCartStore } from '@/stores/cart-store'
+import { toast } from 'sonner'
 import {
     Clock,
     Calendar,
@@ -68,9 +70,8 @@ export function MenuContent({ menuData, phone }: MenuContentProps) {
     const hasSoups = menuData.todaysSoups && menuData.todaysSoups.length > 0;
     if (hasSoups || menuData.todaysSoup) allCategories.add('Sopa do Dia')
     if (menuData.todaysPratos.length > 0) allCategories.add('Pratos do Dia')
-
-    // Hid common static categories for now
-    // if (menuData.advanceOrderItems.length > 0) allCategories.add('Sob Encomenda')
+    if (menuData.advanceOrderItems.length > 0) allCategories.add('Sob Encomenda')
+    allCategories.add('Outra Data')
 
     const categoriesList = Array.from(allCategories)
 
@@ -272,19 +273,84 @@ export function MenuContent({ menuData, phone }: MenuContentProps) {
                                         </h3>
                                         <div className="flex-1 h-px bg-gold/10"></div>
                                     </div>
-                                <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-8">
-                                    {(items as any[]).map((item: any) => (
-                                        <MenuItem
-                                            key={item.id}
-                                            item={item}
-                                            hideImage={isDrinkCategory(categoryName)}
-                                            quantityRemaining={item.quantity_remaining}
-                                            isSoldOut={item.is_sold_out}
-                                        />
-                                    ))}
+                                    <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-8">
+                                        {(items as any[]).map((item: any) => (
+                                            <MenuItem
+                                                key={item.id}
+                                                item={item}
+                                                hideImage={isDrinkCategory(categoryName)}
+                                                quantityRemaining={item.quantity_remaining}
+                                                isSoldOut={item.is_sold_out}
+                                            />
+                                        ))}
+                                    </div>
                                 </div>
+                            ))}
+                    </section>
+                )}
+
+                {/* Advance Order Items */}
+                {menuData.advanceOrderItems.length > 0 && shouldShowSection('Sob Encomenda') && (
+                    <section className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                        <div className="flex flex-col items-center gap-2 text-center">
+                            <div className="w-12 h-12 rounded-2xl bg-gold/10 flex items-center justify-center mb-2">
+                                <Calendar className="w-6 h-6 text-gold" />
                             </div>
-                        ))}
+                            <h2 className="text-3xl font-serif font-bold text-stone-900 tracking-tight">Sob Encomenda</h2>
+                            <p className="text-stone-500 text-sm max-w-sm mx-auto">
+                                Estes pratos requerem encomenda prévia (2+ dias). Perfeitos para grupos ou ocasiões especiais.
+                            </p>
+                        </div>
+                        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-8">
+                            {filteredAdvanceOrder.map((item: any) => (
+                                <MenuItem key={item.id} item={item} />
+                            ))}
+                        </div>
+                    </section>
+                )}
+
+                {/* Custom Request Section */}
+                {shouldShowSection('Outra Data') && (
+                    <section className="max-w-3xl mx-auto pt-8 scroll-mt-24" id="custom-order">
+                        <div className="bg-white border-2 border-dashed border-gold/30 rounded-[2.5rem] p-8 md:p-12 text-center space-y-6 shadow-sm hover:shadow-md transition-all">
+                            <div className="w-16 h-16 bg-gold/5 rounded-2xl flex items-center justify-center mx-auto">
+                                <Calendar className="w-8 h-8 text-gold" />
+                            </div>
+                            <div className="space-y-2">
+                                <h3 className="text-2xl font-serif font-bold text-stone-800">Pedido para Amanhã ou Personalizado</h3>
+                                <p className="text-stone-500 max-w-md mx-auto">
+                                    Não encontrou o que queria no menu de hoje? Quer encomendar algo específico para amanhã ou outro dia?
+                                </p>
+                            </div>
+                            
+                            <div className="max-w-md mx-auto space-y-4">
+                                <textarea 
+                                    className="w-full rounded-2xl border-stone-200 focus:border-gold focus:ring-gold/20 min-h-[100px] p-4 text-sm"
+                                    placeholder="Ex: Gostava de encomendar 2 doses de Bacalhau à Brás para amanhã às 13:00..."
+                                    id="custom-request-text"
+                                ></textarea>
+                                <Button 
+                                    variant="gold" 
+                                    className="w-full rounded-full h-12 text-base font-bold shadow-lg shadow-gold/20"
+                                    onClick={() => {
+                                        const text = (document.getElementById('custom-request-text') as HTMLTextAreaElement).value;
+                                        if (!text.trim()) return;
+                                        
+                                        useCartStore.getState().addItem({
+                                            menuItemId: 'custom-request',
+                                            name: `Pedido Especial: ${text}`,
+                                            price: 0,
+                                            quantity: 1
+                                        });
+
+                                        toast.success('Pedido especial adicionado ao carrinho!');
+                                        (document.getElementById('custom-request-text') as HTMLTextAreaElement).value = '';
+                                    }}
+                                >
+                                    Adicionar ao Pedido
+                                </Button>
+                            </div>
+                        </div>
                     </section>
                 )}
 

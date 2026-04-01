@@ -1,7 +1,7 @@
 {
     "nav": {
         "home": "Início",
-        "menu": "Menu",
+        "menu": "Menu do Dia / Pedidos",
         "about": "Sobre Nós",
         "contact": "Contactos"
     },
@@ -9,8 +9,8 @@
         "welcome": "Ambiente Familiar",
         "tagline": "Comida Tradicional Portuguesa",
         "description": "Pratos típicos cozinhados com amor e os melhores ingredientes. Um espaço acolhedor onde se sente em casa.",
-        "cta_menu": "Ver Menu",
-        "cta_about": "O Nosso Menu",
+        "cta_menu": "Ver Menu / Encomendar",
+        "cta_about": "Encomendar Nosso Menu",
         "featured_title": "Alguns dos Nossos Sabores",
         "featured_subtitle": "*Estes são apenas exemplos. O nosso menu de hoje varia diariamente com ingredientes frescos.*",
         "why_choose": "Porquê Escolher-nos",
@@ -40,7 +40,7 @@
         }
     },
     "menu": {
-        "title": "O Nosso Menu",
+        "title": "Menu do Dia / Pedidos",
         "subtitle": "Explore a nossa seleção de pratos deliciosos, preparados com ingredientes frescos e locais.",
         "search_placeholder": "Pesquisar pratos...",
         "all": "Todos",

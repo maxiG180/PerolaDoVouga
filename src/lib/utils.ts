@@ -6,6 +6,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function formatPrice(price: number) {
+    if (price === 0) return 'Preço a confirmar'
     return new Intl.NumberFormat('pt-PT', {
         style: 'currency',
         currency: 'EUR',
