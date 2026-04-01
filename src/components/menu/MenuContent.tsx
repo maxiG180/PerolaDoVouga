@@ -243,7 +243,11 @@ export function MenuContent({ menuData, phone }: MenuContentProps) {
                             
                             <div className="max-w-md mx-auto space-y-4">
                                 <textarea 
-                                    className="w-full rounded-2xl border-stone-200 focus:border-gold focus:ring-gold/20 min-h-[100px] p-4 text-sm"
+                                    className={cn(
+                                        "w-full rounded-2xl p-4 text-sm min-h-[120px] transition-all",
+                                        "bg-stone-50 border-2 border-stone-200 focus:border-gold focus:ring-2 focus:ring-gold/10",
+                                        "placeholder:text-stone-400 text-stone-800 shadow-inner"
+                                    )}
                                     placeholder="Ex: Gostava de encomendar 2 doses de Bacalhau à Brás para amanhã às 13:00..."
                                     id="custom-request-text"
                                 ></textarea>
