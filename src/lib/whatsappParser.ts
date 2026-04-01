@@ -33,7 +33,7 @@ export function parseWhatsAppMenu(text: string): ParsedMenuItem[] {
         if (/🍲 Sopas/i.test(line)) { currentCategory = 'Sopas'; isInCategoryPratoDoDia = false; continue; }
         if (/🐟 Peixe/i.test(line)) { currentCategory = 'Peixe'; isInCategoryPratoDoDia = false; continue; }
         if (/🥩 Carne/i.test(line)) { currentCategory = 'Carne'; isInCategoryPratoDoDia = false; continue; }
-        if (/🍖 Outras Sugestões/i.test(line)) { currentCategory = 'Carne'; isInCategoryPratoDoDia = false; continue; }
+        if (/🍖 Outras Sugestões/i.test(line)) { currentCategory = 'Sugestões de Carne'; isInCategoryPratoDoDia = false; continue; }
         
         if (/⭐ Prato do Dia/i.test(line)) {
             isInCategoryPratoDoDia = true;

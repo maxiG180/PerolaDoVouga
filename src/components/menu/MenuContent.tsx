@@ -48,8 +48,15 @@ const CATEGORY_ICONS: Record<string, any> = {
     'Cervejas': Beer,
     'Snacks': Sandwich,
     'Sandes': Sandwich,
+    'Sugestões de Carne': Utensils,
     'Gelados': IceCream,
     'Outros': Utensils
+}
+
+const CATEGORY_ORDER = ['Sopas', 'Peixe', 'Carne', 'Sugestões de Carne']
+const getCategoryPriority = (name: string) => {
+    const idx = CATEGORY_ORDER.indexOf(name)
+    return idx === -1 ? 999 : idx
 }
 
 export function MenuContent({ menuData, phone }: MenuContentProps) {
@@ -232,7 +239,7 @@ export function MenuContent({ menuData, phone }: MenuContentProps) {
                                 <div className="h-px w-8 bg-gold/30"></div>
                             </div>
                         </div>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-8">
+                        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-8">
                             {(menuData.todaysSoups || [menuData.todaysSoup]).filter(Boolean).map((soup: any) => (
                                 <MenuItem key={soup.id} item={soup} hideImage={false} />
                             ))}
@@ -255,15 +262,17 @@ export function MenuContent({ menuData, phone }: MenuContentProps) {
                             </div>
                         </div>
 
-                        {Object.entries(groupedTodaysPratos).map(([categoryName, items]) => (
-                            <div key={categoryName} className="space-y-6">
-                                <div className="flex items-center gap-3">
-                                    <h3 className="text-sm font-bold text-stone-400 uppercase tracking-[0.2em]">
-                                        {categoryName}
-                                    </h3>
-                                    <div className="flex-1 h-px bg-stone-100"></div>
-                                </div>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-8">
+                        {Object.entries(groupedTodaysPratos)
+                            .sort(([a], [b]) => getCategoryPriority(a) - getCategoryPriority(b))
+                            .map(([categoryName, items]) => (
+                                <div key={categoryName} className="space-y-6 pt-4">
+                                    <div className="flex items-center gap-3">
+                                        <h3 className="text-sm font-bold text-gold-dark uppercase tracking-[0.2em]">
+                                            {categoryName}
+                                        </h3>
+                                        <div className="flex-1 h-px bg-gold/10"></div>
+                                    </div>
+                                <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-8">
                                     {(items as any[]).map((item: any) => (
                                         <MenuItem
                                             key={item.id}

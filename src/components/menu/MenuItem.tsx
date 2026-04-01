@@ -63,7 +63,7 @@ export function MenuItem({
                 hideImage ? "hover:-translate-y-0.5" : ""
             )}>
                 {!hideImage && (
-                    <div className="relative h-48 lg:h-52 overflow-hidden shrink-0">
+                    <div className="relative h-32 md:h-48 lg:h-52 overflow-hidden shrink-0">
                         {item.image_url ? (
                             <Image
                                 src={item.image_url}
@@ -103,21 +103,17 @@ export function MenuItem({
                     </div>
                 )}
 
-                <div className={cn("flex flex-col p-5", hideImage ? "p-4" : "")}>
+                <div className={cn("flex flex-col p-3 md:p-5", hideImage ? "p-3" : "")}>
                     <div className="flex justify-between items-start mb-2 gap-3">
-                        <h3 className={cn("font-serif font-bold text-stone-800 leading-tight group-hover:text-gold transition-colors duration-300", hideImage ? "text-base" : "text-xl")}>
+                        <h3 className={cn("font-serif font-bold text-stone-800 leading-tight group-hover:text-gold transition-colors duration-300", hideImage ? "text-xs md:text-sm" : "text-sm md:text-xl")}>
                             {item.name}
                         </h3>
                         <div className="flex flex-col items-end">
-                            <span className="text-lg md:text-xl font-bold text-gold-dark tracking-tight">{formatPrice(item.price)}</span>
+                            <span className="text-sm md:text-xl font-bold text-gold-dark tracking-tight">{formatPrice(item.price)}</span>
                         </div>
                     </div>
 
-                    {!hideImage && (
-                        <p className="text-sm text-stone-500/80 leading-relaxed line-clamp-2 mb-6 min-h-[2.5rem] flex-grow font-medium">
-                            {item.description || 'Sabores tradicionais preparados diariamente com os melhores ingredientes.'}
-                        </p>
-                    )}
+                    {/* Description removed for simplicity as requested */}
 
                     {/* Advance Order Info */}
                     {advanceNotice && (
@@ -141,17 +137,14 @@ export function MenuItem({
                             disabled={!item.is_available || isSoldOut}
                             className={cn(
                                 "flex-1 gap-2 bg-stone-900 text-white hover:bg-gold hover:text-white transition-all duration-500 rounded-2xl shadow-sm hover:shadow-xl border-0 h-11 active:scale-95",
-                                hideImage ? "h-9 text-xs" : ""
+                                hideImage ? "h-9 px-2" : ""
                             )}
                         >
-                            <Plus className={cn("w-4 h-4", hideImage ? "w-3 h-3" : "")} />
-                            {hideImage ? "Adicionar" : "Adicionar ao Pedido"}
+                            <Plus className={cn("w-3 h-3 md:w-4 md:h-4")} />
+                            <span className="text-[10px] md:text-sm font-bold uppercase tracking-wider">
+                                {hideImage ? "Add" : "Adicionar"}
+                            </span>
                         </Button>
-                        {!hideImage && (
-                            <div className="w-11 h-11 flex items-center justify-center bg-stone-100/50 rounded-2xl group-hover:bg-gold/10 group-hover:text-gold transition-colors duration-300 cursor-pointer">
-                                <ArrowUpRight className="w-5 h-5 opacity-40 group-hover:opacity-100" />
-                            </div>
-                        )}
                     </div>
                 </div>
             </Card>
