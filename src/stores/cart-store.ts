@@ -38,7 +38,8 @@ export const useCartStore = create<CartStore>()(
                             ),
                         }
                     }
-                    return { items: [...state.items, { ...newItem, id: crypto.randomUUID() }] }
+                    const id = typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2, 9)
+                    return { items: [...state.items, { ...newItem, id }] }
                 })
             },
             removeItem: (id) =>
