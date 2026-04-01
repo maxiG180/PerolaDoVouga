@@ -1,11 +1,15 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { getLocalDate } from '@/lib/utils';
+
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
     try {
         const supabase = await createClient() as any;
         const today = getLocalDate();
+        const todaysSoups: any[] = [];
+        const todaysPratos: any[] = [];
 
         // 1. Get always-available items
         const { data: alwaysAvailable } = await supabase
@@ -49,20 +53,20 @@ export async function GET() {
             .maybeSingle();
 
         // 3. Get advance-order items
-        const { data: advanceOrderItems } = await supabase
+        const { data: advanceOrderItems } = await (supabase
             .from('menu_items')
             .select('*, categories(name)')
             .eq('availability_type', 'advance_order')
             .eq('is_available', true)
-            .order('display_order');
+            .order('display_order') as any);
 
-        const todaysSoups = [];
         if (todayPlanning?.soup) {
             todaysSoups.push(todayPlanning.soup);
         }
 
-        const todaysPratos: any[] = [];
         todayPlanning?.daily_menu_items?.forEach((item: any) => {
+            if (!item.menu_items) return;
+
             const menuItem = {
                 ...item.menu_items,
                 quantity_available: item.quantity_available,
@@ -73,9 +77,8 @@ export async function GET() {
                     : null,
             };
 
-            if (item.menu_items?.daily_type === 'soup') {
-                // If it's not already the primary soup, add it to soups
-                if (item.menu_item_id !== todayPlanning.soup_id) {
+            if (item.menu_item_id === todayPlanning.soup_id || item.menu_items?.daily_type === 'soup') {
+                if (!todaysSoups.find(s => s.id === menuItem.id)) {
                     todaysSoups.push(menuItem);
                 }
             } else {

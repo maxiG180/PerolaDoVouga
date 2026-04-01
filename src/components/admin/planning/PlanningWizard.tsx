@@ -184,9 +184,16 @@ export function PlanningWizard() {
 
                 if (existing) {
                     menuItem = existing;
-                    // Update price if it changed, and sync emoji if missing
                     const updates: any = {};
                     if (existing.price !== item.price) updates.price = item.price;
+                    
+                    // CRITICAL: Ensure existing item is marked as soup/dish so it shows in the planner and website
+                    const correctDailyType = item.category === 'Sopas' ? 'soup' : 'dish';
+                    if (existing.daily_type !== correctDailyType) {
+                        updates.daily_type = correctDailyType;
+                        updates.is_available = true;
+                    }
+
                     if (!existing.image_url && item.emoji && !existing.name.includes(item.emoji)) {
                         updates.name = `${item.emoji} ${existing.name}`;
                     }
