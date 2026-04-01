@@ -9,10 +9,13 @@ import { toast } from 'sonner'
 import { Loader2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Label } from '@/components/ui/label'
 
 export default function AdminLoginPage() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [rememberMe, setRememberMe] = useState(false)
     const [loading, setLoading] = useState(false)
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const router = useRouter()
@@ -20,6 +23,12 @@ export default function AdminLoginPage() {
     const t = useTranslations('admin.login')
 
     useEffect(() => {
+        const savedEmail = localStorage.getItem('admin_email');
+        if (savedEmail) {
+            setEmail(savedEmail);
+            setRememberMe(true);
+        }
+
         const checkSession = async () => {
             const { data: { session } } = await supabase.auth.getSession()
             if (session) {
@@ -41,9 +50,15 @@ export default function AdminLoginPage() {
 
             if (error) throw error
 
+            if (rememberMe) {
+                localStorage.setItem('admin_email', email);
+            } else {
+                localStorage.removeItem('admin_email');
+            }
+
             toast.success(t('success'))
             router.refresh()
-            router.push('/admin/home')
+            router.push('/admin/planning')
         } catch (error: any) {
             toast.error(t('error'))
         } finally {
@@ -125,15 +140,18 @@ export default function AdminLoginPage() {
                             required
                         />
                     </div>
-                    <div>
-                        <label className="block text-sm font-medium mb-1">{t('password_label')}</label>
-                        <Input
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            placeholder="••••••••"
-                            required
+                    <div className="flex items-center space-x-2 py-1">
+                        <Checkbox 
+                            id="remember" 
+                            checked={rememberMe} 
+                            onCheckedChange={(checked) => setRememberMe(checked as boolean)}
                         />
+                        <Label 
+                            htmlFor="remember" 
+                            className="text-sm font-medium leading-none cursor-pointer text-muted-foreground hover:text-primary-900 transition-colors"
+                        >
+                            Lembrar meu email neste navegador
+                        </Label>
                     </div>
                     <button
                         type="submit"

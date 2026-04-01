@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { UtensilsCrossed, LogOut, Home, Settings, CalendarDays, ExternalLink, Receipt, ShoppingCart, TrendingUp, Menu, MessageCircle } from 'lucide-react'
+import { UtensilsCrossed, LogOut, Home, Settings, CalendarDays, ExternalLink, Receipt, ShoppingCart, TrendingUp, Menu, MessageCircle, BarChart3 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { useState } from 'react'
@@ -10,10 +10,10 @@ import { cn } from '@/lib/utils'
 import Image from 'next/image'
 
 const navItems = [
-    { href: '/admin/home', label: 'Painel', icon: Home },
+    { href: '/admin/planning', label: 'Planeamento', icon: CalendarDays },
+    { href: '/admin/home', label: 'Estatísticas', icon: TrendingUp },
     { href: '/admin/expenses', label: 'Despesas', icon: Receipt },
-    { href: '/admin/margins', label: 'Margens', icon: TrendingUp },
-    { href: '/admin/chat', label: 'Chat', icon: MessageCircle },
+    { href: '/admin/margins', label: 'Margens', icon: BarChart3 },
 ]
 
 // Mobile bottom nav (limited to 3 + More button)

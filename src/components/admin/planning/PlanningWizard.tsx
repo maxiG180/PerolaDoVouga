@@ -15,10 +15,11 @@ import {
     PopoverTrigger,
     PopoverClose,
 } from '@/components/ui/popover'
-import { Loader2, Save, Copy, ArrowRight, Check, X, MessageSquare } from 'lucide-react'
+import { Loader2, Save, Copy, ArrowRight, Check, X, MessageSquare, Wand2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import Image from 'next/image'
-import { WhatsAppImportDialog } from './WhatsAppImportDialog'
+import { parseWhatsAppMenu, ParsedMenuItem } from '@/lib/whatsappParser'
+import { Textarea } from '@/components/ui/textarea'
 
 interface MenuItem {
     id: string
@@ -38,8 +39,9 @@ export function PlanningWizard() {
     const [notes, setNotes] = useState<string>('')
     const [loading, setLoading] = useState(true)
     const [saving, setSaving] = useState(false)
-    const [step, setStep] = useState(1) // 1: Soup, 2: Dishes, 3: Review
     const [isWhatsAppDialogOpen, setIsWhatsAppDialogOpen] = useState(false)
+    const [importText, setImportText] = useState('')
+    const [isImporting, setIsImporting] = useState(false)
 
     const supabase = createClient()
 
@@ -135,30 +137,101 @@ export function PlanningWizard() {
         }
     }
 
-    const handleImportedFromWhatsApp = (importedSoups: any[], importedDishes: any[]) => {
-        // Update state with imported items
-        if (importedSoups.length > 0) {
-            setSelectedSoup(importedSoups[0].id)
-            // Add other soups as regular dishes (but they will be filtered as soups in API)
-            const otherSoupIds = importedSoups.slice(1).map(s => s.id)
-            setSelectedDishes(prev => Array.from(new Set([...prev, ...otherSoupIds, ...importedDishes.map(d => d.id)])))
-        } else {
-            setSelectedDishes(prev => Array.from(new Set([...prev, ...importedDishes.map(d => d.id)])))
-        }
-        
-        // Add new items to local lists so they appear in selection
-        const allNewItems = [...importedSoups, ...importedDishes]
-        allNewItems.forEach(item => {
-            if (item.daily_type === 'soup') {
-                if (!soups.find(s => s.id === item.id)) setSoups(prev => [item, ...prev])
-            } else {
-                if (!dishes.find(d => d.id === item.id)) setDishes(prev => [item, ...prev])
+    const handleDirectImport = async () => {
+        if (!importText.trim()) return;
+        setIsImporting(true);
+        try {
+            const parsedItems = parseWhatsAppMenu(importText);
+            if (parsedItems.length === 0) {
+                toast.error('Não foram encontrados pratos no texto.');
+                return;
             }
-        })
 
-        toast.success(`Importados ${importedSoups.length} sopas e ${importedDishes.length} pratos.`)
-        setStep(3) // Jump to review
-    }
+            const finalSoups: any[] = [];
+            const finalDishes: any[] = [];
+
+            // Optimized bulk check/create
+            for (const item of parsedItems) {
+                const { data: existing } = await (supabase
+                    .from('menu_items')
+                    .select('*')
+                    .ilike('name', item.name)
+                    .maybeSingle() as any);
+
+                let menuItem: any;
+
+                if (existing) {
+                    menuItem = existing;
+                    if (existing.price !== item.price) {
+                        const { data: updated } = await (supabase
+                            .from('menu_items') as any)
+                            .update({ price: item.price, description: item.description || existing.description })
+                            .eq('id', existing.id)
+                            .select()
+                            .single();
+                        if (updated) menuItem = updated;
+                    }
+                } else {
+                    const { data: catData } = await (supabase
+                        .from('categories')
+                        .select('id')
+                        .ilike('name', item.category === 'Sopas' ? 'Sopas' : (item.category === 'Peixe' ? 'Peixe' : 'Carne'))
+                        .maybeSingle() as any);
+
+                    const { data: newItem, error } = await (supabase
+                        .from('menu_items') as any)
+                        .insert({
+                            name: item.name,
+                            price: item.price,
+                            description: item.description || null,
+                            category_id: catData?.id || null,
+                            daily_type: item.category === 'Sopas' ? 'soup' : 'dish',
+                            cuisine_type: item.cuisineType,
+                            is_available: true,
+                            is_always_available: false,
+                        })
+                        .select()
+                        .single();
+
+                    if (error) throw error;
+                    menuItem = newItem;
+                }
+
+                if (item.category === 'Sopas') {
+                    finalSoups.push(menuItem);
+                } else {
+                    finalDishes.push(menuItem);
+                }
+            }
+
+            // Update local state
+            if (finalSoups.length > 0) {
+                setSelectedSoup(finalSoups[0].id);
+                const otherSoupIds = finalSoups.slice(1).map(s => s.id);
+                setSelectedDishes(prev => Array.from(new Set([...prev, ...otherSoupIds, ...finalDishes.map(d => d.id)])));
+            } else {
+                setSelectedDishes(prev => Array.from(new Set([...prev, ...finalDishes.map(d => d.id)])));
+            }
+
+            // Add to local selection lists
+            const allNewItems = [...finalSoups, ...finalDishes];
+            allNewItems.forEach(item => {
+                if (item.daily_type === 'soup') {
+                    if (!soups.find(s => s.id === item.id)) setSoups(prev => [item, ...prev]);
+                } else {
+                    if (!dishes.find(d => d.id === item.id)) setDishes(prev => [item, ...prev]);
+                }
+            });
+
+            toast.success(`Importado com sucesso! (${allNewItems.length} itens)`);
+            setImportText('');
+        } catch (error) {
+            console.error('Error importing:', error);
+            toast.error('Erro ao processar o texto.');
+        } finally {
+            setIsImporting(false);
+        }
+    };
 
     const toggleDish = (id: string) => {
         if (selectedDishes.includes(id)) {
@@ -200,21 +273,13 @@ export function PlanningWizard() {
                     </Popover>
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
-                    <Button variant="outline" onClick={copyFromYesterday} className="w-full sm:w-auto">
+                <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+                    <Button variant="outline" onClick={copyFromYesterday} className="w-full sm:w-auto px-6">
                         <Copy className="w-4 h-4 mr-2" />
                         Copiar de Ontem
                     </Button>
-                    <Button 
-                        variant="outline" 
-                        onClick={() => setIsWhatsAppDialogOpen(true)} 
-                        className="w-full sm:w-auto border-green-200 hover:bg-green-50 text-green-700"
-                    >
-                        <MessageSquare className="w-4 h-4 mr-2" />
-                        Importar WhatsApp
-                    </Button>
                     <Button
-                        className="bg-[#D4AF37] hover:bg-[#B39226] text-white w-full sm:w-auto"
+                        className="bg-gold hover:bg-gold-dark text-white w-full sm:w-auto px-8 shadow-lg shadow-gold/20"
                         onClick={handleSave}
                         disabled={saving}
                     >
@@ -224,10 +289,36 @@ export function PlanningWizard() {
                 </div>
             </div>
 
+            {/* Quick Import Section */}
+            <Card className="border-gold/30 bg-gold/5 shadow-sm overflow-hidden">
+                <CardHeader className="bg-white/50 border-b border-gold/10 py-3">
+                    <CardTitle className="text-sm font-bold flex items-center gap-2 text-gold-dark">
+                        <Wand2 className="w-4 h-4" />
+                        Importação Rápida (Cole o Menu aqui)
+                    </CardTitle>
+                </CardHeader>
+                <CardContent className="p-4 space-y-4">
+                    <Textarea 
+                        placeholder="Cole aqui o texto do WhatsApp ou qualquer lista com preços (Ex: Bacalhau - 12,50€)"
+                        className="min-h-[120px] bg-white border-gold/20 focus:border-gold transition-colors text-sm"
+                        value={importText}
+                        onChange={(e) => setImportText(e.target.value)}
+                    />
+                    <Button 
+                        onClick={handleDirectImport} 
+                        disabled={isImporting || !importText.trim()}
+                        className="w-full bg-gold hover:bg-gold-dark text-white font-bold"
+                    >
+                        {isImporting ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Check className="w-4 h-4 mr-2" />}
+                        Processar e Identificar Pratos
+                    </Button>
+                </CardContent>
+            </Card>
+
             {/* Steps */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Step 1: Soup */}
-                <Card className={cn("border-2 transition-all", step === 1 ? "border-[#D4AF37] shadow-md" : "border-gray-200")}>
+                <Card className="border-gray-200 shadow-sm transition-all hover:border-gold/50">
                     <CardHeader className="flex flex-row items-center justify-between">
                         <CardTitle className="flex items-center gap-2">
                             <span className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 text-sm font-bold">1</span>
@@ -263,7 +354,7 @@ export function PlanningWizard() {
                 </Card>
 
                 {/* Step 2: Dishes */}
-                <Card className={cn("border-2 transition-all", step === 2 ? "border-[#D4AF37] shadow-md" : "border-gray-200")}>
+                <Card className="border-gray-200 shadow-sm transition-all hover:border-gold/50">
                     <CardHeader className="flex flex-row items-center justify-between">
                         <CardTitle className="flex items-center gap-2">
                             <span className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 text-sm font-bold">2</span>
@@ -323,11 +414,6 @@ export function PlanningWizard() {
                 </CardContent>
             </Card>
 
-            <WhatsAppImportDialog 
-                isOpen={isWhatsAppDialogOpen}
-                onOpenChangeAction={setIsWhatsAppDialogOpen}
-                onImportedAction={handleImportedFromWhatsApp}
-            />
         </div >
     )
 }
