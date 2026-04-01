@@ -31,8 +31,35 @@ export default function DailyPlanningPage() {
 
     useEffect(() => {
         // Set default date to today
-        setSelectedDate(getLocalDate());
+        const today = getLocalDate();
+        setSelectedDate(today);
+        fetchPlanning(today);
     }, []);
+
+    useEffect(() => {
+        if (selectedDate) {
+            fetchPlanning(selectedDate);
+        }
+    }, [selectedDate]);
+
+    const fetchPlanning = async (date: string) => {
+        try {
+            const res = await fetch(`/api/admin/daily-planning?date=${date}`);
+            const data = await res.json();
+
+            if (data.planning) {
+                setSelectedSoup(data.planning.soup);
+                setSelectedPratos(data.planning.daily_menu_items?.map((item: any) => item.menu_items) || []);
+                setNotes(data.planning.notes || '');
+            } else {
+                setSelectedSoup(null);
+                setSelectedPratos([]);
+                setNotes('');
+            }
+        } catch (error) {
+            console.error('Error fetching planning:', error);
+        }
+    };
 
     useEffect(() => {
         if (soupSearch.length > 0) {

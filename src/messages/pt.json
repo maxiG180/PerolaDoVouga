@@ -11,18 +11,18 @@
         "description": "Pratos típicos cozinhados com amor e os melhores ingredientes. Um espaço acolhedor onde se sente em casa.",
         "cta_menu": "Menu do Dia / Encomendar",
         "cta_about": "Menu do Dia",
-        "featured_title": "Alguns dos Nossos Sabores",
-        "featured_subtitle": "*Estes são apenas exemplos. O nosso menu de hoje varia diariamente com ingredientes frescos.*",
-        "why_choose": "Porquê Escolher-nos",
-        "why_choose_subtitle": "Três razões que fazem da Pérola do Vouga o seu destino gastronómico preferido",
+        "featured_title": "A Nossa Cozinha",
+        "featured_subtitle": "*Estes pratos são exemplos da nossa versatilidade. A ementa do dia é preparada com os produtos mais frescos do mercado.*",
+        "why_choose": "Tradição & Alma",
+        "why_choose_subtitle": "O que nos torna o destino favorito para o seu almoço",
         "visit_us": "Visite-nos",
         "waiting_for_you": "Venha conhecer-nos",
         "visit_description": "Somos uma tasca de bairro em Lisboa. Boa comida, ambiente simples, pessoas genuínas.",
         "roots": {
-            "subtitle": "Tradição Familiar",
-            "title": "Sabores que nos Unem",
-            "description1": "A Pérola do Vouga nasceu com o objetivo de servir o melhor da gastronomia tradicional portuguesa num ambiente que o faz sentir-se em casa.",
-            "description2": "Ingredientes frescos, receitas de família e o carinho em cada prato."
+            "subtitle": "Mais de 20 anos de história",
+            "title": "Tradição no Prato",
+            "description1": "A Pérola do Vouga nasceu para servir o melhor da gastronomia tradicional portuguesa, num ambiente que o faz sentir-se em casa.",
+            "description2": "Ingredientes frescos, receitas de família e a alma da cozinha lusa em cada prato."
         },
         "features": {
             "authentic": {
@@ -41,7 +41,7 @@
     },
     "menu": {
         "title": "Menu do Dia / Encomendar",
-        "subtitle": "Explore a nossa seleção de pratos deliciosos, preparados com ingredientes frescos e locais.",
+        "subtitle": "Pratos preparados diariamente com os melhores produtos da época.",
         "search_placeholder": "Pesquisar pratos...",
         "all": "Todos",
         "daily_special": "Prato do Dia",

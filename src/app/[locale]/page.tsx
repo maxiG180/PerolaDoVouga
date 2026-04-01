@@ -126,12 +126,12 @@ export default async function Home() {
                     <div className="container mx-auto px-4 text-center">
                         <Badge className="bg-gold text-white mb-4 hover:bg-gold text-lg py-1 px-4">{locale === 'pt' ? 'Serviço Disponível' : 'Service Available'}</Badge>
                         <h2 className="text-3xl md:text-4xl font-serif font-bold text-white mb-4">
-                            {locale === 'pt' ? 'Almoços Take-Away & Encomendas' : 'Take-Away Lunches & Orders'}
+                            {locale === 'pt' ? 'Encomendas Online Já Disponíveis' : 'Online Ordering Now Available'}
                         </h2>
                         <p className="text-stone-300 text-lg max-w-2xl mx-auto">
                             {locale === 'pt'
-                                ? 'Já fazemos almoços take-away todos os dias! Estamos também a preparar o nosso sistema de encomendas online completo para sua maior conveniência.'
-                                : 'We now serve take-away lunches every day! We are also preparing our full online ordering system for your convenience.'}
+                                ? 'Já pode encomendar o seu almoço favorito online! Simples, rápido e pronto para levantar no restaurante.'
+                                : 'You can now order your favorite lunch online! Simple, fast, and ready to pick up at the restaurant.'}
                         </p>
                     </div>
                 </section>

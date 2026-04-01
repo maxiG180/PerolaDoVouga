@@ -127,7 +127,29 @@ export function MenuContent({ menuData, phone }: MenuContentProps) {
         ['Cafetaria', 'Bebidas', 'Vinhos', 'Cervejas', 'Refrigerantes', 'Águas'].includes(category)
 
     return (
-        <div className="space-y-8">
+        <div className="space-y-0">
+            {/* Menu Hero Section */}
+            <div className="relative h-[40vh] min-h-[300px] mb-12 -mt-24 -mx-4 md:-mx-8 overflow-hidden">
+                <img 
+                    src="/portuguese_food_hero.png" 
+                    alt="Ementa do Dia" 
+                    className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-b from-stone-900/60 via-stone-900/20 to-stone-50/100"></div>
+                <div className="absolute inset-0 flex flex-col items-center justify-end pb-16 text-center px-4">
+                    <Badge className="bg-gold text-white mb-4 hover:bg-gold-dark border-none px-4 py-1 uppercase tracking-widest text-[10px]">
+                        Sabores Autênticos
+                    </Badge>
+                    <h1 className="text-4xl md:text-6xl font-serif font-bold text-white mb-2 drop-shadow-lg">
+                        Menu do Dia / Encomendar
+                    </h1>
+                    <div className="flex items-center gap-2 text-gold-dark font-medium">
+                        <Calendar className="w-4 h-4 text-gold" />
+                        <span className="text-sm md:text-base text-white/90 drop-shadow-md">{today}</span>
+                    </div>
+                </div>
+            </div>
+
             {/* Search and Category Filter */}
             <div className="sticky top-[72px] z-30 bg-white/80 backdrop-blur-xl py-6 -mx-4 px-4 md:mx-0 md:px-0 space-y-6 transition-all border-b border-stone-100">
                 <div className="flex justify-center">
@@ -177,7 +199,9 @@ export function MenuContent({ menuData, phone }: MenuContentProps) {
                 </div>
             </div>
 
-            <div className="space-y-12 pb-20">
+            <div className="space-y-16 pb-20 relative">
+                {/* Subtle background element */}
+                <div className="absolute inset-0 -z-10 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:20px_20px] opacity-30"></div>
                 {/* Daily Menu Not Updated Alert */}
                 {menuData.todaysPratos.length === 0 && !(menuData.todaysSoups && menuData.todaysSoups.length > 0) && !menuData.todaysSoup && (
                     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-top-4 duration-700">

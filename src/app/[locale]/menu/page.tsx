@@ -4,7 +4,7 @@ import { MenuContent } from '@/components/menu/MenuContent'
 import { createClient } from '@/lib/supabase/server'
 import { getTodaysMenuData } from '@/services/menuService'
 
-import { useTranslations } from 'next-intl'
+import { getTranslations } from 'next-intl/server'
 
 // Force dynamic rendering
 export const dynamic = 'force-dynamic'
@@ -14,7 +14,7 @@ async function getTodaysMenu() {
 }
 
 export default async function MenuPage() {
-    const t = useTranslations('menu')
+    const t = await getTranslations('menu')
     const menuData = await getTodaysMenu();
     const supabase = await createClient(true) as any;
     const { data: settings } = await supabase
