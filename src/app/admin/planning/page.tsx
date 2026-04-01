@@ -43,13 +43,18 @@ export default function DailyPlanningPage() {
     }, [selectedDate]);
 
     const fetchPlanning = async (date: string) => {
+        if (!date) return;
         try {
             const res = await fetch(`/api/admin/daily-planning?date=${date}`);
             const data = await res.json();
 
             if (data.planning) {
                 setSelectedSoup(data.planning.soup);
-                setSelectedPratos(data.planning.daily_menu_items?.map((item: any) => item.menu_items) || []);
+                // Filter out null menu_items to avoid the "100+ selected" bug caused by deleted items
+                const items = (data.planning.daily_menu_items || [])
+                    .map((item: any) => item.menu_items)
+                    .filter(Boolean);
+                setSelectedPratos(items);
                 setNotes(data.planning.notes || '');
             } else {
                 setSelectedSoup(null);
@@ -131,13 +136,9 @@ export default function DailyPlanningPage() {
             if (!res.ok) throw new Error('Failed to save planning');
 
             toast.success('Menu do dia salvo com sucesso!');
-
-            // Reset form
-            setSelectedSoup(null);
-            setSelectedPratos([]);
-            setNotes('');
-            setSoupSearch('');
-            setPratoSearch('');
+            
+            // Refetch to ensure we have the latest data from server without resetting selection
+            fetchPlanning(selectedDate);
         } catch (error) {
             console.error('Error saving planning:', error);
             toast.error('Erro ao salvar menu do dia');

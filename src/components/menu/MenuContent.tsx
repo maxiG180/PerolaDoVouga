@@ -71,7 +71,7 @@ export function MenuContent({ menuData, phone }: MenuContentProps) {
     if (hasSoups || menuData.todaysSoup) allCategories.add('Sopa do Dia')
     if (menuData.todaysPratos.length > 0) allCategories.add('Pratos do Dia')
     if (menuData.advanceOrderItems.length > 0) allCategories.add('Sob Encomenda')
-    allCategories.add('Outra Data')
+    allCategories.add('Outros')
 
     const categoriesList = Array.from(allCategories)
 
@@ -119,6 +119,7 @@ export function MenuContent({ menuData, phone }: MenuContentProps) {
         if (sectionName === 'Sopa do Dia' && selectedCategory === 'Sopa do Dia') return true
         if (sectionName === 'Pratos do Dia' && selectedCategory === 'Pratos do Dia') return true
         if (sectionName === 'Sob Encomenda' && selectedCategory === 'Sob Encomenda') return true
+        if (sectionName === 'Outros' && selectedCategory === 'Outros') return true
         if (categoryName && selectedCategory === categoryName) return true
         return false
     }
@@ -128,28 +129,6 @@ export function MenuContent({ menuData, phone }: MenuContentProps) {
 
     return (
         <div className="space-y-0">
-            {/* Menu Hero Section */}
-            <div className="relative h-[40vh] min-h-[300px] mb-12 -mt-24 -mx-4 md:-mx-8 overflow-hidden">
-                <img 
-                    src="/portuguese_food_hero.png" 
-                    alt="Ementa do Dia" 
-                    className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-b from-stone-900/60 via-stone-900/20 to-stone-50/100"></div>
-                <div className="absolute inset-0 flex flex-col items-center justify-end pb-16 text-center px-4">
-                    <Badge className="bg-gold text-white mb-4 hover:bg-gold-dark border-none px-4 py-1 uppercase tracking-widest text-[10px]">
-                        Sabores Autênticos
-                    </Badge>
-                    <h1 className="text-4xl md:text-6xl font-serif font-bold text-white mb-2 drop-shadow-lg">
-                        Menu do Dia / Encomendar
-                    </h1>
-                    <div className="flex items-center gap-2 text-gold-dark font-medium">
-                        <Calendar className="w-4 h-4 text-gold" />
-                        <span className="text-sm md:text-base text-white/90 drop-shadow-md">{today}</span>
-                    </div>
-                </div>
-            </div>
-
             {/* Search and Category Filter */}
             <div className="sticky top-[72px] z-30 bg-white/80 backdrop-blur-xl py-6 -mx-4 px-4 md:mx-0 md:px-0 space-y-6 transition-all border-b border-stone-100">
                 <div className="flex justify-center">
@@ -334,16 +313,16 @@ export function MenuContent({ menuData, phone }: MenuContentProps) {
                 )}
 
                 {/* Custom Request Section */}
-                {shouldShowSection('Outra Data') && (
+                {shouldShowSection('Outros') && (
                     <section className="max-w-3xl mx-auto pt-8 scroll-mt-24" id="custom-order">
                         <div className="bg-white border-2 border-dashed border-gold/30 rounded-[2.5rem] p-8 md:p-12 text-center space-y-6 shadow-sm hover:shadow-md transition-all">
                             <div className="w-16 h-16 bg-gold/5 rounded-2xl flex items-center justify-center mx-auto">
                                 <Calendar className="w-8 h-8 text-gold" />
                             </div>
                             <div className="space-y-2">
-                                <h3 className="text-2xl font-serif font-bold text-stone-800">Pedido para Amanhã ou Personalizado</h3>
+                                <h3 className="text-2xl font-serif font-bold text-stone-800">Encomenda para outro dia</h3>
                                 <p className="text-stone-500 max-w-md mx-auto">
-                                    Não encontrou o que queria no menu de hoje? Quer encomendar algo específico para amanhã ou outro dia?
+                                    Quer encomendar algo específico para amanhã ou outro dia? Basta escrever aqui o seu pedido.
                                 </p>
                             </div>
                             
