@@ -74,7 +74,9 @@ export async function getTodaysMenuData() {
                     todaysSoups.push(menuItem);
                 }
             } else {
-                todaysPratos.push(menuItem);
+                if (!todaysPratos.find(p => p.id === menuItem.id)) {
+                    todaysPratos.push(menuItem);
+                }
             }
         });
 

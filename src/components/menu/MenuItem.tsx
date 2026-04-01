@@ -63,7 +63,7 @@ export function MenuItem({
                 hideImage ? "hover:-translate-y-0.5" : ""
             )}>
                 {!hideImage && (
-                    <div className="relative h-28 md:h-36 lg:h-40 overflow-hidden shrink-0">
+                    <div className="relative h-20 md:h-28 overflow-hidden shrink-0">
                         {item.image_url ? (
                             <Image
                                 src={item.image_url}
@@ -105,11 +105,11 @@ export function MenuItem({
 
                 <div className={cn("flex flex-col p-2 md:p-3", hideImage ? "p-2" : "")}>
                     <div className="flex justify-between items-start mb-2 gap-3">
-                        <h3 className={cn("font-serif font-bold text-stone-800 leading-tight group-hover:text-gold transition-colors duration-300", hideImage ? "text-[10px] md:text-xs" : "text-xs md:text-base")}>
+                        <h3 className={cn("font-serif font-bold text-stone-800 leading-tight group-hover:text-gold transition-colors duration-300", hideImage ? "text-[8px] md:text-[10px]" : "text-[10px] md:text-sm")}>
                             {item.name}
                         </h3>
                         <div className="flex flex-col items-end">
-                            <span className="text-xs md:text-base font-bold text-gold-dark tracking-tight">{formatPrice(item.price)}</span>
+                            <span className="text-[10px] md:text-sm font-bold text-gold-dark tracking-tight">{formatPrice(item.price)}</span>
                         </div>
                     </div>
 
