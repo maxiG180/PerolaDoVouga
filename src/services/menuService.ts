@@ -70,11 +70,11 @@ export async function getTodaysMenuData() {
 
             // If it's the primary soup, or of type soup
             if (item.menu_item_id === todayPlanning.soup_id || (item.menu_items as any)?.daily_type === 'soup') {
-                if (!todaysSoups.find(s => s.id === menuItem.id)) {
+                if (!todaysSoups.find(s => s.name.toLowerCase().trim() === menuItem.name.toLowerCase().trim())) {
                     todaysSoups.push(menuItem);
                 }
             } else {
-                if (!todaysPratos.find(p => p.id === menuItem.id)) {
+                if (!todaysPratos.find(p => p.name.toLowerCase().trim() === menuItem.name.toLowerCase().trim())) {
                     todaysPratos.push(menuItem);
                 }
             }
