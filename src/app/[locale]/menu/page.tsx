@@ -2,36 +2,18 @@ import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { MenuContent } from '@/components/menu/MenuContent'
 import { createClient } from '@/lib/supabase/server'
+import { getTodaysMenuData } from '@/services/menuService'
 
 // Force dynamic rendering
 export const dynamic = 'force-dynamic'
 
 async function getTodaysMenu() {
-    try {
-        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
-        const res = await fetch(`${baseUrl}/api/menu/todays-menu`, {
-            cache: 'no-store'
-        });
-
-        if (!res.ok) {
-            throw new Error('Failed to fetch menu');
-        }
-
-        return await res.json();
-    } catch (error) {
-        console.error('Error fetching menu:', error);
-        return {
-            alwaysAvailable: [],
-            todaysSoup: null,
-            todaysPratos: [],
-            advanceOrderItems: [],
-        };
-    }
+    return await getTodaysMenuData();
 }
 
 export default async function MenuPage() {
     const menuData = await getTodaysMenu();
-    const supabase = await createClient()
+    const supabase = await createClient(true) as any;
     const { data: settings } = await supabase
         .from('restaurant_settings')
         .select('phone')
