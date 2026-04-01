@@ -108,7 +108,9 @@ export function WhatsAppImportDialog({ isOpen, onOpenChangeAction, onImportedAct
             onImportedAction(finalSoups, finalDishes)
             toast.success('Menu importado com sucesso!')
             onOpenChangeAction(false)
-            reset()
+            setStep('input')
+            setParsedItems([])
+            // setText('') // KEEP TEXT
         } catch (error) {
             console.error('Error importing menu:', error)
             toast.error('Erro ao importar menu. Verifique a consola.')
@@ -126,7 +128,10 @@ export function WhatsAppImportDialog({ isOpen, onOpenChangeAction, onImportedAct
     return (
         <Dialog open={isOpen} onOpenChange={(open) => {
             onOpenChangeAction(open)
-            if (!open) reset()
+            if (!open) {
+                setStep('input')
+                setParsedItems([])
+            }
         }}>
             <DialogContent className="max-w-2xl max-h-[90vh] flex flex-col">
                 <DialogHeader>
@@ -143,7 +148,7 @@ export function WhatsAppImportDialog({ isOpen, onOpenChangeAction, onImportedAct
                                 value={text}
                                 onChange={(e) => setText(e.target.value)}
                                 placeholder="Bom dia a todos! 📅 31/03 – Menu de Hoje..."
-                                className="min-h-[300px] font-mono text-sm border-beige-200 focus:border-gold"
+                                className="min-h-[500px] font-mono text-sm border-beige-200 focus:border-gold"
                             />
                             <div className="bg-blue-50 p-3 rounded-lg flex gap-3 border border-blue-100">
                                 <AlertCircle className="w-5 h-5 text-blue-500 shrink-0" />

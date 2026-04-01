@@ -5,6 +5,7 @@ export interface ParsedMenuItem {
     category: string;
     isPratoDoDia: boolean;
     cuisineType: 'portuguesa' | 'africana' | 'ucraniana' | 'other';
+    emoji?: string;
 }
 
 export function parseWhatsAppMenu(text: string): ParsedMenuItem[] {
@@ -16,16 +17,25 @@ export function parseWhatsAppMenu(text: string): ParsedMenuItem[] {
     // Prato do dia context
     let isInCategoryPratoDoDia = false;
 
+    // Categorized emojis lookup
+    const categoryEmojis: Record<string, string> = {
+        'Sopas': '🥣',
+        'Peixe': '🐟',
+        'Carne': '🥩',
+        'Sobremesas': '🍰',
+        'Bebidas': '🍷',
+    };
+
     for (let i = 0; i < lines.length; i++) {
         const line = lines[i];
 
         // Detect Category Headers
-        if (line.includes('🍲 Sopas')) { currentCategory = 'Sopas'; isInCategoryPratoDoDia = false; continue; }
-        if (line.includes('🐟 Peixe')) { currentCategory = 'Peixe'; isInCategoryPratoDoDia = false; continue; }
-        if (line.includes('🥩 Carne')) { currentCategory = 'Carne'; isInCategoryPratoDoDia = false; continue; }
-        if (line.includes('🍖 Outras Sugestões')) { currentCategory = 'Carne'; isInCategoryPratoDoDia = false; continue; }
+        if (/🍲 Sopas/i.test(line)) { currentCategory = 'Sopas'; isInCategoryPratoDoDia = false; continue; }
+        if (/🐟 Peixe/i.test(line)) { currentCategory = 'Peixe'; isInCategoryPratoDoDia = false; continue; }
+        if (/🥩 Carne/i.test(line)) { currentCategory = 'Carne'; isInCategoryPratoDoDia = false; continue; }
+        if (/🍖 Outras Sugestões/i.test(line)) { currentCategory = 'Carne'; isInCategoryPratoDoDia = false; continue; }
         
-        if (line.includes('⭐ Prato do Dia')) {
+        if (/⭐ Prato do Dia/i.test(line)) {
             isInCategoryPratoDoDia = true;
             if (line.toLowerCase().includes('peixe')) currentCategory = 'Peixe';
             if (line.toLowerCase().includes('carne')) currentCategory = 'Carne';
@@ -33,32 +43,41 @@ export function parseWhatsAppMenu(text: string): ParsedMenuItem[] {
         }
 
         // Match Item + Price
-        // Pattern matches: name [-|—|–] price €
-        // The price part usually ends the line or is near the end.
-        const priceRegex = /([-—–])\s*([\d,.]+)\s*€/i;
+        // Pattern matches: name followed by optional separator and price ending in €
+        // Allows: 
+        // Bacalhau - 12€
+        // Bacalhau: 12.50€
+        // Bacalhau 12,50€
+        const priceRegex = /[:\-—–]?\s*([\d,.]+)\s*€/i;
         const match = line.match(priceRegex);
         
-        if (match) {
-            const separatorIdx = line.lastIndexOf(match[0]);
+        if (match && match.index! > 0) {
+            const separatorIdx = match.index!;
             let name = line.substring(0, separatorIdx).trim();
             
+            // Extract starting emoji if any
+            const emojiMatch = name.match(/^([\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]+)\s*/u);
+            const foundEmoji = emojiMatch ? emojiMatch[1] : categoryEmojis[currentCategory];
+
             // Clean up name: remove common item indicators
-            // E.g. "Sopa: sopa de...", "🐟 Salmão", "⭐ Prato do Dia – Carne: Esparguete..."
             name = name.replace(/^(Sopa:|\s*🥣|\s*🐟|\s*🍽️|\s*🍚|\s*🥚🍤|\s*🥩|\s*🍳|\s*🍔|\s*🐖|\s*🍗|\s*🦃|\s*⭐\s*Prato do Dia\s*[–-]\s*(Carne|Peixe):?|⭐)\s*/i, '').trim();
             
             // Further clean leading emojis and bullet points
             name = name.replace(/^[\s\d\.\-\*•_]+/, '').trim();
-            // Remove starting emoji if any (like 🍚 🐟)
+            // Remove starting emoji if any
             name = name.replace(/^[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]+\s*/u, '').trim();
             
-            const price = parseFloat(match[2].replace(',', '.'));
+            const price = parseFloat(match[1].replace(',', '.'));
             
+            if (isNaN(price)) continue;
+
             const item: ParsedMenuItem = {
                 name,
                 price,
                 category: currentCategory,
                 isPratoDoDia: line.includes('⭐') || isInCategoryPratoDoDia,
-                cuisineType: (line.toLowerCase().includes('ucraniana') || line.toLowerCase().includes('ucrânia')) ? 'ucraniana' : 'portuguesa'
+                cuisineType: (line.toLowerCase().includes('ucraniana') || line.toLowerCase().includes('ucrânia')) ? 'ucraniana' : 'portuguesa',
+                emoji: foundEmoji
             };
             
             items.push(item);

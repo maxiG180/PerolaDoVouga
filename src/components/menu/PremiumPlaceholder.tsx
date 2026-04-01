@@ -24,25 +24,24 @@ export function PremiumPlaceholder({ name, className }: PremiumPlaceholderProps)
     const lowerName = name.toLowerCase()
     
     // Icon & Gradient Logic based on Name
-    let Icon = Utensils
     let gradientClass = "from-[#F5F1E6] via-[#E8E0CC] to-[#D4AF37]/20" // Default Beige/Gold
-    let iconColor = "text-gold-dark"
-    let emoji = ""
+    let emoji = "🍽️"
 
     if (lowerName.includes('sopa')) {
-        Icon = Soup
+        emoji = "🥣"
         gradientClass = "from-[#FAF7F0] via-[#F2EAD3] to-[#D4AF37]/30"
     } else if (lowerName.includes('peixe') || lowerName.includes('salmão') || lowerName.includes('bacalhau') || lowerName.includes('pescada') || lowerName.includes('dourada')) {
-        Icon = Fish
+        emoji = "🐟"
         gradientClass = "from-[#F0F4F8] via-[#D1E1F0] to-[#D4AF37]/20" // Hint of blue but stays in palette
     } else if (lowerName.includes('carne') || lowerName.includes('bife') || lowerName.includes('picanha') || lowerName.includes('frango') || lowerName.includes('peru')) {
-        Icon = ChefHat
+        emoji = lowerName.includes('frango') || lowerName.includes('peru') ? "🍗" : "🥩"
         gradientClass = "from-[#F9F6F0] via-[#EDE6D6] to-[#D4AF37]/40"
     } else if (lowerName.includes('sobremesa') || lowerName.includes('doce') || lowerName.includes('bolo')) {
-        Icon = Cake
+        emoji = "🍰"
         gradientClass = "from-[#FFF9F2] via-[#FCEAD5] to-[#D4AF37]/25"
     } else if (lowerName.includes('café') || lowerName.includes('bebida') || lowerName.includes('sumo')) {
-        Icon = Coffee
+        emoji = "🍷"
+        gradientClass = "from-[#F9F6F0] via-[#EDE6D6] to-[#D4AF37]/20"
     }
 
     // Special Ukrainian highlight
@@ -59,7 +58,7 @@ export function PremiumPlaceholder({ name, className }: PremiumPlaceholderProps)
                  style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #000 1px, transparent 0)', backgroundSize: '24px 24px' }}>
             </div>
 
-            {/* Floating Icon/Logo Wrapper */}
+            {/* Floating Emoji Wrapper */}
             <motion.div
                 initial={{ y: 0 }}
                 animate={{ y: [-5, 5, -5] }}
@@ -68,8 +67,8 @@ export function PremiumPlaceholder({ name, className }: PremiumPlaceholderProps)
             >
                 <div className="relative">
                     <div className="absolute inset-0 bg-gold/20 blur-2xl rounded-full scale-150 opacity-50" />
-                    <div className="relative bg-white/40 backdrop-blur-md p-5 rounded-full border border-white/50 shadow-xl">
-                        <Icon className={cn("w-12 h-12", iconColor)} strokeWidth={1.5} />
+                    <div className="relative bg-white/40 backdrop-blur-md w-20 h-20 rounded-full border border-white/50 shadow-xl flex items-center justify-center">
+                        <span className="text-4xl filter drop-shadow-md">{emoji}</span>
                     </div>
                 </div>
 
@@ -79,7 +78,7 @@ export function PremiumPlaceholder({ name, className }: PremiumPlaceholderProps)
                         animate={{ opacity: 1, scale: 1 }}
                         className="mt-4 px-3 py-1 bg-white/80 backdrop-blur-sm border border-gold/20 rounded-full flex items-center gap-2 shadow-sm"
                     >
-                        <span className="text-xs font-bold tracking-widest text-[#D4AF37] uppercase">Specialty</span>
+                        <span className="text-[10px] font-bold tracking-widest text-[#D4AF37] uppercase">Especialidade</span>
                         <span className="text-sm">🇺🇦</span>
                     </motion.div>
                 )}
@@ -91,7 +90,7 @@ export function PremiumPlaceholder({ name, className }: PremiumPlaceholderProps)
             
             {/* Subtle Brand Text */}
             <div className="absolute bottom-4 left-0 right-0 text-center">
-                <span className="text-[9px] uppercase tracking-[0.4em] text-beige-400 font-bold opacity-60">
+                <span className="text-[9px] uppercase tracking-[0.4em] text-stone-400 font-bold opacity-60">
                     Pérola do Vouga
                 </span>
             </div>

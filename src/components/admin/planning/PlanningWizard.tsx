@@ -31,7 +31,7 @@ interface MenuItem {
 }
 
 export function PlanningWizard() {
-    const [date, setDate] = useState<Date>(new Date(new Date().setDate(new Date().getDate() + 1))) // Default tomorrow
+    const [date, setDate] = useState<Date>(new Date()) // Default Today
     const [soups, setSoups] = useState<MenuItem[]>([])
     const [dishes, setDishes] = useState<MenuItem[]>([])
     const [selectedSoup, setSelectedSoup] = useState<string | null>(null)
@@ -68,18 +68,22 @@ export function PlanningWizard() {
 
     const fetchExistingPlan = async (selectedDate: Date) => {
         const formattedDate = format(selectedDate, 'yyyy-MM-dd')
-        const { data } = await supabase
-            .from('daily_menus')
-            .select('*')
+        const { data, error } = await (supabase
+            .from('daily_menu_planning')
+            .select(`
+                id,
+                soup_id,
+                notes,
+                daily_menu_items (
+                    menu_item_id
+                )
+            `)
             .eq('date', formattedDate)
-            .single()
+            .maybeSingle() as any)
 
         if (data) {
-            // @ts-ignore
             setSelectedSoup(data.soup_id)
-            // @ts-ignore
-            setSelectedDishes(data.dish_ids || [])
-            // @ts-ignore
+            setSelectedDishes(data.daily_menu_items?.map((item: any) => item.menu_item_id) || [])
             setNotes(data.notes || '')
         } else {
             setSelectedSoup(null)
@@ -93,18 +97,38 @@ export function PlanningWizard() {
         try {
             const formattedDate = format(date, 'yyyy-MM-dd')
 
-            // Upsert logic
-            const { error } = await supabase
-                .from('daily_menus')
-                // @ts-ignore
+            // 1. Get or create planning record
+            const { data: planning, error: planningError } = await ((supabase
+                .from('daily_menu_planning') as any)
                 .upsert({
                     date: formattedDate,
                     soup_id: selectedSoup,
-                    dish_ids: selectedDishes,
                     notes: notes
                 }, { onConflict: 'date' })
+                .select()
+                .single())
 
-            if (error) throw error
+            if (planningError) throw planningError
+
+            // 2. Clear existing items for this plan
+            const { error: deleteError } = await supabase
+                .from('daily_menu_items')
+                .delete()
+                .eq('planning_id', planning.id)
+
+            if (deleteError) throw deleteError
+
+            // 3. Insert new items
+            if (selectedDishes.length > 0) {
+                const { error: insertError } = await (supabase
+                    .from('daily_menu_items') as any)
+                    .insert(selectedDishes.map(id => ({
+                        planning_id: planning.id,
+                        menu_item_id: id
+                    })))
+
+                if (insertError) throw insertError
+            }
 
             toast.success('Menu diário guardado com sucesso!')
         } catch (error) {
@@ -120,17 +144,15 @@ export function PlanningWizard() {
         yesterday.setDate(date.getDate() - 1)
         const formattedDate = format(yesterday, 'yyyy-MM-dd')
 
-        const { data } = await supabase
-            .from('daily_menus')
-            .select('*')
+        const { data } = await (supabase
+            .from('daily_menu_planning')
+            .select('*, daily_menu_items(menu_item_id)')
             .eq('date', formattedDate)
-            .single()
+            .single() as any)
 
         if (data) {
-            // @ts-ignore
             setSelectedSoup(data.soup_id)
-            // @ts-ignore
-            setSelectedDishes(data.dish_ids || [])
+            setSelectedDishes(data.daily_menu_items?.map((i: any) => i.menu_item_id) || [])
             toast.success('Menu copiado do dia anterior!')
         } else {
             toast.error('Não existe menu planeado para o dia anterior.')
@@ -162,10 +184,16 @@ export function PlanningWizard() {
 
                 if (existing) {
                     menuItem = existing;
-                    if (existing.price !== item.price) {
+                    // Update price if it changed, and sync emoji if missing
+                    const updates: any = {};
+                    if (existing.price !== item.price) updates.price = item.price;
+                    if (!existing.image_url && item.emoji && !existing.name.includes(item.emoji)) {
+                        updates.name = `${item.emoji} ${existing.name}`;
+                    }
+                    if (Object.keys(updates).length > 0) {
                         const { data: updated } = await (supabase
                             .from('menu_items') as any)
-                            .update({ price: item.price, description: item.description || existing.description })
+                            .update({ ...updates, description: item.description || existing.description })
                             .eq('id', existing.id)
                             .select()
                             .single();
@@ -175,13 +203,16 @@ export function PlanningWizard() {
                     const { data: catData } = await (supabase
                         .from('categories')
                         .select('id')
-                        .ilike('name', item.category === 'Sopas' ? 'Sopas' : (item.category === 'Peixe' ? 'Peixe' : 'Carne'))
+                        .ilike('name', item.category)
                         .maybeSingle() as any);
+
+                    // Add emoji to name if no image is present (which is true for new items)
+                    const finalName = item.emoji ? `${item.emoji} ${item.name}` : item.name;
 
                     const { data: newItem, error } = await (supabase
                         .from('menu_items') as any)
                         .insert({
-                            name: item.name,
+                            name: finalName,
                             price: item.price,
                             description: item.description || null,
                             category_id: catData?.id || null,
@@ -224,7 +255,7 @@ export function PlanningWizard() {
             });
 
             toast.success(`Importado com sucesso! (${allNewItems.length} itens)`);
-            setImportText('');
+            // setImportText(''); // KEEP TEXT as per user request
         } catch (error) {
             console.error('Error importing:', error);
             toast.error('Erro ao processar o texto.');
@@ -300,7 +331,7 @@ export function PlanningWizard() {
                 <CardContent className="p-4 space-y-4">
                     <Textarea 
                         placeholder="Cole aqui o texto do WhatsApp ou qualquer lista com preços (Ex: Bacalhau - 12,50€)"
-                        className="min-h-[120px] bg-white border-gold/20 focus:border-gold transition-colors text-sm"
+                        className="min-h-[300px] bg-white border-gold/20 focus:border-gold transition-colors text-sm"
                         value={importText}
                         onChange={(e) => setImportText(e.target.value)}
                     />
