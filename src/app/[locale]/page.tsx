@@ -17,7 +17,8 @@ import {
     Clock,
     Phone,
     ChefHat,
-    EnvelopeSimple
+    EnvelopeSimple,
+    FacebookLogo
 } from '@phosphor-icons/react/dist/ssr'
 
 export default async function Home() {
@@ -71,19 +72,33 @@ export default async function Home() {
                                     {t('description')}
                                 </p>
 
-                                <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start gsap-hero-btns">
-                                    <Button asChild size="lg" className="bg-stone-800 text-white hover:bg-stone-900 rounded-full px-8">
-                                        <a href="#menu-section">
+                                <div className="flex flex-col items-center lg:items-start gap-6 gsap-hero-btns">
+                                    <Button asChild size="lg" className="bg-stone-800 text-gold hover:bg-stone-900 rounded-full px-10 h-14 text-lg shadow-xl shadow-stone-200/50 hover:shadow-2xl transition-all duration-300 w-full sm:w-auto">
+                                        <Link href="/menu">
                                             {t('cta_about')}
-                                            <ForkKnife className="ml-2 w-4 h-4" />
-                                        </a>
-                                    </Button>
-                                    <Button asChild variant="outline" size="lg" className="border-stone-300 text-stone-800 hover:bg-white rounded-full px-8">
-                                        <Link href="/about">
-                                            {tNav('about')}
-                                            <ArrowRight className="ml-2 w-4 h-4" />
+                                            <ForkKnife className="ml-2 w-5 h-5 transition-transform group-hover:rotate-12" weight="bold" />
                                         </Link>
                                     </Button>
+
+                                    {/* Action Shortcuts for Mobile */}
+                                    <div className="flex items-center gap-4">
+                                        <a 
+                                            href={(settings as any)?.facebook_url || "https://www.facebook.com/share/1JsK9ftJaX/?mibextid=wwXIfr"} 
+                                            target="_blank" 
+                                            rel="noopener noreferrer"
+                                            className="w-12 h-12 rounded-full bg-white border border-stone-200 flex items-center justify-center text-stone-700 hover:text-blue-600 hover:border-blue-200 hover:bg-blue-50 transition-all shadow-sm"
+                                            aria-label="Facebook"
+                                        >
+                                            <FacebookLogo className="w-6 h-6" weight="fill" />
+                                        </a>
+                                        <a 
+                                            href={`tel:${phone}`}
+                                            className="w-12 h-12 rounded-full bg-white border border-stone-200 flex items-center justify-center text-stone-700 hover:text-gold-dark hover:border-gold/30 hover:bg-gold/5 transition-all shadow-sm"
+                                            aria-label="Phone"
+                                        >
+                                            <Phone className="w-6 h-6" weight="fill" />
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
 
@@ -131,10 +146,17 @@ export default async function Home() {
                             <h2 className="text-3xl md:text-5xl font-bold text-stone-800 mb-4">
                                 {t('featured_title')}
                             </h2>
-                            <p className="text-stone-500 max-w-2xl mx-auto italic">
+                            <p className="text-stone-500 max-w-2xl mx-auto italic mb-8">
                                 {t('featured_subtitle')}
                             </p>
+                            <Button asChild className="bg-gold hover:bg-gold-dark text-white rounded-full px-8 h-12 shadow-lg hover:shadow-xl transition-all">
+                                <Link href="/menu">
+                                    {locale === 'pt' ? 'Encomendar no Menu Online' : 'Order via Online Menu'}
+                                    <ArrowRight className="ml-2 w-4 h-4" />
+                                </Link>
+                            </Button>
                         </div>
+        
 
 
                         <div className="space-y-16">
