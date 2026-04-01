@@ -99,22 +99,25 @@ export function Header() {
                     <Link href="/" className="text-sm font-medium text-stone-800 hover:text-gold transition-colors">
                         {t('home')}
                     </Link>
-                    <Link href="/menu" className="text-sm font-medium text-stone-800 hover:text-gold transition-colors">
-                        {t('menu')}
-                    </Link>
-                    <Link href="/about" className="text-sm font-medium text-stone-800 hover:text-gold transition-colors">
+                    <Link href="/about" className="text-sm font-medium text-stone-700 hover:text-gold transition-colors">
                         {t('about')}
                     </Link>
 
                     <div className="h-6 w-px bg-gold/30 mx-2"></div>
 
-                    <div className="flex items-center gap-4">
-                        <a href={`tel:${phone}`} className="flex items-center gap-2 text-sm font-medium text-stone-800 hover:text-gold transition-colors">
+                    <div className="flex items-center gap-6">
+                        <a href={`tel:${phone}`} className="flex items-center gap-2 text-sm font-medium text-stone-700 hover:text-gold transition-colors">
                             <Phone className="w-4 h-4" />
                             <span className="hidden xl:inline">{phone}</span>
                         </a>
 
                         <LanguageSwitcher />
+
+                        <Button asChild variant="gold" size="sm" className="rounded-full px-6 shadow-sm">
+                            <Link href="/menu">
+                                {t('menu')}
+                            </Link>
+                        </Button>
                     </div>
                 </nav>
 
@@ -141,19 +144,18 @@ export function Header() {
                         {t('home')}
                     </Link>
                     <Link
-                        href="/menu"
-                        className="p-4 hover:bg-beige-50 rounded-xl text-lg font-medium text-stone-800 border border-transparent hover:border-beige-200 transition-all"
-                        onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                        {t('menu')}
-                    </Link>
-                    <Link
                         href="/about"
                         className="p-4 hover:bg-beige-50 rounded-xl text-lg font-medium text-stone-800 border border-transparent hover:border-beige-200 transition-all"
                         onClick={() => setIsMobileMenuOpen(false)}
                     >
                         {t('about')}
                     </Link>
+
+                    <Button asChild variant="gold" size="lg" className="mx-4 rounded-xl shadow-md">
+                        <Link href="/menu" onClick={() => setIsMobileMenuOpen(false)}>
+                            {t('menu')}
+                        </Link>
+                    </Button>
 
                     <div className="mt-4 pt-4 border-t border-gray-100 space-y-3 px-4">
                         <div className="flex items-center gap-3 text-stone-600">

@@ -73,10 +73,10 @@ export default async function Home() {
                                 </p>
 
                                 <div className="flex flex-col items-center lg:items-start gap-6 gsap-hero-btns">
-                                    <Button asChild size="lg" className="bg-stone-800 text-gold hover:bg-stone-900 rounded-full px-10 h-14 text-lg shadow-xl shadow-stone-200/50 hover:shadow-2xl transition-all duration-300 w-full sm:w-auto">
+                                    <Button asChild size="lg" className="bg-gold hover:bg-gold-dark text-white rounded-full px-10 h-14 text-lg shadow-xl shadow-gold/20 hover:shadow-2xl transition-all duration-300 w-full sm:w-auto border-none">
                                         <Link href="/menu">
                                             {t('cta_about')}
-                                            <ForkKnife className="ml-2 w-5 h-5 transition-transform group-hover:rotate-12" weight="bold" />
+                                            <ForkKnife className="ml-2 w-5 h-5 transition-transform group-hover:rotate-12 outline-none" weight="bold" />
                                         </Link>
                                     </Button>
 
