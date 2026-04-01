@@ -63,17 +63,7 @@ const getCategoryPriority = (name: string) => {
 
 export function MenuContent({ menuData, phone }: MenuContentProps) {
     const [searchQuery, setSearchQuery] = useState('')
-    const [selectedCategory, setSelectedCategory] = useState<string>('Todos')
 
-    // Extract all unique categories
-    const allCategories = new Set<string>(['Todos'])
-    const hasSoups = menuData.todaysSoups && menuData.todaysSoups.length > 0;
-    if (hasSoups || menuData.todaysSoup) allCategories.add('Sopa do Dia')
-    if (menuData.todaysPratos.length > 0) allCategories.add('Pratos do Dia')
-    if (menuData.advanceOrderItems.length > 0) allCategories.add('Sob Encomenda')
-    allCategories.add('Outros')
-
-    const categoriesList = Array.from(allCategories)
 
     const filterItems = (items: any[]) => {
         if (!searchQuery) return items
@@ -87,24 +77,6 @@ export function MenuContent({ menuData, phone }: MenuContentProps) {
     const filteredTodaysPratos = filterItems(menuData.todaysPratos)
     const filteredAdvanceOrder = filterItems(menuData.advanceOrderItems)
 
-    // Group always available items by category
-    const groupedAlwaysAvailable = filteredAlwaysAvailable.reduce((acc, item) => {
-        const categoryName = item.categories?.name || 'Sugestão da Casa'
-        if (!acc[categoryName]) {
-            acc[categoryName] = []
-        }
-        acc[categoryName].push(item)
-        return acc
-    }, {} as Record<string, any[]>)
-
-    const groupedTodaysPratos = filteredTodaysPratos.reduce((acc, item) => {
-        const categoryName = item.categories?.name || 'Sugestão da Casa'
-        if (!acc[categoryName]) {
-            acc[categoryName] = []
-        }
-        acc[categoryName].push(item)
-        return acc
-    }, {} as Record<string, any[]>)
 
     const today = new Date().toLocaleDateString('pt-PT', {
         weekday: 'long',
@@ -113,22 +85,13 @@ export function MenuContent({ menuData, phone }: MenuContentProps) {
         day: 'numeric'
     })
 
-    const shouldShowSection = (sectionName: string, categoryName?: string) => {
-        if (selectedCategory === 'Todos') return true
-        if (sectionName === 'Sopa do Dia' && selectedCategory === 'Sopa do Dia') return true
-        if (sectionName === 'Pratos do Dia' && selectedCategory === 'Pratos do Dia') return true
-        if (sectionName === 'Sob Encomenda' && selectedCategory === 'Sob Encomenda') return true
-        if (sectionName === 'Outros' && selectedCategory === 'Outros') return true
-        if (categoryName && selectedCategory === categoryName) return true
-        return false
-    }
 
     const isDrinkCategory = (category: string) =>
         ['Cafetaria', 'Bebidas', 'Vinhos', 'Cervejas', 'Refrigerantes', 'Águas'].includes(category)
 
     return (
         <div className="space-y-0">
-            {/* Search and Category Filter */}
+            {/* Search */}
             <div className="sticky top-[72px] z-30 bg-white/80 backdrop-blur-xl py-6 -mx-4 px-4 md:mx-0 md:px-0 space-y-6 transition-all border-b border-stone-100">
                 <div className="flex justify-center">
                     <div className="relative w-full max-w-xl group">
@@ -140,41 +103,6 @@ export function MenuContent({ menuData, phone }: MenuContentProps) {
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
                     </div>
-                </div>
-
-                {/* Categories Scroll */}
-                <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide px-2 max-w-5xl mx-auto justify-start md:justify-center">
-                    {categoriesList.map((cat) => {
-                        const Icon = CATEGORY_ICONS[cat] || (cat.includes('Sopa') ? Soup : (cat.includes('Pratos') ? Utensils : (cat.includes('Encomenda') ? Calendar : Utensils)))
-                        const isSelected = selectedCategory === cat
-
-                        return (
-                            <button
-                                style={{ cursor: 'pointer' }}
-                                key={cat}
-                                onClick={() => setSelectedCategory(cat)}
-                                className={cn(
-                                    "flex flex-col items-center gap-2 group min-w-[80px] transition-all duration-300 cursor-pointer",
-                                    isSelected ? "scale-110" : "opacity-60 hover:opacity-100"
-                                )}
-                            >
-                                <div className={cn(
-                                    "w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl flex items-center justify-center transition-all duration-500 shadow-sm",
-                                    isSelected 
-                                        ? "bg-stone-900 text-white shadow-gold/20 shadow-lg" 
-                                        : "bg-white border border-stone-200 text-stone-400 group-hover:border-gold/50"
-                                )}>
-                                    <Icon className={cn("w-4 h-4 md:w-5 md:h-5", isSelected ? "text-gold" : "group-hover:text-gold/70")} />
-                                </div>
-                                <span className={cn(
-                                    "text-[9px] md:text-[10px] font-bold uppercase tracking-widest transition-colors",
-                                    isSelected ? "text-stone-900" : "text-stone-400"
-                                )}>
-                                    {cat}
-                                </span>
-                            </button>
-                        )
-                    })}
                 </div>
             </div>
 
@@ -230,7 +158,7 @@ export function MenuContent({ menuData, phone }: MenuContentProps) {
                 )}
 
                 {/* Today's Soup */}
-                {(menuData.todaysSoups || [menuData.todaysSoup]).filter(Boolean).length > 0 && shouldShowSection('Sopa do Dia') && (
+                {(menuData.todaysSoups || [menuData.todaysSoup]).filter(Boolean).length > 0 && (
                     <section className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
                         <div className="flex flex-col items-center gap-2 text-center mb-4">
                             <div className="w-12 h-12 rounded-2xl bg-gold/10 flex items-center justify-center mb-2">
@@ -252,7 +180,7 @@ export function MenuContent({ menuData, phone }: MenuContentProps) {
                 )}
 
                 {/* Today's Pratos */}
-                {Object.keys(groupedTodaysPratos).length > 0 && shouldShowSection('Pratos do Dia') && (
+                {filteredTodaysPratos.length > 0 && (
                     <section className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-100">
                         <div className="flex flex-col items-center gap-2 text-center">
                             <div className="w-12 h-12 rounded-2xl bg-gold/10 flex items-center justify-center mb-2">
@@ -266,34 +194,22 @@ export function MenuContent({ menuData, phone }: MenuContentProps) {
                             </div>
                         </div>
 
-                        {Object.entries(groupedTodaysPratos)
-                            .sort(([a], [b]) => getCategoryPriority(a) - getCategoryPriority(b))
-                            .map(([categoryName, items]) => (
-                                <div key={categoryName} className="space-y-6 pt-4">
-                                    <div className="flex items-center gap-3">
-                                        <h3 className="text-sm font-bold text-gold-dark uppercase tracking-[0.2em]">
-                                            {categoryName}
-                                        </h3>
-                                        <div className="flex-1 h-px bg-gold/10"></div>
-                                    </div>
-                                    <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-4">
-                                        {(items as any[]).map((item: any) => (
-                                            <MenuItem
-                                                key={item.id}
-                                                item={item}
-                                                hideImage={isDrinkCategory(categoryName)}
-                                                quantityRemaining={item.quantity_remaining}
-                                                isSoldOut={item.is_sold_out}
-                                            />
-                                        ))}
-                                    </div>
-                                </div>
-                            ))}
+                    <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-4">
+                        {filteredTodaysPratos.map((item: any) => (
+                            <MenuItem
+                                key={item.id}
+                                item={item}
+                                hideImage={false}
+                                quantityRemaining={item.quantity_remaining}
+                                isSoldOut={item.is_sold_out}
+                            />
+                        ))}
+                    </div>
                     </section>
                 )}
 
                 {/* Advance Order Items */}
-                {menuData.advanceOrderItems.length > 0 && shouldShowSection('Sob Encomenda') && (
+                {menuData.advanceOrderItems.length > 0 && (
                     <section className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
                         <div className="flex flex-col items-center gap-2 text-center">
                             <div className="w-12 h-12 rounded-2xl bg-gold/10 flex items-center justify-center mb-2">
@@ -313,8 +229,7 @@ export function MenuContent({ menuData, phone }: MenuContentProps) {
                 )}
 
                 {/* Custom Request Section */}
-                {shouldShowSection('Outros') && (
-                    <section className="max-w-3xl mx-auto pt-8 scroll-mt-24" id="custom-order">
+                <section className="max-w-3xl mx-auto pt-8 scroll-mt-24" id="custom-order">
                         <div className="bg-white border-2 border-dashed border-gold/30 rounded-[2.5rem] p-8 md:p-12 text-center space-y-6 shadow-sm hover:shadow-md transition-all">
                             <div className="w-16 h-16 bg-gold/5 rounded-2xl flex items-center justify-center mx-auto">
                                 <Calendar className="w-8 h-8 text-gold" />
@@ -355,7 +270,6 @@ export function MenuContent({ menuData, phone }: MenuContentProps) {
                             </div>
                         </div>
                     </section>
-                )}
 
                 {/* In-Person Only Notice */}
                 <div className="max-w-3xl mx-auto pt-8">
