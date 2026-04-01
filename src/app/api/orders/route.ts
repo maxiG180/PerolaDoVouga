@@ -73,10 +73,11 @@ export async function POST(request: Request) {
 
         // 3. Send Email to Parents (Cafe Owner)
         if (process.env.RESEND_API_KEY) {
-            const resend = new Resend(process.env.RESEND_API_KEY)
-            const isFuture = customer.pickupDate !== getLocalDate()
-            
-            await resend.emails.send({
+            try {
+                const resend = new Resend(process.env.RESEND_API_KEY)
+                const isFuture = customer.pickupDate !== getLocalDate()
+                
+                const { data: emailData, error: emailError } = await resend.emails.send({
                 from: 'Pérola do Vouga <onboarding@resend.dev>',
                 to: [
                     process.env.RESEND_TO_EMAIL || 'peroladovougalda@gmail.com',
@@ -138,7 +139,16 @@ export async function POST(request: Request) {
             </div>
           </div>
         `
-            })
+                })
+
+                if (emailError) {
+                    console.error('Resend Email Error:', JSON.stringify(emailError, null, 2))
+                } else {
+                    console.log('Email sent successfully:', emailData?.id)
+                }
+            } catch (emailCatchError) {
+                console.error('Email caught error:', emailCatchError)
+            }
         }
 
         return NextResponse.json({ success: true, orderId: (order as any).id, orderNumber })
