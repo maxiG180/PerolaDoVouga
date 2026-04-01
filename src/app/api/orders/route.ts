@@ -7,8 +7,8 @@ import { z } from 'zod'
 const orderSchema = z.object({
     customer: z.object({
         name: z.string(),
-        email: z.string().email(),
-        phone: z.string(),
+        email: z.string().optional(),
+        phone: z.string().min(9, 'Telemóvel inválido'),
         pickupDate: z.string(),
         pickupTime: z.string(),
         notes: z.string().optional(),
@@ -37,7 +37,7 @@ export async function POST(request: Request) {
             .insert({
                 order_number: orderNumber,
                 customer_name: customer.name,
-                customer_email: customer.email,
+                customer_email: customer.email || 'nao-fornecido@peroladovouga.pt',
                 customer_phone: customer.phone,
                 pickup_time: customer.pickupDate + 'T' + customer.pickupTime + ':00',
                 special_instructions: customer.notes,
@@ -47,7 +47,10 @@ export async function POST(request: Request) {
             .select()
             .single()
 
-        if (orderError || !order) throw orderError
+        if (orderError || !order) {
+            console.error('Supabase Order Error:', JSON.stringify(orderError, null, 2))
+            throw new Error(`DB_ORDER_ERROR: ${orderError?.message || 'Unknown'}`)
+        }
 
         // 2. Create Order Items
         const orderItems = items.map((item: any) => ({
@@ -63,7 +66,10 @@ export async function POST(request: Request) {
             .from('order_items')
             .insert(orderItems as any)
 
-        if (itemsError) throw itemsError
+        if (itemsError) {
+            console.error('Supabase Items Error:', JSON.stringify(itemsError, null, 2))
+            throw new Error(`DB_ITEMS_ERROR: ${itemsError?.message || 'Unknown'}`)
+        }
 
         // 3. Send Email to Parents (Cafe Owner)
         if (process.env.RESEND_API_KEY) {
@@ -86,7 +92,8 @@ export async function POST(request: Request) {
 
             <div style="margin-bottom: 25px; padding: 15px; background: #f9f9f9; border-radius: 8px;">
               <p style="margin: 5px 0;"><strong>Cliente:</strong> ${customer.name}</p>
-              <p style="margin: 5px 0;"><strong>Telefone:</strong> ${customer.phone}</p>
+              <p style="margin: 5px 0;"><strong>Telemóvel:</strong> ${customer.phone}</p>
+              ${customer.email ? `<p style="margin: 5px 0;"><strong>Email:</strong> ${customer.email}</p>` : ''}
               <p style="margin: 5px 0; color: #854d0e; font-size: 1.1em;"><strong>DATA DE RECOLHA:</strong> ${customer.pickupDate}</p>
               <p style="margin: 5px 0; color: #854d0e; font-size: 1.1em;"><strong>HORA DE RECOLHA:</strong> ${customer.pickupTime}</p>
               <p style="margin: 15px 0 5px 0;"><strong>Notas do Cliente:</strong></p>

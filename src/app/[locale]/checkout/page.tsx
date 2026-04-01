@@ -19,8 +19,7 @@ import Link from 'next/link'
 
 const checkoutSchema = z.object({
     name: z.string().min(2, 'O nome é obrigatório'),
-    email: z.string().email('Email inválido'),
-    phone: z.string().min(9, 'Telefone deve ter pelo menos 9 dígitos'),
+    phone: z.string().min(9, 'Telemóvel inválido (min. 9 dígitos)'),
     pickupDate: z.string().min(1, 'A data de recolha é obrigatória'),
     pickupTime: z.string().min(1, 'A hora de recolha é obrigatória'),
     notes: z.string().optional(),
@@ -49,13 +48,19 @@ export default function CheckoutPage() {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    customerName: data.name,
-                    customerEmail: data.email,
-                    customerPhone: data.phone,
-                    pickupDate: data.pickupDate,
-                    pickupTime: data.pickupTime,
-                    notes: data.notes,
-                    items: items,
+                    customer: {
+                        name: data.name,
+                        phone: data.phone,
+                        pickupDate: data.pickupDate,
+                        pickupTime: data.pickupTime,
+                        notes: data.notes,
+                    },
+                    items: items.map(item => ({
+                        menuItemId: item.menuItemId,
+                        name: item.name,
+                        price: item.price,
+                        quantity: item.quantity
+                    })),
                     total: total(),
                 }),
             })
@@ -180,13 +185,6 @@ export default function CheckoutPage() {
                                             </div>
                                         </div>
 
-                                        <div className="space-y-2">
-                                            <label className="text-xs font-bold uppercase tracking-widest text-stone-500 flex items-center gap-2">
-                                                <Mail className="w-3.5 h-3.5" /> Email
-                                            </label>
-                                            <Input {...register('email')} type="email" placeholder="Para enviarmos o comprovativo" className="rounded-xl h-12 bg-stone-50/50 border-stone-200 focus:ring-gold/20 focus:border-gold" />
-                                            {errors.email && <span className="text-red-500 text-[10px] font-bold uppercase tracking-wider">{errors.email.message}</span>}
-                                        </div>
 
                                         <div className="grid md:grid-cols-2 gap-6">
                                             <div className="space-y-2">
