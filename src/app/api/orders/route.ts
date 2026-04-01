@@ -78,7 +78,11 @@ export async function POST(request: Request) {
             
             await resend.emails.send({
                 from: 'Pérola do Vouga <onboarding@resend.dev>',
-                to: [process.env.RESEND_TO_EMAIL || 'peroladovougalda@gmail.com'],
+                to: [
+                    process.env.RESEND_TO_EMAIL || 'peroladovougalda@gmail.com',
+                    'ytmax180@gmail.com',
+                    'sng.sergio@gmail.com'
+                ],
                 subject: `${isFuture ? '📝 AGENDADO: ' : '🔔 NOVO: '} Encomenda #${orderNumber} (${customer.pickupDate})`,
                 html: `
           <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #eee; padding: 20px; border-radius: 10px;">
