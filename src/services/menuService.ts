@@ -87,11 +87,11 @@ export async function getTodaysMenuData() {
         });
 
         return {
-            alwaysAvailable: alwaysAvailable || [],
-            todaysSoup: todaysSoups[0] || null, // Keep for compatibility
+            alwaysAvailable: [], // HIDDEN per user request
+            todaysSoup: todaysSoups[0] || null,
             todaysSoups: todaysSoups,
             todaysPratos: todaysPratos,
-            advanceOrderItems: advanceOrderItems || [],
+            advanceOrderItems: [], // HIDDEN per user request
         };
     } catch (error) {
         console.error('Error fetching menu service:', error);

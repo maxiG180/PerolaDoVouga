@@ -62,11 +62,8 @@ export function MenuContent({ menuData, phone }: MenuContentProps) {
     if (hasSoups || menuData.todaysSoup) allCategories.add('Sopa do Dia')
     if (menuData.todaysPratos.length > 0) allCategories.add('Pratos do Dia')
 
-    menuData.alwaysAvailable.forEach(item => {
-        if (item.categories?.name) allCategories.add(item.categories.name)
-    })
-
-    if (menuData.advanceOrderItems.length > 0) allCategories.add('Sob Encomenda')
+    // Hid common static categories for now
+    // if (menuData.advanceOrderItems.length > 0) allCategories.add('Sob Encomenda')
 
     const categoriesList = Array.from(allCategories)
 
@@ -282,82 +279,22 @@ export function MenuContent({ menuData, phone }: MenuContentProps) {
                     </section>
                 )}
 
-                {/* Always Available */}
-                {Object.keys(groupedAlwaysAvailable).length > 0 && (
-                    <section className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-200 pt-8">
-                        {(selectedCategory === 'Todos' || !['Sopa do Dia', 'Pratos do Dia', 'Sob Encomenda'].includes(selectedCategory)) && (
-                            <div className="flex flex-col items-center gap-2 text-center">
-                                <div className="w-12 h-12 rounded-2xl bg-stone-100 flex items-center justify-center mb-2">
-                                    <Utensils className="w-6 h-6 text-stone-400" />
-                                </div>
-                                <h2 className="text-3xl font-serif font-bold text-stone-900 tracking-tight">Sempre Disponível</h2>
-                                <div className="flex items-center gap-3">
-                                    <div className="h-px w-8 bg-stone-200"></div>
-                                    <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-stone-400">Pratos Fixos</span>
-                                    <div className="h-px w-8 bg-stone-200"></div>
-                                </div>
-                            </div>
-                        )}
-
-                        {Object.entries(groupedAlwaysAvailable).map(([categoryName, items]) => {
-                            if (!shouldShowSection('Always', categoryName)) return null
-                            const isDrinks = isDrinkCategory(categoryName)
-
-                            return (
-                                <div key={categoryName} className="space-y-6">
-                                    <div className="flex items-center gap-3">
-                                        <h3 className="text-sm font-bold text-stone-400 uppercase tracking-[0.2em]">
-                                            {categoryName}
-                                        </h3>
-                                        <div className="flex-1 h-px bg-stone-100"></div>
-                                    </div>
-                                    <div className={cn(
-                                        "grid gap-4",
-                                        isDrinks
-                                            ? "grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
-                                            : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-                                    )}>
-                                        {(items as any[]).map((item: any) => (
-                                            <MenuItem
-                                                key={item.id}
-                                                item={item}
-                                                hideImage={isDrinks}
-                                            />
-                                        ))}
-                                    </div>
-                                </div>
-                            )
-                        })}
-                    </section>
-                )}
-
-                {/* Advance Order Items */}
-                {filteredAdvanceOrder.length > 0 && shouldShowSection('Sob Encomenda') && (
-                    <section className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-300 pt-8">
-                        <div className="flex flex-col items-center gap-2 text-center">
-                            <div className="w-12 h-12 rounded-2xl bg-accent/10 flex items-center justify-center mb-2">
-                                <Calendar className="w-6 h-6 text-accent" />
-                            </div>
-                            <h2 className="text-3xl font-serif font-bold text-stone-900 tracking-tight">Sob Encomenda</h2>
-                            <div className="flex items-center gap-3">
-                                <div className="h-px w-8 bg-accent/30"></div>
-                                <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-accent">Reserva Antecipada</span>
-                                <div className="h-px w-8 bg-accent/30"></div>
-                            </div>
+                {/* In-Person Only Notice */}
+                <div className="max-w-3xl mx-auto pt-8">
+                    <div className="bg-stone-50 border border-stone-200 rounded-3xl p-8 text-center space-y-4">
+                        <div className="flex justify-center gap-4 text-stone-400">
+                            <Coffee className="w-6 h-6" />
+                            <Sandwich className="w-6 h-6" />
+                            <Cake className="w-6 h-6" />
                         </div>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-8">
-                            {filteredAdvanceOrder.map((item: any) => (
-                                <MenuItem
-                                    key={item.id}
-                                    item={item}
-                                    hideImage={false}
-                                    advanceNotice={item.advance_notice_days}
-                                    minimumQuantity={item.minimum_quantity}
-                                />
-                            ))}
+                        <div className="space-y-1">
+                            <h4 className="font-bold text-stone-800 tracking-tight">Snacks, Sobremesas e Bebidas</h4>
+                            <p className="text-stone-500 text-sm">
+                                Disponíveis apenas para consumo ou pedido presencialmente no restaurante.
+                            </p>
                         </div>
-                    </section>
-                )}
+                    </div>
+                </div>
 
                 {/* No Results */}
                 {filteredAlwaysAvailable.length === 0 &&
