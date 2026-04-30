@@ -48,7 +48,9 @@
         "daily_special": "Prato do Dia",
         "soup_special": "Sopa do Dia",
         "add_to_cart": "Adicionar",
-        "sold_out": "Esgotado"
+        "sold_out": "Esgotado",
+        "maintenance_title": "Em Manutenção",
+        "maintenance_desc": "O nosso sistema de encomendas online encontra-se temporariamente em manutenção. Para encomendas ou questões, por favor contacte-nos por email:"
     },
     "common": {
         "address": "Morada",
@@ -65,5 +67,13 @@
             "success": "Login efetuado com sucesso!",
             "error": "Erro ao fazer login"
         }
+    },
+    "footer": {
+        "description": "Ambiente familiar e acolhedor com o melhor da gastronomia tradicional portuguesa no coração de Lisboa.",
+        "weekdays": "Segunda - Sexta",
+        "saturday": "Sábado",
+        "sunday": "Domingo",
+        "closed": "Encerrado",
+        "rights": "Todos os direitos reservados."
     }
 }

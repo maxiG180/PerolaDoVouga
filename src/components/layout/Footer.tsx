@@ -3,7 +3,7 @@
 import { MapPin, Phone, EnvelopeSimple as Mail, InstagramLogo as Instagram, FacebookLogo as Facebook } from '@phosphor-icons/react'
 import { createClient } from '@/lib/supabase/client'
 import { useEffect, useState } from 'react'
-
+import { useTranslations } from 'next-intl'
 interface RestaurantSettings {
     phone: string
     email: string
@@ -20,6 +20,8 @@ interface RestaurantSettings {
 
 export function Footer() {
     const [settings, setSettings] = useState<RestaurantSettings | null>(null)
+    const t = useTranslations('footer')
+    const tCommon = useTranslations('common')
 
     useEffect(() => {
         const fetchSettings = async () => {
@@ -44,7 +46,7 @@ export function Footer() {
     // Hours logic: display DB values or fallback
     const hoursWeekday = settings?.opening_hours || '07:00 - 18:00'
     const hoursSaturday = settings?.opening_hours_saturday || '08:00 - 15:00'
-    const hoursSunday = settings?.opening_hours_weekend || 'Encerrado'
+    const hoursSunday = settings?.opening_hours_weekend || t('closed')
 
     // Socials
     const facebookUrl = settings?.facebook_url || 'https://www.facebook.com/share/1JsK9ftJaX/?mibextid=wwXIfr'
@@ -60,7 +62,7 @@ export function Footer() {
                     <div>
                         <h3 className="font-serif text-2xl font-bold text-gold mb-4">{businessName}</h3>
                         <p className="text-beige-300 mb-6 leading-relaxed">
-                            Ambiente familiar e acolhedor com o melhor da gastronomia tradicional portuguesa no coração de Lisboa.
+                            {t('description')}
                         </p>
                         <div className="flex gap-4">
                             {showFacebook && (
@@ -78,7 +80,7 @@ export function Footer() {
 
                     {/* Contact */}
                     <div>
-                        <h4 className="font-serif text-lg font-bold text-white mb-6">Contactos</h4>
+                        <h4 className="font-serif text-lg font-bold text-white mb-6">{tCommon('contact')}</h4>
                         <ul className="space-y-4">
                             <li className="flex items-start gap-3 text-beige-300">
                                 <MapPin className="w-5 h-5 text-gold shrink-0 mt-1" />
@@ -97,18 +99,18 @@ export function Footer() {
 
                     {/* Hours */}
                     <div>
-                        <h4 className="font-serif text-lg font-bold text-white mb-6">Horário</h4>
+                        <h4 className="font-serif text-lg font-bold text-white mb-6">{tCommon('hours')}</h4>
                         <ul className="space-y-2 text-beige-300">
                             <li className="flex justify-between">
-                                <span>Segunda - Sexta</span>
+                                <span>{t('weekdays')}</span>
                                 <span>{hoursWeekday}</span>
                             </li>
                             <li className="flex justify-between">
-                                <span>Sábado</span>
+                                <span>{t('saturday')}</span>
                                 <span>{hoursSaturday}</span>
                             </li>
                             <li className="flex justify-between text-gold">
-                                <span>Domingo</span>
+                                <span>{t('sunday')}</span>
                                 <span>{hoursSunday}</span>
                             </li>
                         </ul>
@@ -116,7 +118,7 @@ export function Footer() {
                 </div>
 
                 <div className="border-t border-beige-800 pt-8 text-center text-sm text-beige-400">
-                    <p>&copy; {new Date().getFullYear()} {businessName}. Todos os direitos reservados.</p>
+                    <p>&copy; {new Date().getFullYear()} {businessName}. {t('rights')}</p>
                 </div>
             </div>
         </footer>

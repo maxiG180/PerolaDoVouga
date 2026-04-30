@@ -47,7 +47,9 @@
         "daily_special": "Dish of the Day",
         "soup_special": "Soup of the Day",
         "add_to_cart": "Add",
-        "sold_out": "Sold Out"
+        "sold_out": "Sold Out",
+        "maintenance_title": "Under Maintenance",
+        "maintenance_desc": "Our online ordering system is temporarily under maintenance. For orders or questions, please contact us by email:"
     },
     "common": {
         "address": "Address",
@@ -64,5 +66,13 @@
             "success": "Login successful!",
             "error": "Login failed"
         }
+    },
+    "footer": {
+        "description": "Familiar and welcoming environment with the best of traditional Portuguese gastronomy in the heart of Lisbon.",
+        "weekdays": "Monday - Friday",
+        "saturday": "Saturday",
+        "sunday": "Sunday",
+        "closed": "Closed",
+        "rights": "All rights reserved."
     }
 }
