@@ -21,7 +21,7 @@ export default async function AboutPage() {
                     <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
                         <div className="relative h-[400px] md:h-[500px] rounded-[2rem] overflow-hidden shadow-xl border-8 border-white">
                             <img
-                                src="/cafe.jpg"
+                                src="/Cafe.png"
                                 alt="Nosso Espaço Acolhedor"
                                 className="w-full h-full object-cover"
                             />
@@ -43,8 +43,8 @@ export default async function AboutPage() {
                             </p>
                             <p className="text-lg text-stone-600 leading-relaxed">
                                 {locale === 'pt'
-                                    ? <>A nossa cozinha é uma celebração de culturas. Servimos a tradicional <strong>cozinha portuguesa</strong>, enriquecida com o tempero da <strong>cozinha africana</strong> e toques da <strong>cozinha ucraniana</strong>, honrando as diversas raízes da nossa equipa.</>
-                                    : <>Our kitchen is a celebration of cultures. We serve traditional <strong>Portuguese cuisine</strong>, enriched with <strong>African seasoning</strong> and touches of <strong>Ukrainian cuisine</strong>, honoring the diverse roots of our team.</>}
+                                    ? <>A nossa cozinha é uma celebração de culturas. Servimos a tradicional <strong>cozinha portuguesa</strong>, com toques da <strong>cozinha ucraniana</strong>, honrando as diversas raízes da nossa equipa.</>
+                                    : <>Our kitchen is a celebration of cultures. We serve traditional <strong>Portuguese cuisine</strong>, with touches of <strong>Ukrainian cuisine</strong>, honoring the diverse roots of our team.</>}
                             </p>
                             <p className="text-lg text-stone-600 leading-relaxed italic">
                                 {locale === 'pt'
